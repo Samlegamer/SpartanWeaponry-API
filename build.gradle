@@ -10,7 +10,7 @@ version = "${minecraft_version}-${mod_version}"
 group = mod_group_id
 
 base {
-    archivesName = mod_id
+    archivesName = mod_jar_name
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -139,10 +139,10 @@ repositories {
 	maven {
 		url = "https://maven.theillusivec4.top/"
 	}
-/*	maven {
+	maven {
 		name = "CurseMaven"
 		url = "https://cursemaven.com/"
-	}*/
+	}
 }
 
 dependencies {
@@ -155,6 +155,12 @@ dependencies {
     
     // Apply Mixin's Annotation Processor
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    
+    // Apply MixinExtra
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")) {
+    	jarJar.ranged(it, "[${mixin_extras_version},)")
+    }
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
@@ -175,6 +181,10 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
 	// Compile against the the Curios API but don't include it at runtime
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
+    
+	implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5185001")
+    implementation fg.deobf("curse.maven:footwork-api-608407:4786768")
+    implementation fg.deobf("curse.maven:project-war-dance-446004:4718727")
 }
 
 mixin {
@@ -196,7 +206,7 @@ tasks.named('processResources', ProcessResources).configure {
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version: forge_version, forge_version_range: forge_version_range,
             loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_id: mod_id, mod_jar_name : mod_jar_name, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_credits: mod_credits, mod_description: mod_description,
     ]
     inputs.properties replaceProperties

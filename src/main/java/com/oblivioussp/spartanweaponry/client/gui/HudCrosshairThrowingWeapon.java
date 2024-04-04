@@ -28,6 +28,7 @@ public class HudCrosshairThrowingWeapon
 		
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
+//		boolean isShoulderSurfingLoaded = ModList.get().isLoaded("shouldersurfing");
 		
 		if((!ClientConfig.INSTANCE.disableNewCrosshairsThrowingWeapon.get() || ClientConfig.INSTANCE.forceCompatibilityCrosshairs.get()) &&
 				equippedStack.getItem() instanceof ThrowingWeaponItem throwingWeapon)	// Assert that the equipped stack is a Throwing Weapon; otherwise abort the rendering
@@ -40,6 +41,8 @@ public class HudCrosshairThrowingWeapon
 			}
 			
 			poseStack.pushPose();
+//			if(isShoulderSurfingLoaded)
+//				ShoulderSurfingCompat.offsetCrosshairs(poseStack, mc.getWindow(), partialTicks);
 			
 			RenderSystem.blendFuncSeparate(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO);
 			RenderSystem.enableBlend();
@@ -100,6 +103,11 @@ public class HudCrosshairThrowingWeapon
 	        }
 
 	        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+//	        if(isShoulderSurfingLoaded)
+//				ShoulderSurfingCompat.clearCrosshairOffset(poseStack);
+	        
+	        PoseStack textPoseStack = new PoseStack();
 	        
 	        if(equippedStack.getOrCreateTag().contains(ThrowingWeaponItem.NBT_AMMO_USED))
 	        {
@@ -113,7 +121,7 @@ public class HudCrosshairThrowingWeapon
 				int textX = screenWidth / 2;
 				int textY = screenHeight / 2 + 20;
 				mc.font.drawInBatch(text, textX - (mc.font.width(text) / 2), textY, 0xFFFFFFFF,
-						true, poseStack.last().pose(), buffer, false, 0, 0xF000F0);
+						true, textPoseStack.last().pose(), buffer, false, 0, 0xF000F0);
 
 				buffer.endBatch();
 	        }

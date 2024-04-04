@@ -22,6 +22,7 @@ public class HudCrosshairHeavyCrossbow
 		
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
+//		boolean isShoulderSurfingLoaded = ModList.get().isLoaded("shouldersurfing");
 		
 		if((!ClientConfig.INSTANCE.disableNewCrosshairsCrossbow.get() || ClientConfig.INSTANCE.forceCompatibilityCrosshairs.get()) &&
 				equippedStack.getItem() instanceof HeavyCrossbowItem crossbowItem)	// Assert that the equipped stack is a Heavy Crossbow; otherwise abort the rendering
@@ -38,7 +39,9 @@ public class HudCrosshairHeavyCrossbow
 			}
 			
 			poseStack.pushPose();
-			
+//			if(isShoulderSurfingLoaded)
+//				ShoulderSurfingCompat.offsetCrosshairs(poseStack, mc.getWindow(), partialTicks);
+
 			RenderSystem.blendFuncSeparate(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO);
 			RenderSystem.enableBlend();
 	        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -70,6 +73,10 @@ public class HudCrosshairHeavyCrossbow
 			}
 			
 			RenderSystem.blendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+
+//			if(isShoulderSurfingLoaded)
+//				ShoulderSurfingCompat.clearCrosshairOffset(poseStack);
+			
 			poseStack.popPose();
 		}
 	}

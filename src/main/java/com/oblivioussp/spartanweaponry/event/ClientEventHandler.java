@@ -10,7 +10,6 @@ import com.oblivioussp.spartanweaponry.api.oil.OilEffect;
 import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
 import com.oblivioussp.spartanweaponry.capability.IOilHandler;
 import com.oblivioussp.spartanweaponry.client.KeyBinds;
-import com.oblivioussp.spartanweaponry.client.gui.HudCrosshair;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.inventory.tooltip.OilCoatingTooltip;
 import com.oblivioussp.spartanweaponry.network.NetworkHandler;
@@ -88,10 +87,11 @@ public class ClientEventHandler
 		}
 	}
 	
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre ev)
 	{
-		if(ev.getOverlay() == VanillaGuiOverlay.CROSSHAIR.type() && HudCrosshair.isVanillaCrosshairDisabled())
+		Minecraft mc = Minecraft.getInstance();
+		if(ev.getOverlay().id().equals(VanillaGuiOverlay.CROSSHAIR.id()) && mc.player.getMainHandItem().is(ModItemTags.HAS_CUSTOM_CROSSHAIR))
 			ev.setCanceled(true);
 	}
 	
