@@ -184,6 +184,7 @@ dependencies {
     
 	implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5185001")
     implementation fg.deobf("curse.maven:footwork-api-608407:4786768")
+    implementation fg.deobf("curse.maven:attributizer-838573:4784940")
     implementation fg.deobf("curse.maven:project-war-dance-446004:4718727")
 }
 
