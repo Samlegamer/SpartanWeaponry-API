@@ -34,3 +34,9 @@ mandatory=true
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
+[[dependencies.${mod_id}]]
+modId="shouldersurfing"
+mandatory=false
+versionRange="${shoulder_surfing_version_range}"
+ordering="NONE"
+side="BOTH"

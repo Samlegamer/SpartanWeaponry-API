@@ -6,6 +6,7 @@ import com.mojang.math.Vector3f;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.compat.shouldersurfing.ShoulderSurfingCompat;
 import com.oblivioussp.spartanweaponry.item.IHudCrosshair;
+import com.oblivioussp.spartanweaponry.util.ClientConfig;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -59,7 +60,7 @@ public class HudCrosshair
 				if(!isVanillaCrosshairDisabled)
 					isVanillaCrosshairDisabled = true;
 				
-				if((options.getCameraType().isFirstPerson() || (ModList.get().isLoaded("shouldersurfing") && ShoulderSurfingCompat.isShoulderSurfing())) 
+				if((options.getCameraType().isFirstPerson() || ModList.get().isLoaded("leawind_third_person") || (!ClientConfig.INSTANCE.disableShoulderSurfingIntegration.get() && ModList.get().isLoaded("shouldersurfing") && ShoulderSurfingCompat.isShoulderSurfing())) 
 						&& (mc.gameMode.getPlayerMode() != GameType.SPECTATOR || canRenderCrosshairForSpectator(mc)))
 				{
 					// Do the debug rendering for crosshairs even with the custom crosshairs enabled

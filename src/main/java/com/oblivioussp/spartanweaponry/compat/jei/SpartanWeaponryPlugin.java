@@ -144,16 +144,20 @@ public class SpartanWeaponryPlugin implements IModPlugin
 			removeItemTagFromJEI(jeiRuntime, ModItemTags.STEEL_WEAPONS);
 		if(Config.INSTANCE.silver.disableRecipes.get())
 			removeItemTagFromJEI(jeiRuntime, ModItemTags.SILVER_WEAPONS);
-		if(Config.INSTANCE.invar.disableRecipes.get())
-			removeItemTagFromJEI(jeiRuntime, ModItemTags.INVAR_WEAPONS);
-		if(Config.INSTANCE.platinum.disableRecipes.get())
-			removeItemTagFromJEI(jeiRuntime, ModItemTags.PLATINUM_WEAPONS);
 		if(Config.INSTANCE.electrum.disableRecipes.get())
 			removeItemTagFromJEI(jeiRuntime, ModItemTags.ELECTRUM_WEAPONS);
-		if(Config.INSTANCE.nickel.disableRecipes.get())
-			removeItemTagFromJEI(jeiRuntime, ModItemTags.NICKEL_WEAPONS);
 		if(Config.INSTANCE.lead.disableRecipes.get())
 			removeItemTagFromJEI(jeiRuntime, ModItemTags.LEAD_WEAPONS);
+		if(Config.INSTANCE.nickel.disableRecipes.get())
+			removeItemTagFromJEI(jeiRuntime, ModItemTags.NICKEL_WEAPONS);
+		if(Config.INSTANCE.invar.disableRecipes.get())
+			removeItemTagFromJEI(jeiRuntime, ModItemTags.INVAR_WEAPONS);
+		if(Config.INSTANCE.constantan.disableRecipes.get())
+			removeItemTagFromJEI(jeiRuntime, ModItemTags.CONSTANTAN_WEAPONS);
+		if(Config.INSTANCE.platinum.disableRecipes.get())
+			removeItemTagFromJEI(jeiRuntime, ModItemTags.PLATINUM_WEAPONS);
+		if(Config.INSTANCE.aluminum.disableRecipes.get())
+			removeItemTagFromJEI(jeiRuntime, ModItemTags.ALUMINUM_WEAPONS);
 		
 		if(Config.INSTANCE.disableNewArrowRecipes.get())
 			removeItemTagFromJEI(jeiRuntime, ModItemTags.ARROWS);

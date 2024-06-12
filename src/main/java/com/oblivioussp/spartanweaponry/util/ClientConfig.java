@@ -27,6 +27,7 @@ public class ClientConfig
 	// Client settings
 	public BooleanValue disableNewCrosshairsCrossbow, disableNewCrosshairsThrowingWeapon,
 						forceCompatibilityCrosshairs;
+	public BooleanValue disableShoulderSurfingIntegration;
 	public EnumValue<Alignment> quiverHudAlignment, oilUsesHudAlignment;
 	public IntValue quiverHudOffsetX, quiverHudOffsetY, oilUsesHudOffsetX, oilUsesHudOffsetY;
 	public BooleanValue forceDisableUncraftableTooltips;
@@ -38,6 +39,11 @@ public class ClientConfig
 								.translation("config." + ModSpartanWeaponry.ID + ".client.force_disable_uncraftable_tooltips")
 								.worldRestart()
 								.define("force_disable_uncraftable_tooltips", false);
+		builder.pop();
+		builder.push("integration");
+		disableShoulderSurfingIntegration = builder.comment("Set to true to fully disable integration with Shoulder Surfing Reloaded")
+				.translation("config." + ModSpartanWeaponry.ID + ".client.disable_shoulder_surfing_integration")
+				.define("disable_shoulder_surfing_integration", false);
 		builder.pop();
 		builder.push("hud");
 			disableNewCrosshairsCrossbow = builder.comment("Set to true to disable a new Crosshair for the Crossbow which visually shows inaccuracy, using the default Crosshair instead; false otherwise")
