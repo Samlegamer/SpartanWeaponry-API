@@ -3,7 +3,6 @@ package com.oblivioussp.spartanweaponry.client.gui.container;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.client.gui.components.ToggleImageButton;
 import com.oblivioussp.spartanweaponry.inventory.QuiverBaseMenu;
@@ -14,8 +13,9 @@ import com.oblivioussp.spartanweaponry.network.QuiverPrioritySlotPacket;
 import com.oblivioussp.spartanweaponry.util.Defaults;
 import com.oblivioussp.spartanweaponry.util.Log;
 
-import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -82,31 +82,38 @@ public class QuiverBaseScreen<T extends QuiverBaseMenu> extends AbstractContaine
 	protected void init()
 	{
 		super.init();
-		addRenderableWidget(new ToggleImageButton(isAmmoCollectEnabled, leftPos - 18, topPos + 20, 16, 16, 177, 39, 17, 17, texture, 256, 256, (button) ->
+		
+		// TODO: Combine tooltips for priority slot
+		ToggleImageButton ammoCollectButton = new ToggleImageButton(isAmmoCollectEnabled, leftPos - 18, topPos + 20, 16, 16, 177, 39, 17, 17, texture, 256, 256, (button) ->
 		{
 			isAmmoCollectEnabled = !isAmmoCollectEnabled;
+			button.setTooltip(Tooltip.create(isAmmoCollectEnabled ? AMMO_COLLECT_ENABLED_BUTTON_TOOLTIP : AMMO_COLLECT_DISABLED_BUTTON_TOOLTIP));
 			NetworkHandler.sendPacketToServer(new QuiverButtonPacket(isAmmoCollectEnabled));
-		}, this::drawAmmoCollectTooltip, Component.empty()));
+		}, Component.empty());
+		ammoCollectButton.setTooltip(Tooltip.create(isAmmoCollectEnabled ? AMMO_COLLECT_ENABLED_BUTTON_TOOLTIP : AMMO_COLLECT_DISABLED_BUTTON_TOOLTIP));
+		addRenderableWidget(ammoCollectButton);
 		for(int i = 0; i < ammoSlots; i++)
 		{
 			Slot slot = menu.getSlot(i);
-			addRenderableWidget(new ImageButton(leftPos + slot.x - 1, topPos + slot.y - 1, 7, 7, 177, 1, 8, texture, 256, 256, (button) -> 
+			ImageButton priorityButton = new ImageButton(leftPos + slot.x - 1, topPos + slot.y - 1, 7, 7, 177, 1, 8, texture, 256, 256, (button) -> 
 			{
 				// Do button pushing actions here
 				prioritySlot = hoveredSlot.getContainerSlot();
 				NetworkHandler.sendPacketToServer(new QuiverPrioritySlotPacket(hoveredSlot.getContainerSlot()));
-			}, this::drawButtonTooltip, Component.empty()));
+			}, Component.empty());
+//			priorityButton.setTooltip(Tooltip.create(PRIORITY_BUTTON_TOOLTIP));
+			addRenderableWidget(priorityButton);
 		}
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) 
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) 
 	{
-		renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		if(menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem())
 		{
-			List<Component> tooltipList = getTooltipFromItem(hoveredSlot.getItem());
+			List<Component> tooltipList = getTooltipFromItem(minecraft, hoveredSlot.getItem());
 			
 			// Show the priority button tooltip if the button is being hovered over
 			if(hoveredSlot.index < ammoSlots && 
@@ -114,33 +121,32 @@ public class QuiverBaseScreen<T extends QuiverBaseMenu> extends AbstractContaine
 					mouseY > topPos + hoveredSlot.y - 1 && mouseY < topPos + hoveredSlot.y + 6)
 				tooltipList.add(0, PRIORITY_BUTTON_TOOLTIP);
 			
-			renderTooltip(poseStack, tooltipList, hoveredSlot.getItem().getTooltipImage(), mouseX, mouseY);
+			renderTooltip(guiGraphics, mouseX, mouseY);
 		}
 	}
 
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTicks, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY)
 	{
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, texture);
-		blit(poseStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+		guiGraphics.blit(texture, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 		int offhandY = ammoSlots == Defaults.SlotsQuiverHuge ? 122 : 104;
-		blit(poseStack, leftPos - 27, topPos + offhandY, 178, offhandY, 27, 29);
+		guiGraphics.blit(texture, leftPos - 27, topPos + offhandY, 178, offhandY, 27, 29);
 
 		Slot highlightedSlot = menu.slots.get(prioritySlot);
-		renderSlotHighlight(poseStack, leftPos + highlightedSlot.x, topPos + highlightedSlot.y, getBlitOffset(), 0x8040C040);
+		renderSlotHighlight(guiGraphics, leftPos + highlightedSlot.x, topPos + highlightedSlot.y, 0, 0x8040C040);
 	}
 	
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) 
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) 
 	{
 		String name = quiver.getHoverName().getString();
-		font.draw(poseStack, name, imageWidth / 2 - font.width(name) / 2, 5, 0x404040);
-		font.draw(poseStack, playerInventoryTitle.getString(), 8, 42 + (ammoSlots == Defaults.SlotsQuiverHuge ? 18 : 0), 0x404040);
+		guiGraphics.drawString(font, quiver.getHoverName(), imageWidth / 2 - font.width(name) / 2, 5, 0x404040, false);
+		guiGraphics.drawString(font, playerInventoryTitle, 8, 42 + (ammoSlots == Defaults.SlotsQuiverHuge ? 18 : 0), 0x404040, false);
 	}
 	
-	protected void drawButtonTooltip(Button button, PoseStack poseStack, int x, int y)
+/*	protected void drawButtonTooltip(Button button, PoseStack poseStack, int x, int y)
 	{
 		if(menu.getCarried().isEmpty() && hoveredSlot != null && !hoveredSlot.hasItem())
 			renderTooltip(poseStack, PRIORITY_BUTTON_TOOLTIP, x, y);
@@ -150,6 +156,6 @@ public class QuiverBaseScreen<T extends QuiverBaseMenu> extends AbstractContaine
 	{
 		if(menu.getCarried().isEmpty())
 			renderTooltip(poseStack, isAmmoCollectEnabled ? AMMO_COLLECT_ENABLED_BUTTON_TOOLTIP : AMMO_COLLECT_DISABLED_BUTTON_TOOLTIP, x, y);
-	}
+	}*/
 
 }

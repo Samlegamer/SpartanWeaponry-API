@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 
@@ -33,6 +34,7 @@ public abstract class AbstractArrowMixin extends ProjectileMixin
 	@Inject(at = @At("HEAD"), method = "playerTouch(Lnet/minecraft/world/entity/player/Player;)V", cancellable = true)
 	private void playerTouch(Player entityIn, CallbackInfo callback)
 	{
+		Level level = level();
 		if(!level.isClientSide && (inGround || isNoPhysics()) && shakeTime <= 0)
 		{
 			Log.debug("Player collision with arrow entity intercepted!");

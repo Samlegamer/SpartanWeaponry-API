@@ -8,8 +8,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.oblivioussp.spartanweaponry.api.IWeaponTraitContainer;
 import com.oblivioussp.spartanweaponry.api.WeaponTraits;
 import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
-import com.oblivioussp.spartanweaponry.compat.footworkapi.FootworkHybridDamageSource;
-import com.oblivioussp.spartanweaponry.damagesource.ArmorPiercingEntityDamageSource;
+import com.oblivioussp.spartanweaponry.init.ModDamageTypes;
 import com.oblivioussp.spartanweaponry.util.Log;
 
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,12 +18,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.fml.ModList;
 
-@Mixin(value = Player.class, priority = 1100)
-public class PlayerMixin
+@Mixin(Player.class)
+public class PlayerMixin 
 {
-	
 	@Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getSweepingDamageRatio(Lnet/minecraft/world/entity/LivingEntity;)F"))
 	private float getSweepingDamageRatio(LivingEntity entityIn)
 	{
@@ -45,13 +42,12 @@ public class PlayerMixin
 		// Otherwise, return the standard sweep ratio method
 		return EnchantmentHelper.getSweepingDamageRatio(entityIn);
 	}
-
-//	@Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;playerAttack(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/damagesource/DamageSource;"))
-	@ModifyExpressionValue(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;playerAttack(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/damagesource/DamageSource;"))
+	
+//	@Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSources;playerAttack(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/damagesource/DamageSource;"))
+	@ModifyExpressionValue(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSources;playerAttack(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/damagesource/DamageSource;"))
 	private DamageSource damagePlayerAttack(DamageSource originalSource, Entity targetIn)
 	{
 		Log.debug("Intercepted DamageSource.playerAttack() method!");
-		Log.debug("Original damage source class: " + originalSource.getClass().toString());
 		Player playerIn = ((Player)originalSource.getEntity());
 		ItemStack weaponStack = playerIn.getMainHandItem();
 		if(weaponStack.getItem() instanceof IWeaponTraitContainer<?> container)
@@ -60,12 +56,15 @@ public class PlayerMixin
 			if(armorPiercingTrait != null)
 			{
 				Log.debug("Set damage type to Armor Piercing");
-				float armorPiercingPercentage = armorPiercingTrait.getMagnitude() / 100.0f;
-				return ModList.get().isLoaded("footwork") ? FootworkHybridDamageSource.create(playerIn, armorPiercingPercentage, originalSource) :
-						new ArmorPiercingEntityDamageSource("player", playerIn, armorPiercingPercentage);
+//				float armorPiercingPercentage = armorPiercingTrait.getMagnitude() / 100.0f;
+				return /*ModList.get().isLoaded("footwork") ? FootworkHybridDamageSource.create(playerIn, armorPiercingPercentage, originalSource) :*/
+					ModDamageTypes.armorPiercingMelee(playerIn);
+
+//				return ModDamageTypes.armorPiercingMelee(playerIn);
 			}
 		}
 		// Otherwise, return the basic player attack damage source
+//		return playerIn.damageSources().playerAttack(playerIn);
 		return originalSource;
 	}
 	

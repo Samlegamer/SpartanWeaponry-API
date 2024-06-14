@@ -11,6 +11,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -41,7 +42,7 @@ public class TippedProjectileRecipeMaker
 						projIngredient, projIngredient, projIngredient});
 				
         		ResourceLocation recipeResLoc = new ResourceLocation("spartanweaponry", "tipped_projectile." + ForgeRegistries.ITEMS.getKey(outputStack.getItem()).getPath() + potionType.getName(".effect."));
-        		ShapedRecipe recipe = new ShapedRecipe(recipeResLoc, recipeGroup, 3, 3, recipeIngredients, outputStack);
+        		ShapedRecipe recipe = new ShapedRecipe(recipeResLoc, recipeGroup, CraftingBookCategory.MISC, 3, 3, recipeIngredients, outputStack);
         		list.add(recipe);
       		} 
     	} 

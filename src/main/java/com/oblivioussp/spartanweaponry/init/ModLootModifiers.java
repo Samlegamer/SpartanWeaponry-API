@@ -6,6 +6,7 @@ import com.oblivioussp.spartanweaponry.loot.ConfigLootCondition;
 import com.oblivioussp.spartanweaponry.loot.DecapitateLootModifier;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
@@ -25,6 +26,6 @@ public class ModLootModifiers
 	
 	public static void registerLootConditions()
 	{
-		CONFIG_ENABLED = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(ModSpartanWeaponry.ID, "new_heads_enabled"), new LootItemConditionType(new ConfigLootCondition.Serializer()));
+		CONFIG_ENABLED = Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, new ResourceLocation(ModSpartanWeaponry.ID, "new_heads_enabled"), new LootItemConditionType(new ConfigLootCondition.Serializer()));
 	}
 }

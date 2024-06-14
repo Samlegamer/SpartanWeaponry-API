@@ -1,8 +1,9 @@
 package com.oblivioussp.spartanweaponry.data;
 
+import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.init.ModBlocks;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -13,9 +14,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModBlockModelProvider extends BlockStateProvider
 {
 	
-	public ModBlockModelProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
+	public ModBlockModelProvider(PackOutput output, ExistingFileHelper exFileHelper)
 	{
-		super(gen, modid, exFileHelper);
+		super(output, ModSpartanWeaponry.ID, exFileHelper);
 	}
 
 	@Override

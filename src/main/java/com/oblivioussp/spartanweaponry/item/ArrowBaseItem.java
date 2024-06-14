@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.entity.projectile.ArrowBaseEntity;
-import com.oblivioussp.spartanweaponry.init.ModItems;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -23,7 +22,7 @@ public class ArrowBaseItem extends ArrowItem
 	
 	public ArrowBaseItem(float damageModifier, float rangeModifier) 
 	{
-		super(new Item.Properties().tab(ModItems.TAB_SW_ARROWS_BOLTS));
+		super(new Item.Properties());
 		this.damageModifier = damageModifier;
 		this.rangeModifier = rangeModifier;
 	}

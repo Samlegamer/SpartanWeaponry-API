@@ -8,6 +8,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -90,6 +91,7 @@ public class ArrowBaseEntity extends AbstractArrow implements IEntityAdditionalS
 	public void tick() 
 	{
 		super.tick();
+		Level level = level();
 		if(level.isClientSide /*&& potion != null && potion != Potions.EMPTY*/)
 		{
 			if(inGround)
@@ -112,6 +114,7 @@ public class ArrowBaseEntity extends AbstractArrow implements IEntityAdditionalS
 	protected void doPostHurtEffects(LivingEntity living) 
 	{
 		Entity entity = getEffectSource();
+		Level level = level();
 		
 		for(MobEffectInstance effect : potion.getEffects())
 		{
@@ -139,6 +142,7 @@ public class ArrowBaseEntity extends AbstractArrow implements IEntityAdditionalS
 	{
 		if (id == 0) 
 		{
+			Level level = level();
 			int i = getEntityData().get(COLOUR);
 			if (i != -1) 
 			{
@@ -173,7 +177,7 @@ public class ArrowBaseEntity extends AbstractArrow implements IEntityAdditionalS
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() 
+	public Packet<ClientGamePacketListener> getAddEntityPacket() 
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -254,14 +258,15 @@ public class ArrowBaseEntity extends AbstractArrow implements IEntityAdditionalS
 		int colour = getEntityData().get(COLOUR);
 		if(colour != -1 && particleCount > 0)
 		{
-	         double cR = (double)(colour >> 16 & 255) / 255.0D;
-	         double cG = (double)(colour >> 8 & 255) / 255.0D;
-	         double cB = (double)(colour >> 0 & 255) / 255.0D;
-	         
-	         for(int i = 0; i < particleCount; i++)
-	         {
-	        	 level.addParticle(ParticleTypes.ENTITY_EFFECT, getRandomX(0.5d), getRandomY(), getRandomZ(0.5d), cR, cG, cB);
-	         }
+			Level level = level();
+	        double cR = (double)(colour >> 16 & 255) / 255.0D;
+	        double cG = (double)(colour >> 8 & 255) / 255.0D;
+	        double cB = (double)(colour >> 0 & 255) / 255.0D;
+	        
+	        for(int i = 0; i < particleCount; i++)
+	        {
+	        	level.addParticle(ParticleTypes.ENTITY_EFFECT, getRandomX(0.5d), getRandomY(), getRandomZ(0.5d), cR, cG, cB);
+	        }
 		}
 	}
 }

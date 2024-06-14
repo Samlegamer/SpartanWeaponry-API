@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.oblivioussp.spartanweaponry.capability.IOilHandler;
 import com.oblivioussp.spartanweaponry.client.gui.AlignmentHelper.Alignment;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
@@ -13,9 +12,9 @@ import com.oblivioussp.spartanweaponry.util.OilHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -26,7 +25,7 @@ public class HudOilUses
 {
 	protected static final ResourceLocation WIDGETS = new ResourceLocation("textures/gui/widgets.png");
 	
-	public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int screenWidth, int screenHeight)
+	public static void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight)
 	{
 		RenderSystem.assertOnRenderThread();
 		
@@ -60,19 +59,26 @@ public class HudOilUses
 		offsetX = AlignmentHelper.getAlignedX(align, ClientConfig.INSTANCE.oilUsesHudOffsetX.get(), 22);
 		offsetY = AlignmentHelper.getAlignedY(align, ClientConfig.INSTANCE.oilUsesHudOffsetY.get(), 22);
 
+		PoseStack poseStack = RenderSystem.getModelViewStack();
 		poseStack.pushPose();
-        poseStack.translate(0.0D, 0.0D, (double)(mc.getItemRenderer().blitOffset + 200.0F));
-        MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+        poseStack.translate(0.0d, 0.0d, 200.0d);
+//        MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS);
         RenderSystem.enableBlend();
         
-		mc.getItemRenderer().renderAndDecorateFakeItem(oilStack, offsetX - 17, offsetY);
-		font.drawInBatch(usesStr, offsetX , offsetY + 6, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
+        guiGraphics.renderFakeItem(oilStack, offsetX - 17, offsetY);
+        
+		PoseStack guiPose = guiGraphics.pose();
+		guiPose.pushPose();
+		guiPose.setIdentity();
+        guiGraphics.drawString(font, usesStr, offsetX , offsetY + 6, 0xFFFFFF);
+		guiPose.popPose();
+//		font.drawInBatch(usesStr, offsetX , offsetY + 6, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
 		
-		renderBuffer.endBatch();
+//		renderBuffer.endBatch();
 		poseStack.popPose();
 	}
 }

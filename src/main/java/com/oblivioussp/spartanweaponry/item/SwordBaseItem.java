@@ -24,7 +24,6 @@ import com.oblivioussp.spartanweaponry.util.WeaponArchetype;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -36,7 +35,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -292,13 +290,13 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 	}
 	
 	@Override
-	public void onUsingTick(ItemStack stack, LivingEntity player, int count) 
+	public void onUseTick(Level levelIn, LivingEntity player, ItemStack stack, int count) 
 	{
 		Optional<WeaponTrait> actionTrait = archetype.getActionTrait();
 		actionTrait.ifPresent((trait) -> 
 			trait.getActionCallback().ifPresent((callback) -> 
 				callback.onUsingTick(stack, player, count, getDirectAttackDamage())));
-		super.onUsingTick(stack, player, count);
+		super.onUseTick(levelIn, player, stack, count);
 	}
 	
 	@Override
@@ -347,19 +345,6 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 		traits.forEach((trait) -> 
 			trait.getMeleeCallback().ifPresent((callback) -> callback.onCreateItem(material, stack)));
 		super.onCraftedBy(stack, levelIn, playerIn);
-	}
-	
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) 
-	{
-		if(allowedIn(group))
-		{
-			ItemStack stack = new ItemStack(this);
-			if(traits != null)
-				traits.forEach((trait) ->
-					trait.getMeleeCallback().ifPresent((callback) -> callback.onCreateItem(material, stack)));
-			items.add(stack);
-		}
 	}
 	
 	@Override

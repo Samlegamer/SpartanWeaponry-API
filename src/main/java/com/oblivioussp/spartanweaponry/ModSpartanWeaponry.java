@@ -13,6 +13,7 @@ import com.oblivioussp.spartanweaponry.init.ModBlockEntities;
 import com.oblivioussp.spartanweaponry.init.ModBlocks;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.init.ModCommands;
+import com.oblivioussp.spartanweaponry.init.ModCreativeTabs;
 import com.oblivioussp.spartanweaponry.init.ModCriteriaTriggers;
 import com.oblivioussp.spartanweaponry.init.ModEnchantments;
 import com.oblivioussp.spartanweaponry.init.ModEntities;
@@ -34,18 +35,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryBuilder;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
 
 @Mod(value = ModSpartanWeaponry.ID)
 public class ModSpartanWeaponry 
@@ -64,11 +60,11 @@ public class ModSpartanWeaponry
 		
 		modBus.addListener(this::onSetup);
 		modBus.addListener(this::onClientSetup);
-		modBus.addListener(this::onIMCEnqueue);
 		
 		// Registering Deferred Registries
 		ModBlocks.REGISTRY.register(modBus);
 		ModItems.REGISTRY.register(modBus);
+		ModCreativeTabs.REGISTRY.register(modBus);
 		ModEntities.REGISTRY.register(modBus);
 		ModBlockEntities.REGISTRY.register(modBus);
 		ModEnchantments.REGISTRY.register(modBus);
@@ -77,7 +73,6 @@ public class ModSpartanWeaponry
 		ModMenus.REGISTRY.register(modBus);
 		ModSounds.REGISTRY.register(modBus);
 		ModParticles.REGISTRY.register(modBus);
-//		modBus.addListener(ModParticles::registerFactories);
 		ModLootModifiers.REGISTRY.register(modBus);
 		WeaponTraits.REGISTRY.makeRegistry(() -> new RegistryBuilder<WeaponTrait>().hasTags());
 		WeaponTraits.REGISTRY.register(modBus);
@@ -122,12 +117,4 @@ public class ModSpartanWeaponry
             ClientHelper.registerScreens();
         });
     }
-	
-	private void onIMCEnqueue(InterModEnqueueEvent ev)
-	{
-		ev.enqueueWork(() ->
-		{
-			InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
-		});
-	}
 }

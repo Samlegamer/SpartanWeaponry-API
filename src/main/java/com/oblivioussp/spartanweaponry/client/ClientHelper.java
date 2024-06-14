@@ -1,6 +1,7 @@
 package com.oblivioussp.spartanweaponry.client;
 
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
+import com.oblivioussp.spartanweaponry.api.ModToolActions;
 import com.oblivioussp.spartanweaponry.api.ModelOverrides;
 import com.oblivioussp.spartanweaponry.api.WeaponTraits;
 import com.oblivioussp.spartanweaponry.api.oil.OilEffect;
@@ -114,7 +115,7 @@ public class ClientHelper
 	{
 		ItemProperties.register(meleeWeapon, ModelOverrides.BLOCKING, (stack, world, living, value) ->
 		{
-			return meleeWeapon.hasWeaponTrait(WeaponTraits.BLOCK_MELEE.get()) && living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
+			return meleeWeapon.canPerformAction(stack, ModToolActions.MELEE_BLOCK) &&  living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
 		});
 		Item weapon = meleeWeapon.getAsItem();
 		ItemProperties.register(weapon, ModelOverrides.THROWING, (stack, world, living, value) ->
@@ -175,6 +176,22 @@ public class ClientHelper
 			return quiver.getAmmoCount(stack);
 		});
 	}
+	
+/*	public static void registerMeleeWeaponBlockingPropertyOverrides(Item meleeWeapon)
+	{
+		ItemProperties.register(meleeWeapon, Const.MODEL, (stack, world, living, value) ->
+		{
+			return GearData.getModelIndex(stack);
+		});
+		ItemProperties.register(meleeWeapon, Const.BROKEN_PROPERTY, (stack, world, living, value) ->
+		{
+			return GearHelper.isBroken(stack) ? 0 : 1;
+		});
+		ItemProperties.register(meleeWeapon, ModelOverrides.BLOCKING, (stack, world, living, value) ->
+		{
+			return meleeWeapon.canPerformAction(stack, ModToolActions.MELEE_BLOCK) && living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
+		});
+	}*/
 	
 	@SubscribeEvent
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers ev)

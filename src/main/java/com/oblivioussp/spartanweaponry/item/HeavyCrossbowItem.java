@@ -5,8 +5,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.IReloadable;
 import com.oblivioussp.spartanweaponry.api.ReloadableHandler;
@@ -44,6 +45,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
@@ -201,11 +203,11 @@ public class HeavyCrossbowItem extends CrossbowItem implements IReloadable, IHud
 	                    	inaccuracyModifier = 12.0f * ((float)inaccuracy / stackAimTicks);
 	                	
 	                	// Fire projectiles.
-	                    this.spawnProjectile(stack, itemBolt, itemstack, levelIn, player, flag1, inaccuracyModifier, 0.0f);
+	                    spawnProjectile(stack, itemBolt, itemstack, levelIn, player, flag1, inaccuracyModifier, 0.0f);
 	                    if(itemstack.getCount() > 1)
 	                    {
-		                    this.spawnProjectile(stack, itemBolt, itemstack, levelIn, player, flag1, inaccuracyModifier, -10.0f);
-		                    this.spawnProjectile(stack, itemBolt, itemstack, levelIn, player, flag1, inaccuracyModifier, 10.0f);
+		                    spawnProjectile(stack, itemBolt, itemstack, levelIn, player, flag1, inaccuracyModifier, -10.0f);
+		                    spawnProjectile(stack, itemBolt, itemstack, levelIn, player, flag1, inaccuracyModifier, 10.0f);
 	                    }
 	                    int damage = itemstack.getCount() > 1 ? 3 : 1;
 	                    stack.hurtAndBreak(damage, player, (playerEntity) -> playerEntity.broadcastBreakEvent(player.getUsedItemHand()));
@@ -214,7 +216,7 @@ public class HeavyCrossbowItem extends CrossbowItem implements IReloadable, IHud
 	                    stack.getTag().put(NBT_PROJECTILE, new CompoundTag());
 	                }
 	
-	                levelIn.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (levelIn.random.nextFloat() * 0.4F + 1.2F) + getBoltVelocity() * 0.5F);
+	                levelIn.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.0F / (levelIn.random.nextFloat() * 0.4F + 1.2F) + 1.5f * 0.5F);
 	
 	                player.awardStat(Stats.ITEM_USED.get(this));
 	            }
@@ -225,55 +227,56 @@ public class HeavyCrossbowItem extends CrossbowItem implements IReloadable, IHud
     /**
      * Gets the velocity of the bolt entity from the crossbow's charge
      */
-    public static float getBoltVelocity()
+    public static float getBoltVelocity(BoltEntity bolt)
     {
-    	return 1.5f;
+    	return 4.5f * bolt.getRangeMultiplier();	// 1.5f * 3.0f * rangeMultiplier
     }
     
     protected void spawnProjectile(ItemStack crossbow, BoltItem boltItem, ItemStack boltStack, Level levelIn, Player player, boolean creativeOrInfinite, float inaccuracyModifier, float projectileAngle)
     {
-    	BoltEntity entityBolt = boltItem.createBolt(levelIn, boltStack, player);
+    	BoltEntity bolt = boltItem.createBolt(levelIn, boltStack, player);
     	
-    	entityBolt.setCritArrow(true);
-    	entityBolt.setSoundEvent(SoundEvents.CROSSBOW_HIT);
-    	entityBolt.setShotFromCrossbow(true);
+    	bolt.setCritArrow(true);
+    	bolt.setSoundEvent(SoundEvents.CROSSBOW_HIT);
+    	bolt.setShotFromCrossbow(true);
         int pierceLvl = crossbow.getEnchantmentLevel(Enchantments.PIERCING);
     	if(pierceLvl > 0)
-    		entityBolt.setPierceLevel((byte)pierceLvl);
+    		bolt.setPierceLevel((byte)pierceLvl);
         
-    	Quaternion quat = new Quaternion(new Vector3f(player.getUpVector(1.0f)), projectileAngle, true);
-    	Vector3f velocityVec = new Vector3f(player.getViewVector(1.0f));
-    	velocityVec.transform(quat);
-        entityBolt.shootFromRotation(player, player.xRotO, player.yRotO, 0.0F, getBoltVelocity() * 3.0F, inaccuracyModifier);
+    	Vec3 upVector = player.getUpVector(1.0f);
+    	Quaternionf quat = new Quaternionf().setAngleAxis((projectileAngle * (Mth.PI / 180.0f)), upVector.x, upVector.y, upVector.z);
+    	Vector3f velocityVec = player.getViewVector(1.0f).toVector3f().rotate(quat);
+    	bolt.shoot(velocityVec.x, velocityVec.y, velocityVec.z, getBoltVelocity(bolt), inaccuracyModifier);
+//        entityBolt.shootFromRotation(player, player.xRotO, player.yRotO, 0.0F, getBoltVelocity() * 3.0F, inaccuracyModifier);
 
     	for(WeaponTrait trait : rangedTraits)
-    		trait.getRangedCallback().ifPresent((callback) -> callback.onProjectileSpawn(material, entityBolt));
+    		trait.getRangedCallback().ifPresent((callback) -> callback.onProjectileSpawn(material, bolt));
         
         int j = crossbow.getEnchantmentLevel(Enchantments.POWER_ARROWS);
 
         if (j > 0)
         {
-            entityBolt.setBaseDamage(entityBolt.getBaseDamage() + j * 0.5D + 0.5D);
+            bolt.setBaseDamage(bolt.getBaseDamage() + j * 0.5D + 0.5D);
         }
 
         int k = crossbow.getEnchantmentLevel(Enchantments.PUNCH_ARROWS);
 
         if (k > 0)
         {
-            entityBolt.setKnockback(k);
+            bolt.setKnockback(k);
         }
 
         if (crossbow.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0)
         {
-            entityBolt.setSecondsOnFire(100);
+            bolt.setSecondsOnFire(100);
         }
 
         if (creativeOrInfinite || projectileAngle != 0.0f)
         {
-            entityBolt.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+            bolt.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
         }
 
-        levelIn.addFreshEntity(entityBolt);
+        levelIn.addFreshEntity(bolt);
     }
     
     @Override

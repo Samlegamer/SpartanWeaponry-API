@@ -1,5 +1,7 @@
 package com.oblivioussp.spartanweaponry.capability;
 
+import com.oblivioussp.spartanweaponry.item.QuiverBaseItem;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -32,13 +34,23 @@ public class QuiverCapabilityProvider implements ICapabilitySerializable<Compoun
 	@Override
 	public CompoundTag serializeNBT() 
 	{
-		return handler.resolve().get().serializeNBT();
+		CompoundTag tag = handler.resolve().get().serializeNBT();
+		quiver.getOrCreateTag().put(QuiverBaseItem.NBT_AMMO, tag);
+		return new CompoundTag();
 	}
 
 	@Override
 	public void deserializeNBT(CompoundTag nbt) 
 	{
-		handler.resolve().get().deserializeNBT(nbt);
+		if(nbt.contains("Size") && nbt.contains("Items"))
+		{
+			// Convert current tag to store on item and clear passed tag
+			quiver.getOrCreateTag().put(QuiverBaseItem.NBT_AMMO, nbt);
+			nbt.remove("Size");
+			nbt.remove("Items");
+		}
+		CompoundTag tagCopy = quiver.getOrCreateTag().getCompound(QuiverBaseItem.NBT_AMMO);
+		handler.resolve().get().deserializeNBT(tagCopy);
 	}
 
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.oblivioussp.spartanweaponry.init.ModRecipeSerializers;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -25,7 +27,7 @@ public class TippedProjectileBaseRecipe extends CustomRecipe
 
 	public TippedProjectileBaseRecipe(ResourceLocation idIn, Item arrowIn, Item arrowOut) 
 	{
-		super(idIn);
+		super(idIn, CraftingBookCategory.MISC);
 		this.projectileIn = arrowIn;
 		this.projectileOut = arrowOut;
 	}
@@ -62,7 +64,7 @@ public class TippedProjectileBaseRecipe extends CustomRecipe
 	}
 
 	@Override
-	public ItemStack assemble(CraftingContainer inv)
+	public ItemStack assemble(CraftingContainer inv, RegistryAccess registry)
 	{
 		ItemStack potionStack = inv.getItem(1 + inv.getWidth());
 		if(potionStack.getItem() == Items.LINGERING_POTION)

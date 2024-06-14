@@ -169,7 +169,7 @@ public abstract class QuiverBaseMenu extends AbstractContainerMenu
 				quiverStack = inventory.getItem(slot);
 				break;
 			case CURIO:
-				Optional<SlotResult> opt = CuriosApi.getCuriosHelper().findFirstCurio(inventory.player, (stack) -> stack.getItem() instanceof QuiverBaseItem);
+				Optional<SlotResult> opt = CuriosApi.getCuriosInventory(inventory.player).resolve().get().findFirstCurio((stack) -> stack.getItem() instanceof QuiverBaseItem);
 				if(opt.isPresent())
 				{
 					quiverStack = opt.get().stack();

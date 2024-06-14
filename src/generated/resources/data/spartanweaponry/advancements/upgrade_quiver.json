@@ -31,5 +31,6 @@
     [
       "has_upgraded_quiver"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

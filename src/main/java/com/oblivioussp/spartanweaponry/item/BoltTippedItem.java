@@ -5,16 +5,13 @@ import java.util.List;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.entity.projectile.BoltEntity;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BoltTippedItem extends BoltItem
 {
@@ -38,23 +35,6 @@ public class BoltTippedItem extends BoltItem
     		return bolt;
     	
     	return null;
-	}
-
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
-	{
-		if(allowedIn(tab))
-		{
-			for(Potion potion : ForgeRegistries.POTIONS)
-			{
-				if(!potion.getEffects().isEmpty())
-				{
-					ItemStack stack = new ItemStack(this);
-					PotionUtils.setPotion(stack, potion);
-					items.add(stack);
-				}
-			}
-		}
 	}
 	
 	@Override

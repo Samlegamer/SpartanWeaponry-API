@@ -31,5 +31,6 @@
     [
       "has_max_upgraded_quiver"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

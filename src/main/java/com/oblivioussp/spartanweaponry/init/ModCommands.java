@@ -78,7 +78,7 @@ public class ModCommands
 		ItemStack oilStack = OilHelper.makeOilStack(oilEffect);
 		oilHandler.setEffect(oilEffect, ItemStack.EMPTY);
 		playerIn.playNotifySound(ModSounds.OIL_APPLIED.get(), playerIn.getSoundSource(), 1.0f, 1.0f);
-		commandSourceIn.sendSuccess(Component.translatable("command." + ModSpartanWeaponry.ID + ".apply_oil.success", oilStack.getHoverName(), applyStack.getItem().getName(applyStack).getString(), playerIn.getName().getString()), true);
+		commandSourceIn.sendSuccess(() -> Component.translatable("command." + ModSpartanWeaponry.ID + ".apply_oil.success", oilStack.getHoverName(), applyStack.getItem().getName(applyStack).getString(), playerIn.getName().getString()), true);
 		return 1;
 	}
 	
@@ -95,7 +95,7 @@ public class ModCommands
 		ItemStack oilStack = OilHelper.makePotionOilStack(potion);
 		oilHandler.setPotion(potion, ItemStack.EMPTY);
 		playerIn.playNotifySound(ModSounds.OIL_APPLIED.get(), playerIn.getSoundSource(), 1.0f, 1.0f);
-		commandSourceIn.sendSuccess(Component.translatable("command." + ModSpartanWeaponry.ID + ".apply_potion_oil.success", oilStack.getHoverName(), applyStack.getItem().getName(applyStack).getString(), playerIn.getName().getString()), true);
+		commandSourceIn.sendSuccess(() -> Component.translatable("command." + ModSpartanWeaponry.ID + ".apply_potion_oil.success", oilStack.getHoverName(), applyStack.getItem().getName(applyStack).getString(), playerIn.getName().getString()), true);
 		return 1;
 	}
 	
@@ -109,7 +109,7 @@ public class ModCommands
 				orElseThrow(() -> ERROR_INCOMPATIBLE_ITEM.create(applyStack.getItem().getName(applyStack).getString()));
 
 		oilHandler.clearEffect();
-		commandSourceIn.sendSuccess(Component.translatable("command." + ModSpartanWeaponry.ID + ".clear_oil.success", applyStack.getItem().getName(applyStack).getString(), playerIn.getName().getString()), true);
+		commandSourceIn.sendSuccess(() -> Component.translatable("command." + ModSpartanWeaponry.ID + ".clear_oil.success", applyStack.getItem().getName(applyStack).getString(), playerIn.getName().getString()), true);
 		
 		return 1;
 	}

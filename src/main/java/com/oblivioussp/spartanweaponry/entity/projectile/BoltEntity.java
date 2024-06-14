@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.google.common.collect.Lists;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
-import com.oblivioussp.spartanweaponry.damagesource.ArmorPiercingIndirectEntityDamageSource;
+import com.oblivioussp.spartanweaponry.init.ModDamageTypes;
 import com.oblivioussp.spartanweaponry.init.ModEntities;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 
@@ -14,6 +14,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -91,11 +92,11 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 		getEntityData().set(DATA_BOLT, boltStack);
 	}
     
-    @Override
+/*    @Override
     public void shootFromRotation(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
     {
     	super.shootFromRotation(shooter, pitch, yaw, p_184547_4_, (float)(velocity * rangeMultiplier), inaccuracy);
-    }
+    }*/
 	
 	@Override
 	protected void defineSynchedData() 
@@ -109,7 +110,8 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
     public void tick() 
     {
     	super.tick();
-
+    	
+    	Level level = level();
 		if(level.isClientSide)
 		{
 			if(inGround)
@@ -128,14 +130,10 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 		}
     }
     
-    protected DamageSource causeArmorPiercingDamage(Entity sourceEntity, Entity indirectEntity)
-    {
-    	return new ArmorPiercingIndirectEntityDamageSource("arrow", sourceEntity, indirectEntity, armorPiercingFactor).setProjectile();
-    }
-    
     @Override
     protected void onHitEntity(EntityHitResult result)
     {
+    	Level level = level();
     	Entity entity = result.getEntity();
         float velocity = (float)getDeltaMovement().length();
         int damage = Mth.ceil(Mth.clamp((double)velocity * getBaseDamage(), 0.0D, 2.147483647E9D));
@@ -165,10 +163,10 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
         Entity shooter = getOwner();
         DamageSource source;
         if(shooter == null)
-        	source = causeArmorPiercingDamage(this, this);
+        	source = ModDamageTypes.armorPiercingProjectile(this, this);
         else 
         {
-        	source = causeArmorPiercingDamage(this, shooter);
+        	source = ModDamageTypes.armorPiercingProjectile(this, shooter);
         	if(shooter instanceof LivingEntity)
         		((LivingEntity)shooter).setLastHurtMob(entity);
         }
@@ -243,6 +241,7 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 	protected void doPostHurtEffects(LivingEntity living) 
 	{
 		super.doPostHurtEffects(living);
+    	Level level = level();
 		
 		for(MobEffectInstance effect : potion.getEffects())
 		{
@@ -272,7 +271,7 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() 
+	public Packet<ClientGamePacketListener> getAddEntityPacket() 
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -321,6 +320,11 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 		compound.putInt(NBT_POTION_COLOUR, getEntityData().get(DATA_COLOUR));
 	}
 	
+	public float getRangeMultiplier() 
+	{
+		return rangeMultiplier;
+	}
+	
 	public void setPotionEffect(ItemStack stack)
 	{
 		potion = PotionUtils.getPotion(stack);
@@ -332,14 +336,15 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 		int colour = getEntityData().get(DATA_COLOUR);
 		if(colour != -1 && particleCount > 0)
 		{
-	         double cR = (double)(colour >> 16 & 255) / 255.0D;
-	         double cG = (double)(colour >> 8 & 255) / 255.0D;
-	         double cB = (double)(colour >> 0 & 255) / 255.0D;
-	         
-	         for(int i = 0; i < particleCount; i++)
-	         {
-	        	 level.addParticle(ParticleTypes.ENTITY_EFFECT, getRandomX(0.5d), getRandomY(), getRandomZ(0.5d), cR, cG, cB);
-	         }
+	    	Level level = level();
+	        double cR = (double)(colour >> 16 & 255) / 255.0D;
+	        double cG = (double)(colour >> 8 & 255) / 255.0D;
+	        double cB = (double)(colour >> 0 & 255) / 255.0D;
+	        
+	        for(int i = 0; i < particleCount; i++)
+	        {
+	        	level.addParticle(ParticleTypes.ENTITY_EFFECT, getRandomX(0.5d), getRandomY(), getRandomZ(0.5d), cR, cG, cB);
+	        }
 		}
 	}
 	

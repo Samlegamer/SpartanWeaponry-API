@@ -3,6 +3,7 @@ package com.oblivioussp.spartanweaponry.entity.projectile;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,7 +56,7 @@ public abstract class ArrowEntitySW extends AbstractArrow
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() 
+	public Packet<ClientGamePacketListener> getAddEntityPacket() 
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

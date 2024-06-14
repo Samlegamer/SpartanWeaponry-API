@@ -672,6 +672,17 @@
 	"item.spartanweaponry.proj_tipped.effect.long_chilled": "%s of Chilling",
 	"item.spartanweaponry.proj_tipped.effect.anchored": "%s of Anchoring",
 	"item.spartanweaponry.proj_tipped.effect.long_anchored": "%s of Anchoring",
+	"item.spartanweaponry.proj_tipped.effect.decay": "%s of Decay",
+	"item.spartanweaponry.proj_tipped.effect.long_decay": "%s of Decay",
+	"item.spartanweaponry.proj_tipped.effect.strong_decay": "%s of Decay",
+	"item.spartanweaponry.proj_tipped.effect.reinforced": "%s of Reinforcing",
+	"item.spartanweaponry.proj_tipped.effect.long_reinforced": "%s of Reinforcing",
+	"item.spartanweaponry.proj_tipped.effect.strong_reinforced": "%s of Reinforcing",
+	"item.spartanweaponry.proj_tipped.effect.undeath": "%s of Undeath",
+	"item.spartanweaponry.proj_tipped.effect.long_undeath": "%s of Undeath",
+	"item.spartanweaponry.proj_tipped.effect.vulnerable": "%s of Vulnerability",
+	"item.spartanweaponry.proj_tipped.effect.long_vulnerable": "%s of Vulnerability",
+	"item.spartanweaponry.proj_tipped.effect.strong_vulnerable": "%s of Vulnerability",
 	
 	// The Abyss
 	"item.spartanweaponry.proj_tipped.effect.abyspower": "%s of Abyss Power",
@@ -798,6 +809,7 @@
 	
 	// Apotheosis
 	"item.spartanweaponry.proj_tipped.effect.grievous": "%s of Healing Reduction",
+	"item.spartanweaponry.proj_tipped.effect.flying": "%s of Flying",
 	
 	// The Undergarden
 	"item.spartanweaponry.proj_tipped.effect.brittleness": "%s of Brittleness",
@@ -812,6 +824,12 @@
 	"item.spartanweaponry.proj_tipped.effect.sculk_affinity": "%s of Sculk Affinity",
 	"item.spartanweaponry.proj_tipped.effect.long_sculk_affinity": "%s of Sculk Affinity",
 	
+	// Iron's Spells and Spellbooks
+	"item.spartanweaponry.proj_tipped.effect.mana": "%s of Mana",
+	
+	// Railcraft Reborn
+	"item.spartanweaponry.proj_tipped.effect.creosote": "%s of Creosote",
+	
 	// Quivers
 	"item.spartanweaponry.small_arrow_quiver": "Small Arrow Quiver",
 	"item.spartanweaponry.medium_arrow_quiver": "Medium Arrow Quiver",
@@ -823,9 +841,10 @@
 	"item.spartanweaponry.large_bolt_quiver": "Large Bolt Quiver",
 	"item.spartanweaponry.huge_bolt_quiver": "Huge Bolt Quiver",
 	
-	"item.spartanweaponry.medium_quiver_upgrade_kit": "Medium Quiver Upgrade Kit",
-	"item.spartanweaponry.large_quiver_upgrade_kit": "Large Quiver Upgrade Kit",
-	"item.spartanweaponry.huge_quiver_upgrade_kit": "Huge Quiver Upgrade Kit",
+	"item.spartanweaponry.quiver_compartment": "Quiver Compartment / Smithing \"Template\"",
+	"item.spartanweaponry.medium_quiver_brace": "Medium Quiver Brace",
+	"item.spartanweaponry.large_quiver_brace": "Large Quiver Brace",
+	"item.spartanweaponry.huge_quiver_brace": "Huge Quiver Brace",
 	
 	"item.spartanweaponry.dynamite": "Dynamite",
 	"item.spartanweaponry.grease_ball": "Grease Ball",
@@ -853,6 +872,17 @@
 	"item.spartanweaponry.weapon_oil.wither_long": "Sustained Wither Oil",
 	"item.spartanweaponry.weapon_oil.wither_strong": "Potent Wither Oil",
 	"item.spartanweaponry.weapon_oil.potion": "Oil",
+	
+	"item.spartanweaponry.parrying_dagger": "Parrying Dagger",
+	"item.spartanweaponry.silent_gear_parrying_dagger": "Parrying Dagger",
+	"item.spartanweaponry.silent_gear_parrying_dagger.nameProper": "%s Parrying Dagger",
+	"item.spartanweaponry.blueprint.parrying_dagger.desc": "Old-school Defence",
+	
+	"part.spartanweaponry.parrying_dagger_blade": "Parrying Dagger Blade",
+	"item.spartanweaponry.parrying_dagger_blade": "Compound Parrying Dagger Blade",
+	"item.spartanweaponry.parrying_dagger_blade.nameProper": "%s Parrying Dagger Blade",
+	
+	"gearType.silentgear.parrying_dagger": "Parrying Dagger",
 	
 	// Blocks (Blocks!!!???)
 	"block.spartanweaponry.blaze_head": "Blaze Head",
@@ -1023,9 +1053,15 @@
 	"tooltip.spartanweaponry.illager_head.desc": "Obtained by killing a Pillager, Vindicator, Illusioner or an Evoker with a weapon with the 'Decapitate' Weapon Trait",
 	"tooltip.spartanweaponry.witch_head.desc": "Obtained by killing a Witch with a weapon with the 'Decapitate' Weapon Trait",
 	
-	"tooltip.spartanweaponry.medium_quiver_upgrade_kit.desc": "Upgrades any Small Quiver into a Medium Quiver in a Smithing Table",
-	"tooltip.spartanweaponry.large_quiver_upgrade_kit.desc": "Upgrades any Medium Quiver into a Large Quiver in a Smithing Table",
-	"tooltip.spartanweaponry.huge_quiver_upgrade_kit.desc": "Upgrades any Large Quiver into a Huge Quiver in a Smithing Table",
+	"tooltip.spartanweaponry.medium_quiver_brace.desc": "Material to upgrade Small Quivers into a Medium Quiver in a Smithing Table",
+	"tooltip.spartanweaponry.large_quiver_brace.desc": "Material to upgrade Medium Quivers into a Large Quiver in a Smithing Table",
+	"tooltip.spartanweaponry.huge_quiver_brace.desc": "Material to upgrade Large Quivers into a Huge Quiver in a Smithing Table",
+
+	"tooltip.spartanweaponry.quiver_compartment.applies_to": "Arrow & Bolt Quivers",
+	"tooltip.spartanweaponry.quiver_compartment.ingredients": "Quiver Brace of the next tier",
+	"tooltip.spartanweaponry.quiver_compartment.upgrade_description": "Quiver Capacity Upgrade",
+	"tooltip.spartanweaponry.quiver_compartment.base_slot_description": "Quiver Slot",
+	"tooltip.spartanweaponry.quiver_compartment.additonal_slot_description": "Quiver Brace Slot",
 	
 	"tooltip.spartanweaponry.description": "Description: %s",
 	"tooltip.spartanweaponry.show_description": "[Press %s to show description]",
@@ -1092,7 +1128,7 @@
 	"tooltip.spartanweaponry.quiver_ammo": "- %dx %s",
 	"tooltip.spartanweaponry.quiver_none": "- Nothing!",
 	"tooltip.spartanweaponry.quiver_collect_status": "Ammo Collect: ",
-	"tooltip.spartanweaponry.quiver_upgrade": "Upgrade using Quiver Upgrade Kits in a Smithing Table",
+	"tooltip.spartanweaponry.quiver_upgrade": "Upgrade using a Quiver Compartment & a Quiver Brace of the next tier in a Smithing Table",
 	
 	"tooltip.spartanweaponry.enabled": "Enabled",
 	"tooltip.spartanweaponry.disabled": "Disabled",

@@ -32,5 +32,6 @@
     [
       "has_parrying_dagger"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

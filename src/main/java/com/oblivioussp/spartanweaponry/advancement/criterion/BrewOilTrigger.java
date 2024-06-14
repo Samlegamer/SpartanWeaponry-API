@@ -9,8 +9,8 @@ import com.oblivioussp.spartanweaponry.api.OilEffects;
 import com.oblivioussp.spartanweaponry.api.oil.OilEffect;
 
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SerializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +30,7 @@ public class BrewOilTrigger extends SimpleCriterionTrigger<BrewOilTrigger.Trigge
 	}
 
 	@Override
-	protected TriggerInstance createInstance(JsonObject jsonIn, EntityPredicate.Composite predicateIn, DeserializationContext contextIn)
+	protected TriggerInstance createInstance(JsonObject jsonIn, ContextAwarePredicate predicateIn, DeserializationContext contextIn)
 	{
 		OilEffect oilEffect = null;
 		if(jsonIn.has(JSON_OIL))
@@ -52,7 +52,7 @@ public class BrewOilTrigger extends SimpleCriterionTrigger<BrewOilTrigger.Trigge
 	{
 		private final OilEffect oilEffect;
 
-		public TriggerInstance(EntityPredicate.Composite predicateIn, @Nullable OilEffect oilEffectIn) 
+		public TriggerInstance(ContextAwarePredicate predicateIn, @Nullable OilEffect oilEffectIn) 
 		{
 			super(BrewOilTrigger.ID, predicateIn);
 			oilEffect = oilEffectIn;
@@ -60,7 +60,7 @@ public class BrewOilTrigger extends SimpleCriterionTrigger<BrewOilTrigger.Trigge
 		
 		public static TriggerInstance brewedOil()
 		{
-			return new BrewOilTrigger.TriggerInstance(EntityPredicate.Composite.ANY, null);
+			return new BrewOilTrigger.TriggerInstance(ContextAwarePredicate.ANY, null);
 		}
 		
 		// TODO: Possibly make a advancement for brewing all the oils

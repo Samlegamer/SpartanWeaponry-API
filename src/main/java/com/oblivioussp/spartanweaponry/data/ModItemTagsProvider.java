@@ -1,31 +1,35 @@
 package com.oblivioussp.spartanweaponry.data;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.tags.ModBlockTags;
 import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModItemTagsProvider extends ItemTagsProvider
 {
-	public ModItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagsProvider, ExistingFileHelper existingFileHelper) 
+	public ModItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registry, CompletableFuture<TagsProvider.TagLookup<Block>> blockTagLookup, ExistingFileHelper existingFileHelper) 
 	{
-		super(dataGenerator, blockTagsProvider, ModSpartanWeaponry.ID, existingFileHelper);
+		super(output, registry, blockTagLookup, ModSpartanWeaponry.ID, existingFileHelper);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void addTags()
+	protected void addTags(HolderLookup.Provider registry)
 	{
 		final TagKey<Item> WEAPONS = ItemTags.create(new ResourceLocation("forge:weapons"));
 		final TagKey<Item> CURIOS_BACK = ItemTags.create(new ResourceLocation("curios:back"));
@@ -158,7 +162,7 @@ public class ModItemTagsProvider extends ItemTagsProvider
 			addTags(ModItemTags.DAGGERS, ModItemTags.PARRYING_DAGGERS, ModItemTags.LONGSWORDS, ModItemTags.KATANAS, ModItemTags.SABERS, ModItemTags.RAPIERS, ModItemTags.GREATSWORDS,
 				ModItemTags.CLUBS, ModItemTags.BATTLE_HAMMERS, ModItemTags.WARHAMMERS, ModItemTags.SPEARS, ModItemTags.HALBERDS, ModItemTags.PIKES, ModItemTags.LANCES,
 				ModItemTags.BATTLEAXES, ModItemTags.FLANGED_MACES, ModItemTags.GLAIVES, ModItemTags.QUARTERSTAVES, ModItemTags.SCYTHES);
-		
+
 		tag(ModItemTags.THROWING_WEAPONS).addTags(ModItemTags.THROWING_KNIVES, ModItemTags.TOMAHAWKS, ModItemTags.JAVELINS, ModItemTags.BOOMERANGS);
 		tag(ModItemTags.HAS_CUSTOM_CROSSHAIR).addTags(ModItemTags.THROWING_WEAPONS, ModItemTags.HEAVY_CROSSBOWS);
 

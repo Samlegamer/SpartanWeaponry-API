@@ -9,10 +9,12 @@ import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.init.ModRecipeSerializers;
 import com.oblivioussp.spartanweaponry.util.OilHelper;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -20,9 +22,9 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class ApplyOilRecipe extends CustomRecipe
 {
-	public ApplyOilRecipe(ResourceLocation idIn) 
+	public ApplyOilRecipe(ResourceLocation idIn, CraftingBookCategory craftingBookCategoryIn) 
 	{
-		super(idIn);
+		super(idIn, craftingBookCategoryIn);
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class ApplyOilRecipe extends CustomRecipe
 	}
 
 	@Override
-	public ItemStack assemble(CraftingContainer containerIn) 
+	public ItemStack assemble(CraftingContainer containerIn, RegistryAccess registryAccessIn) 
 	{
 		ItemStack oilStack = ItemStack.EMPTY,
 				weaponStack = ItemStack.EMPTY;

@@ -32,5 +32,6 @@
     [
       "has_throwing_knife"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

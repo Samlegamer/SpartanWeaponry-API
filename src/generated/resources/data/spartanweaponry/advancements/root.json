@@ -47,5 +47,6 @@
       "has_handle",
       "has_pole"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

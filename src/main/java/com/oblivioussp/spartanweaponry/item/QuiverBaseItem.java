@@ -7,7 +7,6 @@ import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.capability.QuiverCapabilityProvider;
 import com.oblivioussp.spartanweaponry.capability.QuiverCurioCapabilityProvider;
 import com.oblivioussp.spartanweaponry.client.ClientHelper;
-import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.inventory.tooltip.QuiverTooltip;
 import com.oblivioussp.spartanweaponry.util.Defaults;
 
@@ -48,7 +47,8 @@ public abstract class QuiverBaseItem extends Item
 	public static final String NBT_CURRENT_AMMO = "CurrentAmmo";
 	public static final String NBT_TOTAL_AMMO = "TotalAmmo";
 	public static final String NBT_AMMO_COLLECT = "AmmoCollect";
-	public static final String NBT_CLIENT_INVENTORY = "ClientInventory";
+//	public static final String NBT_CLIENT_INVENTORY = "ClientInventory";
+	public static final String NBT_AMMO = "Ammo";
 	public static final String NBT_OFFHAND_MOVED = "OffhandMoved";
 	public static final String NBT_ITEM_ID = "Id";
 	public static final String NBT_ITEM_SLOT = "Slot";
@@ -58,7 +58,7 @@ public abstract class QuiverBaseItem extends Item
 
 	public QuiverBaseItem(int inventorySize)
 	{
-		super(new Item.Properties().tab(ModItems.TAB_SW).stacksTo(1));
+		super(new Item.Properties().stacksTo(1));
 		
 		if(FMLEnvironment.dist.isClient())
 			ClientHelper.registerQuiverPropertyOverrides(this);
@@ -71,7 +71,7 @@ public abstract class QuiverBaseItem extends Item
 		int ammo = 0;
 		ListTag list = null;
 		
-		list = stack.getOrCreateTag().getCompound(NBT_CLIENT_INVENTORY).getList("Items", Tag.TAG_COMPOUND);
+		list = stack.getOrCreateTag().getCompound(NBT_AMMO).getList("Items", Tag.TAG_COMPOUND);
 		if(list == null)	return 0;
 		
 		for(int i = 0; i < list.size(); i++)
@@ -139,23 +139,26 @@ public abstract class QuiverBaseItem extends Item
 	@Override
 	public CompoundTag getShareTag(ItemStack stack) 
 	{
-		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve().orElseThrow();
-		if(!(handler instanceof ItemStackHandler))
+/*		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve().orElseThrow();
+		if(!(handler instanceof ItemStackHandler))*/
 			return super.getShareTag(stack);
 		
-		CompoundTag capTag = ((ItemStackHandler)handler).serializeNBT();
+/*		CompoundTag capTag = ((ItemStackHandler)handler).serializeNBT();
 		CompoundTag tag = super.getShareTag(stack);
 		if(tag == null)
 			tag = new CompoundTag();
 		
 		if(capTag != null)
 			tag.put(NBT_CLIENT_INVENTORY, capTag);
-		return tag;
+		return tag;*/
 	}
 	
 	@Override
 	public void appendHoverText(ItemStack stack, Level levelIn, List<Component> tooltip, TooltipFlag flagIn) 
 	{
+		if(stack.getOrCreateTag().contains("ClientInventory"))
+			stack.getOrCreateTag().remove("ClientInventory");
+		
 		super.appendHoverText(stack, levelIn, tooltip, flagIn);
 		
 		boolean ammoCollect = stack.getOrCreateTag().getBoolean(NBT_AMMO_COLLECT);
@@ -169,7 +172,7 @@ public abstract class QuiverBaseItem extends Item
 	
 	public Optional<TooltipComponent> makeTooltipImage(ItemStack stackIn, boolean isBoltQuiver)
 	{
-		ListTag list = stackIn.getOrCreateTag().getCompound(NBT_CLIENT_INVENTORY).getList("Items", Tag.TAG_COMPOUND);
+		ListTag list = stackIn.getOrCreateTag().getCompound(NBT_AMMO).getList("Items", Tag.TAG_COMPOUND);
 		int prioritySlot = stackIn.getOrCreateTag().getInt(NBT_PROIRITY_SLOT);
 		
 		NonNullList<ItemStack> items = NonNullList.withSize(ammoSlots, ItemStack.EMPTY);

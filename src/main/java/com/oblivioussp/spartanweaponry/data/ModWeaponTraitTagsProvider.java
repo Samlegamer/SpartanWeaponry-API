@@ -1,21 +1,26 @@
 package com.oblivioussp.spartanweaponry.data;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.WeaponTraits;
 import com.oblivioussp.spartanweaponry.api.tags.ModWeaponTraitTags;
 import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeRegistryTagsProvider;
 import net.minecraftforge.registries.RegistryManager;
 
-public class ModWeaponTraitTagsProvider extends ForgeRegistryTagsProvider<WeaponTrait> 
+public class ModWeaponTraitTagsProvider extends IntrinsicHolderTagsProvider<WeaponTrait> 
 {
 
-	public ModWeaponTraitTagsProvider(DataGenerator dataGenerator, ExistingFileHelper existingFileHelper)
+	public ModWeaponTraitTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registry, ExistingFileHelper existingFileHelper)
 	{
-		super(dataGenerator, RegistryManager.ACTIVE.getRegistry(WeaponTraits.REGISTRY_KEY), ModSpartanWeaponry.ID, existingFileHelper);
+		super(output, WeaponTraits.REGISTRY_KEY, registry, 
+				(weaponTrait) -> RegistryManager.ACTIVE.getRegistry(WeaponTraits.REGISTRY_KEY).getResourceKey(weaponTrait).orElseThrow(), 
+				ModSpartanWeaponry.ID, existingFileHelper);
 	}
 
 	@Override
@@ -25,7 +30,7 @@ public class ModWeaponTraitTagsProvider extends ForgeRegistryTagsProvider<Weapon
 	}
 
 	@Override
-	protected void addTags() 
+	protected void addTags(HolderLookup.Provider registry) 
 	{
 		tag(ModWeaponTraitTags.DAGGER).add(WeaponTraits.THROWABLE.get(), WeaponTraits.DAMAGE_BONUS_BACKSTAB.get());
 		tag(ModWeaponTraitTags.PARRYING_DAGGER).add(WeaponTraits.BLOCK_MELEE.get());

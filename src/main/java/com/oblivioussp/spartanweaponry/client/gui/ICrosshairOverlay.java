@@ -1,11 +1,10 @@
 package com.oblivioussp.spartanweaponry.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 public interface ICrosshairOverlay 
 {
-	void render(ForgeGui gui, PoseStack mStack, float partialTicks, int screenWidth, int screenHeight, ItemStack stack);
+	void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight, ItemStack stack);
 }

@@ -1,8 +1,8 @@
 package com.oblivioussp.spartanweaponry.client.gui.components;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -17,10 +17,10 @@ public class ToggleImageButton extends Button
 	private boolean toggleState;
 
 	public ToggleImageButton(boolean isToggled, int xPos, int yPos, int width, int height, int texU, int texV,
-			int texToggleDiffU, int texHoverDiffV, ResourceLocation textureLoc, int texWidth, int texHeight, OnPress onPress, OnTooltip onTooltip,
+			int texToggleDiffU, int texHoverDiffV, ResourceLocation textureLoc, int texWidth, int texHeight, OnPress onPress,
 			Component component) 
 	{
-		super(xPos, yPos, width, height, component, onPress, onTooltip);
+		super(xPos, yPos, width, height, component, onPress, DEFAULT_NARRATION);
 		texStartU = texU;
 		texStartV = texV;
 		toggleDiffU = texToggleDiffU;
@@ -39,9 +39,9 @@ public class ToggleImageButton extends Button
 	}
 
 	@Override
-	public void renderButton(PoseStack poseStack, int renderX, int renderY, float p_94285_) 
+	public void renderWidget(GuiGraphics guiGraphics, int renderX, int renderY, float p_94285_) 
 	{
-		super.renderButton(poseStack, renderX, renderY, p_94285_);
+		super.renderWidget(guiGraphics, renderX, renderY, p_94285_);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, textureLocation);
 		float u = texStartU;
@@ -49,12 +49,12 @@ public class ToggleImageButton extends Button
 		
 		if(toggleState)
 			u += toggleDiffU;
-		if(isHoveredOrFocused())
+		if(isHovered())
 			v += hoverDiffV;
 		
 		RenderSystem.enableDepthTest();
-		blit(poseStack, x, y, u, v, width, height, textureWidth, textureHeight);
-		if(isHovered)
-			renderToolTip(poseStack, renderX, renderY);
+		guiGraphics.blit(textureLocation, getX(), getY(), u, v, width, height, textureWidth, textureHeight);
+//		if(isHovered)
+//			renderToolTip(guiGraphics, renderX, renderY);
 	}
 }

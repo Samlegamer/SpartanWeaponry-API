@@ -56,7 +56,7 @@ public class QuiverAccessPacket
 						// Via the Curios slots
 						if(quiver.isEmpty() && ModList.get().isLoaded(CuriosApi.MODID))
 						{
-							Optional<SlotResult> opt = CuriosApi.getCuriosHelper().findFirstCurio(player, (stack) -> stack.getItem() instanceof QuiverBaseItem);
+							Optional<SlotResult> opt = QuiverHelper.getQuiverCurio(player);
 							if(opt.isPresent() && info.isQuiver(opt.get().stack()))
 							{
 								quiver = opt.get().stack();
@@ -89,7 +89,7 @@ public class QuiverAccessPacket
 				// Via the Curios slots
 				if(quiver.isEmpty() && ModList.get().isLoaded(CuriosApi.MODID))
 				{
-					Optional<SlotResult> opt = CuriosApi.getCuriosHelper().findFirstCurio(player, (stack) -> stack.getItem() instanceof QuiverBaseItem);
+					Optional<SlotResult> opt = QuiverHelper.getQuiverCurio(player);
 					if(opt.isPresent())
 					{
 						quiver = opt.get().stack();

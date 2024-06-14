@@ -42,6 +42,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -92,7 +93,7 @@ public class CommonEventHandler
 	@SubscribeEvent
 	public static void onLivingHurt(LivingHurtEvent ev)
 	{
-		DamageSource src = ev.getSource();
+		DamageSource source = ev.getSource();
 		float dmgDealt = ev.getAmount();
 		LivingEntity target = ev.getEntity();
 		
@@ -101,14 +102,15 @@ public class CommonEventHandler
 //			Log.info("Damage: Entity: " + target.getDisplayName().getContents() + " Armour value: " + target.getArmorValue() + " Damage value: " + dmgDealt + " Source: " + src.msgId);			
 		
 		
-		if(dmgDealt == 0.0f || src.isProjectile() || src.isFire() || src.isExplosion() || src.isMagic() ||
-				(!src.getMsgId().equals("player") && !src.getMsgId().equals("mob")))
+		if(dmgDealt == 0.0f || source.is(DamageTypeTags.IS_PROJECTILE) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_EXPLOSION) || /*src.isMagic() ||*/
+				(!source.getMsgId().equals("player") && !source.getMsgId().equals("mob")))
 			return;
 		
 		// Ensure that the source of damage is direct (not from projectiles, etc)
-		if(src.getDirectEntity() == src.getEntity() && src.getEntity() instanceof LivingEntity && target != null)
+		if(source.getDirectEntity() == source.getEntity() && source.getEntity() instanceof LivingEntity && target != null)
 		{
-			LivingEntity attacker = (LivingEntity)src.getEntity();
+			LivingEntity attacker = (LivingEntity)source.getEntity();
+			Level level = attacker.level();
 			
 			ItemStack attackerStack = attacker.getMainHandItem();
 			ItemStack targetStack = target.getMainHandItem();
@@ -124,7 +126,7 @@ public class CommonEventHandler
 				{
 					Optional<IMeleeTraitCallback> opt = trait.getMeleeCallback();
 					if(opt.isPresent())
-						dmgDealt = opt.get().modifyDamageDealt(container.getMaterial(), dmgDealt, src, attacker, target);
+						dmgDealt = opt.get().modifyDamageDealt(container.getMaterial(), dmgDealt, source, attacker, target);
 				}
 				
 				if(dmgDealt > dmgUnmodified)
@@ -142,7 +144,7 @@ public class CommonEventHandler
 				if(oilHandler.isOiled())
 				{
 					float dmgUnmodified = dmgDealt;
-					dmgDealt = oilHandler.useEffect(dmgDealt, attacker.level, target, attacker, attackerStack);
+					dmgDealt = oilHandler.useEffect(dmgDealt, level, target, attacker, attackerStack);
 					if(dmgDealt != dmgUnmodified)
 						doOilDamageParticles = true;
 				}
@@ -154,21 +156,21 @@ public class CommonEventHandler
 				{
 					Optional<IMeleeTraitCallback> opt = trait.getMeleeCallback();
 					if(opt.isPresent())
-						dmgDealt = opt.get().modifyDamageTaken(container.getMaterial(), dmgDealt, src, attacker, target);
+						dmgDealt = opt.get().modifyDamageTaken(container.getMaterial(), dmgDealt, source, attacker, target);
 				}
 			}
 			
 			if(dmgDealt != ev.getAmount())
 			{
-				if(!attacker.level.isClientSide) 
+				if(!level.isClientSide) 
 				{
 					// Emit particles when damage has been enhanced or mitigated, depending on what has happened
 					if(doTraitDamageParticles && dmgDealt > ev.getAmount())
-						((ServerLevel)attacker.level).sendParticles(ModParticles.DAMAGE_BOOSTED.get(), target.getX(), target.getY() + (target.getBbHeight() / 2.0f), target.getZ(), 8, 0.2d, 0.2d, 0.2d, 0.5d);
+						((ServerLevel)level).sendParticles(ModParticles.DAMAGE_BOOSTED.get(), target.getX(), target.getY() + (target.getBbHeight() / 2.0f), target.getZ(), 8, 0.2d, 0.2d, 0.2d, 0.5d);
 					else if(dmgDealt < ev.getAmount())
-						((ServerLevel)attacker.level).sendParticles(ModParticles.DAMAGE_REDUCED.get(), target.getX(), target.getY() + (target.getBbHeight() / 2.0f), target.getZ(), 8, 0.2d, 0.2d, 0.2d, 0.5d);
+						((ServerLevel)level).sendParticles(ModParticles.DAMAGE_REDUCED.get(), target.getX(), target.getY() + (target.getBbHeight() / 2.0f), target.getZ(), 8, 0.2d, 0.2d, 0.2d, 0.5d);
 					if(doOilDamageParticles)
-						((ServerLevel)attacker.level).sendParticles(ModParticles.OIL_DAMAGE_BOOSTED.get(), target.getX(), target.getY() + (target.getBbHeight() / 2.0f), target.getZ(), 8, 0.2d, 0.2d, 0.2d, 0.5d);
+						((ServerLevel)level).sendParticles(ModParticles.OIL_DAMAGE_BOOSTED.get(), target.getX(), target.getY() + (target.getBbHeight() / 2.0f), target.getZ(), 8, 0.2d, 0.2d, 0.2d, 0.5d);
 				}
 				
 				//Log.info(String.format("Changed damage dealt! %f -> %f", ev.getAmount(), dmgDealt));
@@ -190,7 +192,8 @@ public class CommonEventHandler
 				boolean damageItem = false;
 				
 				// Block Melee attacks only! Explosion, Fire, Magic, Projectile and unblockable damage won't be blocked!
-				if(!source.isExplosion() && !source.isFire() && !source.isMagic() && !source.isProjectile() && !source.isBypassArmor())
+				if(source.getMsgId().equals("player") || source.getMsgId().equals("mob") &&
+						!source.is(DamageTypeTags.IS_EXPLOSION) && !source.is(DamageTypeTags.IS_FIRE) && !source.is(DamageTypeTags.IS_PROJECTILE) && !source.is(DamageTypeTags.BYPASSES_ARMOR))
 				{
 					// Do knockback due to damage.
 					Entity trueSourceEntity = source.getEntity();
@@ -206,7 +209,7 @@ public class CommonEventHandler
 				{
                     int itemDamage = 1 + Mth.floor(ev.getAmount());
                     activeStack.hurtAndBreak(itemDamage, player, (playerEntity) -> playerEntity.broadcastBreakEvent(playerEntity.getUsedItemHand()));
-                    player.level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, SoundSource.PLAYERS, 0.8f, 0.8f);
+                    player.level().playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, SoundSource.PLAYERS, 0.8f, 0.8f);
                     ev.setCanceled(true);                        
 				}
 			}
@@ -255,7 +258,7 @@ public class CommonEventHandler
 			oppositeStack = player.getItemBySlot(oppositeHand);
 			
 			// Check and see if the bow has been unequipped and if the opposite hand slot has valid ammo in it.
-			if(!ItemStack.isSame(fromStack, toStack) && !oppositeStack.isEmpty())
+			if(!ItemStack.isSameItem(fromStack, toStack) && !oppositeStack.isEmpty())
 			{
 				// Check if the item being switched to is blacklisted in the config
 				boolean toStackBlacklisted = false;
@@ -298,7 +301,7 @@ public class CommonEventHandler
 				}
 			}
 			// Check to see if a bow has been equipped
-			if(!ItemStack.isSame(toStack, fromStack))
+			if(!ItemStack.isSameItem(toStack, fromStack))
 			{
 				// Check to see if the weapon being equipped is blacklisted in the config
 				String regName = ForgeRegistries.ITEMS.getKey(toStack.getItem()).toString();
@@ -443,6 +446,7 @@ public class CommonEventHandler
 		int beforeCount = pickedUpStack.getCount(),
 			afterCount = beforeCount;
 		Player player  = ev.getEntity();
+		Level level = player.level();
 		List<ItemStack> quivers = QuiverHelper.findValidQuivers(player);
 		
 		if(!quivers.isEmpty())
@@ -471,7 +475,7 @@ public class CommonEventHandler
 			{
 				player.take(ev.getItem(), beforeCount - afterCount);
 				ev.getItem().getItem().setCount(afterCount);
-				player.level.playSound((Player)null, ev.getItem().getX(), ev.getItem().getY(), ev.getItem().getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, (rand.nextFloat() - rand.nextFloat()) * 0.7F + 0.0F);
+				level.playSound((Player)null, ev.getItem().getX(), ev.getItem().getY(), ev.getItem().getZ(), SoundEvents.ITEM_PICKUP, player.getSoundSource(), 0.2F, (rand.nextFloat() - rand.nextFloat()) * 0.7F + 0.0F);
 			}
 		}
 		// Merge compatible itemstacks for throwing weapons
@@ -484,7 +488,7 @@ public class CommonEventHandler
 			for(int i = 0; i < player.getInventory().getContainerSize(); i++)
 			{
 				ItemStack slotStack = player.getInventory().getItem(i);
-				if(ItemStack.isSameIgnoreDurability(slotStack, pickedUpStack) && pickedUpStack.hasTag() && slotStack.hasTag() &&
+				if(ItemStack.isSameItem(slotStack, pickedUpStack) && pickedUpStack.hasTag() && slotStack.hasTag() &&
 						slotStack.getTag().hasUUID(ThrowingWeaponItem.NBT_UUID) && pickedUpStack.getTag().hasUUID(ThrowingWeaponItem.NBT_UUID) &&
 						pickedUpStack.getTag().getUUID(ThrowingWeaponItem.NBT_UUID).equals(slotStack.getTag().getUUID(ThrowingWeaponItem.NBT_UUID)))
 				{
@@ -503,7 +507,11 @@ public class CommonEventHandler
     						// TODO: Reimplement broken item particles
 //    						this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
 //    						player.renderBrokenItemStack(pickedUpStack);
-    	            		itemDamage -= slotStack.getMaxDamage() + 1;
+//    						player.breakItem(slotStack);
+    						level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BREAK, player.getSoundSource(), 0.8f, 0.8f + player.getRandom().nextFloat() * 0.4f);
+//    						if(!level.isClientSide)
+//    							((ServerLevel)level).getChunkSource().broadcast(player, new ClientboundEntityEventPacket(player, (byte) 47));
+    						itemDamage -= slotStack.getMaxDamage() + 1;
     					}
     					else
     					{
@@ -534,7 +542,7 @@ public class CommonEventHandler
         	if(removeItems)
         	{
         		player.take(player, 1);
-        		player.level.playSound((Player)null, ev.getItem().getX(), ev.getItem().getY(), ev.getItem().getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, (rand.nextFloat() - rand.nextFloat()) * 0.7F + 0.0F);
+        		level.playSound((Player)null, ev.getItem().getX(), ev.getItem().getY(), ev.getItem().getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, (rand.nextFloat() - rand.nextFloat()) * 0.7F + 0.0F);
 				ev.getItem().getItem().setCount(0);
         	}
 		}
@@ -709,7 +717,7 @@ public class CommonEventHandler
 		ItemStack left = ev.getLeft();
 		ItemStack right = ev.getRight();
 		if(left.getItem() instanceof ThrowingWeaponItem && left.hasTag() && left.getTag().getBoolean(ThrowingWeaponItem.NBT_ORIGINAL)
-				&& ItemStack.isSameIgnoreDurability(left, right))
+				&& ItemStack.isSameItem(left, right))
 		{
 			ThrowingWeaponItem throwingWeapon = (ThrowingWeaponItem)left.getItem();
 			int leftAmmo = left.getTag().getInt(ThrowingWeaponItem.NBT_AMMO_USED);

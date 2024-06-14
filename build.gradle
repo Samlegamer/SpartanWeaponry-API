@@ -6,11 +6,11 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = "${minecraft_version}-${mod_version}"
+version = "${minecraft_version}-forge-${mod_version}"
 group = mod_group_id
 
 base {
-    archivesName = mod_jar_name
+    archivesName = "${mod_jar_name}"
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -177,15 +177,18 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-	// At runtime, use the full Curios mod jar
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
 	// Compile against the the Curios API but don't include it at runtime
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}:api")
+	// At runtime, use the full Curios mod jar
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}")
     
-	implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5321692")
-    implementation fg.deobf("curse.maven:footwork-api-608407:4786768")
-    implementation fg.deobf("curse.maven:attributizer-838573:4784940")
-    implementation fg.deobf("curse.maven:project-war-dance-446004:4718727")
+//    implementation fg.deobf("curse.maven:footwork-api-608407:5259234")
+//    implementation fg.deobf("curse.maven:attributizer-838573:4844296")
+//    implementation fg.deobf("curse.maven:project-war-dance-446004:5259302")
+    implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5419215")
+    
+//    implementation fg.deobf("curse.maven:silent-lib-242998:4585754")
+//    implementation fg.deobf("curse.maven:silent-gear-297039:5199286")
 }
 
 mixin {
@@ -207,9 +210,8 @@ tasks.named('processResources', ProcessResources).configure {
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version: forge_version, forge_version_range: forge_version_range,
             loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_jar_name : mod_jar_name, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_id: mod_id, mod_name: mod_name, mod_jar_name: mod_jar_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_credits: mod_credits, mod_description: mod_description,
-            shoulder_surfing_version_range : shoulder_surfing_version_range,
     ]
     inputs.properties replaceProperties
 

@@ -30,7 +30,6 @@ import com.oblivioussp.spartanweaponry.util.WeaponArchetype;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,7 +46,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -374,19 +372,12 @@ public class ThrowingWeaponItem extends Item implements IWeaponTraitContainer<Th
 		initNBT(stack, true);
 	}
 	
-	@Override
-	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) 
+	public ItemStack makeTabStack()
 	{
-		if(allowedIn(group))
-		{
-			ItemStack stack = new ItemStack(this);
-
-			if(traits != null)
-				traits.forEach((trait) -> trait.getMeleeCallback().ifPresent((callback) -> callback.onCreateItem(material, stack)));
-			
-			initNBT(stack, false);
-			items.add(stack);
-		}
+		ItemStack stack = new ItemStack(this);
+		
+		initNBT(stack, false);
+		return stack;
 	}
 
 	@Override

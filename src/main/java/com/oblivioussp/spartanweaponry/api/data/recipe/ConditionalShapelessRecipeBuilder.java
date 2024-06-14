@@ -135,7 +135,7 @@ public class ConditionalShapelessRecipeBuilder
 	{
 		validate(id);
 		advancementBuilder.parent(new ResourceLocation("minecraft:recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-		consumerIn.accept(new Result(id, result, count, group == null ? "" : group, ingredients, conditions, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + result.getItem().getItemCategory().getRecipeFolderName() + "/" + id.getPath())));
+		consumerIn.accept(new Result(id, result, count, group == null ? "" : group, ingredients, conditions, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath())));
 	}
 	
 	private void validate(ResourceLocation id)

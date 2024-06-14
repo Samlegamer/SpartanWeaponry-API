@@ -6,12 +6,13 @@ import java.util.function.Consumer;
 import com.oblivioussp.spartanweaponry.api.crafting.condition.TypeDisabledCondition;
 
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.UpgradeRecipeBuilder;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -37,7 +38,7 @@ public class RecipeProviderHelper
 	 */
 	public static void smithingRecipe(Consumer<FinishedRecipe> consumer, ItemLike base, TagKey<Item> additionTag, ItemLike result, String hasItemCriterionName)
 	{
-		UpgradeRecipeBuilder.smithing(Ingredient.of(base), Ingredient.of(additionTag), result.asItem()).unlocks(hasItemCriterionName, hasItem(additionTag)).
+		SmithingTransformRecipeBuilder.smithing(Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), Ingredient.of(base), Ingredient.of(additionTag), RecipeCategory.MISC, result.asItem()).unlocks(hasItemCriterionName, hasItem(additionTag)).
 			save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_smithing");
 	}
 	
@@ -391,7 +392,7 @@ public class RecipeProviderHelper
 	 */
 	protected static CriterionTriggerInstance hasItem(ItemLike item)
 	{
-		return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, new ItemPredicate[] {ItemPredicate.Builder.item().of(item).build()});
+		return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, new ItemPredicate[] {ItemPredicate.Builder.item().of(item).build()});
 	}
 
 	/**
@@ -401,6 +402,6 @@ public class RecipeProviderHelper
 	 */
 	protected static CriterionTriggerInstance hasItem(TagKey<Item> tag)
 	{
-		return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, new ItemPredicate[] {ItemPredicate.Builder.item().of(tag).build()});
+		return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, new ItemPredicate[] {ItemPredicate.Builder.item().of(tag).build()});
 	}
 }

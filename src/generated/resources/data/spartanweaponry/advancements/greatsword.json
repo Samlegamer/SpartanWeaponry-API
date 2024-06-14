@@ -32,5 +32,6 @@
     [
       "has_greatsword"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -13,6 +13,7 @@ import com.oblivioussp.spartanweaponry.util.QuiverHelper.IQuiverInfo;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -26,7 +27,7 @@ public class HudQuiverAmmo
 {
 	protected static final ResourceLocation WIDGETS = new ResourceLocation("textures/gui/widgets.png");
 
-	public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int screenWidth, int screenHeight) 
+	public static void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight) 
 	{
 		RenderSystem.assertOnRenderThread();
 		
@@ -60,7 +61,7 @@ public class HudQuiverAmmo
 		if(quiverStack.isEmpty())
 			return;
 		
-		ListTag list = quiverStack.getTag().getCompound(QuiverBaseItem.NBT_CLIENT_INVENTORY).getList("Items", Tag.TAG_COMPOUND);
+		ListTag list = quiverStack.getTag().getCompound(QuiverBaseItem.NBT_AMMO).getList("Items", Tag.TAG_COMPOUND);
 		
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -75,24 +76,25 @@ public class HudQuiverAmmo
 		offsetX = AlignmentHelper.getAlignedX(align, ClientConfig.INSTANCE.quiverHudOffsetX.get(), 22);
 		offsetY = AlignmentHelper.getAlignedY(align, ClientConfig.INSTANCE.quiverHudOffsetY.get(), 22);
 		
+		PoseStack poseStack = RenderSystem.getModelViewStack();
 		poseStack.pushPose();
-        poseStack.translate(0.0D, 0.0D, (double)(mc.getItemRenderer().blitOffset + 200.0F));
+        poseStack.translate(0.0d, 0.0d, 200.0d);
         MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
         
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, WIDGETS);
+//        RenderSystem.setShaderTexture(0, WIDGETS);
         
-		mc.gui.blit(poseStack, offsetX, offsetY, 24, 23, 22, 22);
-		mc.getItemRenderer().renderAndDecorateItem(quiverStack, offsetX + 3, offsetY + 3);
-		font.drawInBatch(ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true, poseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
+		guiGraphics.blit(WIDGETS, offsetX, offsetY, 24, 23, 22, 22);
+		guiGraphics.renderFakeItem(quiverStack, offsetX + 3, offsetY + 3);
+		font.drawInBatch(ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
 		
 		// Draw the key (in text form) required to open this quiver
 		if(!KeyBinds.KEY_ACCESS_QUIVER.isUnbound())
 		{
 			String inventoryKey = "[" + KeyBinds.KEY_ACCESS_QUIVER.getTranslatedKeyMessage().getString().toUpperCase() + "]";
 			int keyTextYOffset = align.getVertical() == VerticalAlignment.TOP ? 22 : -8;
-			font.drawInBatch(inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
+			font.drawInBatch(inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
 		}
 		renderBuffer.endBatch();
 		poseStack.popPose();

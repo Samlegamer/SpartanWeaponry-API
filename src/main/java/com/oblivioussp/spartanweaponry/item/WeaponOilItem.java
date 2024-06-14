@@ -8,19 +8,16 @@ import com.oblivioussp.spartanweaponry.api.oil.OilEffect;
 import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
 import com.oblivioussp.spartanweaponry.capability.IOilHandler;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
-import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.init.ModSounds;
 import com.oblivioussp.spartanweaponry.util.OilHelper;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -37,37 +34,7 @@ public class WeaponOilItem extends BasicItem
 {
 	public WeaponOilItem()
 	{
-		super(new Item.Properties().tab(ModItems.TAB_SW).stacksTo(6).craftRemainder(Items.GLASS_BOTTLE));
-	}
-	
-	@Override
-	public void fillItemCategory(CreativeModeTab tabIn, NonNullList<ItemStack> itemListIn) 
-	{
-		if(allowedIn(tabIn))
-		{
-			ForgeRegistry<OilEffect> registry = RegistryManager.ACTIVE.getRegistry(OilEffects.REGISTRY_KEY);
-			if(registry != null)
-			{
-				registry.forEach((oilEffect) -> 
-				{
-					if(oilEffect != OilEffects.POTION.get())
-					{
-						ItemStack stack = OilHelper.makeOilStack(oilEffect);
-						itemListIn.add(stack);
-					}
-				});
-			}
-			
-			// Valid potion effects
-			ForgeRegistries.POTIONS.forEach((potion) ->
-			{
-				if(OilHelper.isValidPotion(potion))
-				{
-					ItemStack stack = OilHelper.makePotionOilStack(potion);
-					itemListIn.add(stack);
-				}
-			});
-		}
+		super(new Item.Properties().stacksTo(6).craftRemainder(Items.GLASS_BOTTLE));
 	}
 	
 	@Override

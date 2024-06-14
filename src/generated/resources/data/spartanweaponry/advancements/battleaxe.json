@@ -32,5 +32,6 @@
     [
       "has_battleaxe"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

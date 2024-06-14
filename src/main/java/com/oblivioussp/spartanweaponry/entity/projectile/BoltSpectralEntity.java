@@ -43,6 +43,7 @@ public class BoltSpectralEntity extends BoltEntity
     @Override
     public void tick() 
     {
+    	Level level = level();
     	super.tick();
     	if(level.isClientSide && !inGround)
     		level.addParticle(ParticleTypes.INSTANT_EFFECT, getX(), getY(), getZ(), 0.0d, 0.0d, 0.0d);

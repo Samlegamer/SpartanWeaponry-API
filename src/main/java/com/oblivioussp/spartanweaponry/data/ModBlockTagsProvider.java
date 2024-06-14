@@ -1,24 +1,27 @@
 package com.oblivioussp.spartanweaponry.data;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.tags.ModBlockTags;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModBlockTagsProvider extends BlockTagsProvider
 {
-	public ModBlockTagsProvider(DataGenerator dataGenerator, @Nullable ExistingFileHelper existingFileHelper) 
+	public ModBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registry, @Nullable ExistingFileHelper existingFileHelper) 
 	{
-		super(dataGenerator, ModSpartanWeaponry.ID, existingFileHelper);
+		super(output, registry, ModSpartanWeaponry.ID, existingFileHelper);
 	}
 	
 	@Override
-	protected void addTags()
+	protected void addTags(HolderLookup.Provider p_256380_)
 	{
 		tag(ModBlockTags.GRASS).add(Blocks.GRASS, Blocks.SEAGRASS, Blocks.FERN);
 	}

@@ -11,6 +11,7 @@ import com.oblivioussp.spartanweaponry.api.trait.IMeleeTraitCallback;
 import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
 import com.oblivioussp.spartanweaponry.capability.IOilHandler;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
+import com.oblivioussp.spartanweaponry.init.ModDamageTypes;
 import com.oblivioussp.spartanweaponry.init.ModEnchantments;
 import com.oblivioussp.spartanweaponry.init.ModEntities;
 import com.oblivioussp.spartanweaponry.init.ModParticles;
@@ -22,6 +23,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -32,7 +34,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,6 +105,7 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 	@Override
 	public void tick() 
 	{
+		Level level = level();
 		if(waterInertia == 0.0f)
 			waterInertia = getWeaponItem().getEnchantmentLevel(ModEnchantments.HYDRODYNAMIC.get()) == 1 ? 0.98f : -1.0f;
 		
@@ -181,6 +183,7 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 	{
 		Entity entity = hitResult.getEntity();
 		Entity shooter = getOwner();    //func_234616_v_();
+		Level level = level();
 		
 		if(entity != null)
 		{
@@ -200,11 +203,14 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 					return;
 			}
 			if(shooter == null)
-				src = new IndirectEntityDamageSource("mob", this, this).setProjectile();
+//				src = new IndirectEntityDamageSource("mob", this, this).setProjectile();
+				src = ModDamageTypes.thrownWeaponMob(this, this);
 			else if(shooter instanceof Player)
-				src = new IndirectEntityDamageSource("player", this, shooter).setProjectile();
+//				src = new IndirectEntityDamageSource("player", this, shooter).setProjectile();
+				src = ModDamageTypes.thrownWeaponPlayer(this, shooter);
 			else
-				src = new IndirectEntityDamageSource("mob", this, shooter).setProjectile();
+//				src = new IndirectEntityDamageSource("mob", this, shooter).setProjectile();
+				src = ModDamageTypes.thrownWeaponMob(this, shooter);
 			
 			if(entity instanceof LivingEntity && shooter instanceof LivingEntity)
 			{
@@ -316,6 +322,7 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 	@Override
 	protected void onHitBlock(BlockHitResult hitResult) 
 	{
+		Level level = level();
     	if(hitResult.getType() == Type.BLOCK)
     	{
     		if(!level.isClientSide)
@@ -336,6 +343,7 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 	 */
 	protected void removeEnchantments(ItemStack stack)
 	{
+		Level level = level();
 		if(stack.isEnchanted() && stack.getOrCreateTag().contains(ThrowingWeaponItem.NBT_AMMO_USED))
 		{
     		EnchantmentHelper.setEnchantments(ImmutableMap.of(), stack);
@@ -401,7 +409,7 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() 
+	public Packet<ClientGamePacketListener> getAddEntityPacket() 
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -442,6 +450,7 @@ public class ThrowingWeaponEntity extends AbstractArrow implements IEntityAdditi
 	
 	protected boolean attemptCatch(Player player)
 	{
+		Level level = level();
 		if(!level.isClientSide && shakeTime <= 0)
 		{
 			boolean canBePickedUp = pickup == AbstractArrow.Pickup.ALLOWED || pickup == AbstractArrow.Pickup.CREATIVE_ONLY && player.getAbilities().instabuild;

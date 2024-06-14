@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.entity.projectile.BoltEntity;
-import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.util.Defaults;
 
 import net.minecraft.ChatFormatting;
@@ -25,7 +24,7 @@ public class BoltItem extends Item
 
 	public BoltItem(float damageModifier, float rangeModifier, float armorPiercingFactor) 
 	{
-		super(new Item.Properties().tab(ModItems.TAB_SW_ARROWS_BOLTS));
+		super(new Item.Properties());
 		this.damageModifier = damageModifier;
 		this.rangeModifier = rangeModifier;
 		this.armorPiercingFactor = armorPiercingFactor;

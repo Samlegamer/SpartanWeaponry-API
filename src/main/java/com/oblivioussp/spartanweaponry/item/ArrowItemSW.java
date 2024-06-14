@@ -3,7 +3,6 @@ package com.oblivioussp.spartanweaponry.item;
 import java.util.List;
 
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
-import com.oblivioussp.spartanweaponry.init.ModItems;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -20,7 +19,7 @@ public abstract class ArrowItemSW extends ArrowItem
 	
 	public ArrowItemSW() 
 	{
-		super(new Item.Properties().tab(ModItems.TAB_SW_ARROWS_BOLTS));
+		super(new Item.Properties());
 	}
 	
 	@Override

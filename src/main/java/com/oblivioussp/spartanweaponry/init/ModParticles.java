@@ -27,8 +27,8 @@ public class ModParticles
 	@SubscribeEvent
 	public static void registerFactories(RegisterParticleProvidersEvent ev)
 	{
-		ev.register(DAMAGE_BOOSTED.get(), DamageModifiedParticle.DamageBoostedProvider::new);
-		ev.register(DAMAGE_REDUCED.get(), DamageModifiedParticle.DamageReducedProvider::new);
-		ev.register(OIL_DAMAGE_BOOSTED.get(), DamageModifiedParticle.OilDamageBoostedProvider::new);
+		ev.registerSpriteSet(DAMAGE_BOOSTED.get(), DamageModifiedParticle.DamageBoostedProvider::new);
+		ev.registerSpriteSet(DAMAGE_REDUCED.get(), DamageModifiedParticle.DamageReducedProvider::new);
+		ev.registerSpriteSet(OIL_DAMAGE_BOOSTED.get(), DamageModifiedParticle.OilDamageBoostedProvider::new);
 	}
 }

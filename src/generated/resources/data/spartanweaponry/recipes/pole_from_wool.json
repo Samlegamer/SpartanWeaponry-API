@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "group": "spartanweaponry:pole",
   "key": {
     "#": {
@@ -17,5 +18,6 @@
   "result": {
     "count": 4,
     "item": "spartanweaponry:pole"
-  }
+  },
+  "show_notification": true
 }

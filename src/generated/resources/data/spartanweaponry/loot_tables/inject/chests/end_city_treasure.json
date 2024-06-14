@@ -147,5 +147,6 @@
         "min": 1.0
       }
     }
-  ]
+  ],
+  "random_sequence": "spartanweaponry:inject/chests/end_city_treasure"
 }

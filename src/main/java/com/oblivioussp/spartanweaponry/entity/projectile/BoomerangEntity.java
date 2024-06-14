@@ -23,7 +23,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -97,6 +96,8 @@ public class BoomerangEntity extends ThrowingWeaponEntity
 	@Override
 	public void tick() 
 	{
+		Level level = level();
+		
 		super.tick();
 		
 		// Do nothing if the Boomerang is in the ground
@@ -208,6 +209,7 @@ public class BoomerangEntity extends ThrowingWeaponEntity
 		// Note: This will mean that the Boomerang will no longer activate buttons or pressure plates... (unless they are not moving in flight in front of it)
 		if(isNoGravity())
 		{
+			Level level = level();
 			// Once the Boomerang hits any surface, it should return to the player.
 			
 			BlockPos blockPos = hitResult.getBlockPos();
@@ -233,10 +235,8 @@ public class BoomerangEntity extends ThrowingWeaponEntity
 			playSound(getBounceSound(), 1.0f, 2.2f / random.nextFloat() * 0.2f + 0.9f);
 			
 			// Do Block collision logic with projectiles (e.g. Set the projectile on fire, etc.)
-			if(blockState.getMaterial() != Material.AIR)
-			{
+			if(!blockState.isAir())
 				blockState.onProjectileHit(level, blockState, hitResult, this);
-			}
 		}
 		else
 			super.onHitBlock(hitResult);
@@ -250,12 +250,7 @@ public class BoomerangEntity extends ThrowingWeaponEntity
 	}
 	
 	@Override
-	public void positionRider(Entity entityIn) 
-	{
-		positionRider(entityIn, Entity::setPos);
-	}
-	
-	private void positionRider(Entity entityIn, Entity.MoveFunction moveIn)
+	protected void positionRider(Entity entityIn, Entity.MoveFunction moveIn)
 	{
 		if(hasPassenger(entityIn))
 		{

@@ -7,14 +7,15 @@ import com.oblivioussp.spartanweaponry.util.Defaults;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -53,6 +54,7 @@ public class DynamiteEntity extends ThrowableItemProjectile
 	@Override
 	public void tick()
 	{
+		Level level = level();
 		baseTick();
 		xOld = getX();
         yOld = getY();
@@ -82,7 +84,7 @@ public class DynamiteEntity extends ThrowableItemProjectile
         move(MoverType.SELF, getDeltaMovement());
         setDeltaMovement(getDeltaMovement().scale(drag));
 
-        if (onGround)
+        if (onGround())
             setDeltaMovement(getDeltaMovement().multiply(0.7d, -0.5d, 0.7d));
         
         // TODO: Allow Dynamite to stick to surfaces and mobs for Sticky Dynamite
@@ -103,16 +105,17 @@ public class DynamiteEntity extends ThrowableItemProjectile
 
 	protected void explode()
 	{
+		Level level = level();
 		if(!level.isClientSide)
 		{
 			boolean mobGriefing = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
-			level.explode(this, getX(), getY(), getZ(), Config.INSTANCE.explosionStrengthDynamite.get().floatValue(), mobGriefing && !Config.INSTANCE.disableTerrainDamage.get() ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE); /*ConfigHandler.enableTerrainDamage &&*/// mobGriefing);
+			level.explode(this, getX(), getY(), getZ(), Config.INSTANCE.explosionStrengthDynamite.get().floatValue(), mobGriefing && !Config.INSTANCE.disableTerrainDamage.get() ? ExplosionInteraction.TNT : ExplosionInteraction.NONE); /*ConfigHandler.enableTerrainDamage &&*/// mobGriefing);
 			this.discard();
 		}
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() 
+	public Packet<ClientGamePacketListener> getAddEntityPacket() 
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

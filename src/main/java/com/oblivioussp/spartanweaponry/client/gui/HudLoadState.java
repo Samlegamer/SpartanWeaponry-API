@@ -1,10 +1,11 @@
 package com.oblivioussp.spartanweaponry.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.oblivioussp.spartanweaponry.item.IHudLoadState;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -15,7 +16,7 @@ public class HudLoadState
 	protected static final int COLOUR_LOAD_READY = 0x6060FFFF;	// Teal-ish
 	protected static final int COLOUR_LOADED = 0x6040C040;		// Green
 
-	public static void render(ForgeGui gui, PoseStack poseStack, float partialTicks, int screenWidth, int screenHeight) 
+	public static void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight) 
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
@@ -41,7 +42,7 @@ public class HudLoadState
 				isOffhand = true;
 			}
 			
-			if(loadStack != null && loadItem != null && ((!loadStack.isEmpty() && player.getUseItem().sameItem(loadStack)) || loadItem.isLoaded(loadStack)))
+			if(loadStack != null && loadItem != null && ((!loadStack.isEmpty() && ItemStack.isSameItem(player.getUseItem(), loadStack)) || loadItem.isLoaded(loadStack)))
 			{
 				if(!isOffhand)
 				{
@@ -59,7 +60,7 @@ public class HudLoadState
 					posY = mc.getWindow().getGuiScaledHeight() - 3 - Mth.clamp(Mth.floor((16 * loadProgress) + partialTicks), 0, 16);
 		
 				if(loadSlot != -1 || isOffhand)
-					ForgeGui.fill(poseStack, posX, posY, posX + 16, (mc.getWindow().getGuiScaledHeight() - 19) + 16, colour);
+					guiGraphics.fill(RenderType.guiOverlay(), posX, posY, posX + 16, (mc.getWindow().getGuiScaledHeight() - 19) + 16, colour);
 			}
 		}
 	}

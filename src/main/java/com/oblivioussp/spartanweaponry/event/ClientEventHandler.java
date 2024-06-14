@@ -27,9 +27,11 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLLoader;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler 
@@ -87,26 +89,27 @@ public class ClientEventHandler
 		}
 	}
 	
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent
 	public static void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre ev)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if(ev.getOverlay().id().equals(VanillaGuiOverlay.CROSSHAIR.id()) && mc.player.getMainHandItem().is(ModItemTags.HAS_CUSTOM_CROSSHAIR))
+		if(ev.getOverlay() == VanillaGuiOverlay.CROSSHAIR.type() && mc.player.getMainHandItem().is(ModItemTags.HAS_CUSTOM_CROSSHAIR))
 			ev.setCanceled(true);
 	}
 	
 	// Debug NBT viewer; Enable if NBT needs to be debugged
-/*	@SubscribeEvent
+	@SubscribeEvent
 	public static void onTooltip(ItemTooltipEvent ev)
 	{
 		ItemStack stack = ev.getItemStack();
 
         // Debug (Show NBT data on *EVERYTHING*)
-        if(/*SharedConstants.IS_RUNNING_IN_IDE && stack.hasTag() && ev.getFlags().isAdvanced())
+		
+        if(!FMLLoader.isProduction() && stack.hasTag() && ev.getFlags().isAdvanced())
         {
         	// Format NBT debug string
         	String nbtStr = stack.getTag().toString();
-        	ev.getToolTip().add(new TextComponent("NBT: " + ChatFormatting.DARK_GRAY + nbtStr).withStyle(ChatFormatting.DARK_PURPLE));
+        	ev.getToolTip().add(Component.literal("NBT: " + ChatFormatting.DARK_GRAY + nbtStr).withStyle(ChatFormatting.DARK_PURPLE));
         }
-	}*/
+	}
 }

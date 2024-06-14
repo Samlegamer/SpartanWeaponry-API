@@ -25,6 +25,7 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITag;
 
@@ -48,6 +49,7 @@ public class AbstractSkeletonMixin extends MobMixin
 	@Inject(at = @At("HEAD"), method = "reassessWeaponGoal()V", cancellable = true)
 	private void reassessWeaponGoal(CallbackInfo callback)
 	{
+		Level level = level();
 		if(level != null && !level.isClientSide)
 		{
 			ItemStack bowStack = getItemInHand(InteractionHand.MAIN_HAND);
@@ -80,6 +82,7 @@ public class AbstractSkeletonMixin extends MobMixin
 	{
 		if(!Config.INSTANCE.disableSpawningSkeletonWithLongbow.get())
 		{
+			Level level = level();
 			float rand = random.nextFloat();
 			float chance = difficultyIn.isHard() ? 
 					Config.INSTANCE.skeletonWithLongbowSpawnChanceHard.get().floatValue() : 

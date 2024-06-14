@@ -20,6 +20,6 @@ public class ReachWeaponTrait extends MeleeCallbackWeaponTrait
 	@Override
 	public void onModifyAttributesMelee(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder) 
 	{
-		builder.put(ForgeMod.ATTACK_RANGE.get(), new AttributeModifier(ATTACK_REACH_MODIFIER, "Weapon modifier", getMagnitude() - 5.0, AttributeModifier.Operation.ADDITION));
+		builder.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier(ATTACK_REACH_MODIFIER, "Weapon modifier", getMagnitude() - 5.0, AttributeModifier.Operation.ADDITION));
 	}
 }

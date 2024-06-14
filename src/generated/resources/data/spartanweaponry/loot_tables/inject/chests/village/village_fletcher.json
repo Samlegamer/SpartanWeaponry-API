@@ -45,5 +45,6 @@
         "min": 1.0
       }
     }
-  ]
+  ],
+  "random_sequence": "spartanweaponry:inject/chests/village/village_fletcher"
 }

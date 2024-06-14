@@ -3,7 +3,7 @@ package com.oblivioussp.spartanweaponry.data;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.init.ModSounds;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SoundDefinition;
@@ -14,9 +14,9 @@ import net.minecraftforge.common.data.SoundDefinitionsProvider;
 public class ModSoundDefinitionsProvider extends SoundDefinitionsProvider 
 {
 
-	public ModSoundDefinitionsProvider(DataGenerator generator, ExistingFileHelper helper)
+	public ModSoundDefinitionsProvider(PackOutput output, ExistingFileHelper existingFileHelper)
 	{
-		super(generator, ModSpartanWeaponry.ID, helper);
+		super(output, ModSpartanWeaponry.ID, existingFileHelper);
 	}
 
 	@Override

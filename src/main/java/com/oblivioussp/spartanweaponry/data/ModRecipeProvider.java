@@ -20,16 +20,17 @@ import com.oblivioussp.spartanweaponry.item.SwordBaseItem;
 import com.oblivioussp.spartanweaponry.item.ThrowingWeaponItem;
 import com.oblivioussp.spartanweaponry.util.OilHelper;
 
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.data.recipes.UpgradeRecipeBuilder;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -45,13 +46,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModRecipeProvider extends RecipeProvider
 {
-	public ModRecipeProvider(DataGenerator generatorIn) 
+	public ModRecipeProvider(PackOutput output) 
 	{
-		super(generatorIn);
+		super(output);
 	}
 	
 	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipeFunc) 
+	protected void buildRecipes(Consumer<FinishedRecipe> recipeFunc) 
 	{
 		TagKey<Item> woodLog = ItemTags.create(new ResourceLocation("minecraft:logs"));
 		TagKey<Item> planks = ItemTags.create(new ResourceLocation("minecraft:planks"));
@@ -88,15 +89,15 @@ public class ModRecipeProvider extends RecipeProvider
 		TagKey<Item> aluminum = ItemTags.create(new ResourceLocation(WeaponMaterial.ALUMINUM.getRepairTagName()));
 		
 		// Handles
-		ShapelessRecipeBuilder.shapeless(ModItems.SIMPLE_HANDLE.get()).requires(stick).requires(ModItemTags.GRASS).unlockedBy("has_stick", hasItem(stick)).save(recipeFunc);
-		ShapelessRecipeBuilder.shapeless(ModItems.HANDLE.get()).requires(stick).requires(string).group("spartanweaponry:handle").unlockedBy("has_string", hasItem(string)).save(recipeFunc, ModSpartanWeaponry.ID + ":handle_from_string");
-		ShapelessRecipeBuilder.shapeless(ModItems.HANDLE.get(), 4).requires(stick).requires(stick).requires(stick).requires(stick).requires(ItemTags.WOOL).group("spartanweaponry:handle").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":handle_from_wool");
-		ShapelessRecipeBuilder.shapeless(ModItems.HANDLE.get(), 4).requires(stick).requires(stick).requires(stick).requires(stick).requires(leather).group("spartanweaponry:handle").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":handle_from_leather");
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ModItems.SIMPLE_HANDLE.get()).requires(stick).requires(ModItemTags.GRASS).unlockedBy("has_stick", hasItem(stick)).save(recipeFunc);
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ModItems.HANDLE.get()).requires(stick).requires(string).group("spartanweaponry:handle").unlockedBy("has_string", hasItem(string)).save(recipeFunc, ModSpartanWeaponry.ID + ":handle_from_string");
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ModItems.HANDLE.get(), 4).requires(stick).requires(stick).requires(stick).requires(stick).requires(ItemTags.WOOL).group("spartanweaponry:handle").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":handle_from_wool");
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ModItems.HANDLE.get(), 4).requires(stick).requires(stick).requires(stick).requires(stick).requires(leather).group("spartanweaponry:handle").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":handle_from_leather");
 		// Poles
-		ShapedRecipeBuilder.shaped(ModItems.SIMPLE_POLE.get()).define('#', ModItems.SIMPLE_HANDLE.get()).define('/', stick).pattern("/").pattern("#").pattern("/").unlockedBy("has_handle", hasItem(ModItems.SIMPLE_HANDLE.get())).save(recipeFunc);
-		ShapedRecipeBuilder.shaped(ModItems.POLE.get()).define('|', stick).define('#', string).pattern("| ").pattern("|#").pattern("| ").group("spartanweaponry:pole").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":pole_from_string");
-		ShapedRecipeBuilder.shaped(ModItems.POLE.get(), 4).define('|', stick).define('#', ItemTags.WOOL).pattern("|||").pattern("|||").pattern("||#").group("spartanweaponry:pole").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":pole_from_wool");
-		ShapedRecipeBuilder.shaped(ModItems.POLE.get(), 4).define('|', stick).define('#', leather).pattern("|||").pattern("|||").pattern("||#").group("spartanweaponry:pole").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":pole_from_leather");
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.SIMPLE_POLE.get()).define('#', ModItems.SIMPLE_HANDLE.get()).define('/', stick).pattern("/").pattern("#").pattern("/").unlockedBy("has_handle", hasItem(ModItems.SIMPLE_HANDLE.get())).save(recipeFunc);
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.POLE.get()).define('|', stick).define('#', string).pattern("| ").pattern("|#").pattern("| ").group("spartanweaponry:pole").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":pole_from_string");
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.POLE.get(), 4).define('|', stick).define('#', ItemTags.WOOL).pattern("|||").pattern("|||").pattern("||#").group("spartanweaponry:pole").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":pole_from_wool");
+		ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.POLE.get(), 4).define('|', stick).define('#', leather).pattern("|||").pattern("|||").pattern("||#").group("spartanweaponry:pole").unlockedBy("has_stick", hasItem(stick)).save(recipeFunc, ModSpartanWeaponry.ID + ":pole_from_leather");
 	
 		ConditionalShapedRecipeBuilder.shaped(ModItems.EXPLOSIVE_CHARGE.get(), 4).define('#', gunpowder).define('-', ironNugget).pattern("###").pattern("---").pattern("###").group("spartanweaponry:explosive").unlockedBy("has_gunpowder", hasItem(gunpowder)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.EXPLOSIVES))).save(recipeFunc);
 		ConditionalShapedRecipeBuilder.shaped(ModItems.GREASE_BALL.get()).define('#', ModItemTags.RAW_MEAT).define('O', slimeballs).pattern(" # ").pattern("#O#").pattern(" # ").group("spartanweaponry:grease_ball").unlockedBy("has_meat", hasItem(ModItemTags.RAW_MEAT)).unlockedBy("has_slimeball", hasItem(slimeballs)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.OIL))).save(recipeFunc);
@@ -245,16 +246,26 @@ public class ModRecipeProvider extends RecipeProvider
 		TippedProjectileRecipeBuilder.tipped(ModItems.TIPPED_NETHERITE_BOLT.get()).input(ModItems.NETHERITE_BOLT.get()).save(recipeFunc);
 		
 		ConditionalShapedRecipeBuilder.shaped(ModItems.SMALL_ARROW_QUIVER.get()).define('L', leather).define('~', string).define('^', arrows).define('#', iron).pattern("L~L").pattern("L^L").pattern("###").unlockedBy("has_arrow", hasItem(arrows)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
-		quiverSmithingRecipe(recipeFunc, ModItems.SMALL_ARROW_QUIVER.get(), ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get(), ModItems.MEDIUM_ARROW_QUIVER.get(), "has_medium_quiver_upgrade_kit");
-		quiverSmithingRecipe(recipeFunc, ModItems.MEDIUM_ARROW_QUIVER.get(), ModItems.LARGE_QUIVER_UPGRADE_KIT.get(), ModItems.LARGE_ARROW_QUIVER.get(), "has_large_quiver_upgrade_kit");
-		quiverSmithingRecipe(recipeFunc, ModItems.LARGE_ARROW_QUIVER.get(), ModItems.HUGE_QUIVER_UPGRADE_KIT.get(), ModItems.HUGE_ARROW_QUIVER.get(), "has_huge_quiver_upgrade_kit");
+		quiverSmithingRecipe(recipeFunc, ModItems.QUIVER_COMPARTMENT.get(), ModItems.SMALL_ARROW_QUIVER.get(), ModItems.MEDIUM_QUIVER_BRACE.get(), ModItems.MEDIUM_ARROW_QUIVER.get(), "has_medium_quiver_brace");
+		quiverSmithingRecipe(recipeFunc, ModItems.QUIVER_COMPARTMENT.get(), ModItems.MEDIUM_ARROW_QUIVER.get(), ModItems.LARGE_QUIVER_BRACE.get(), ModItems.LARGE_ARROW_QUIVER.get(), "has_large_quiver_brace");
+		quiverSmithingRecipe(recipeFunc, ModItems.QUIVER_COMPARTMENT.get(), ModItems.LARGE_ARROW_QUIVER.get(), ModItems.HUGE_QUIVER_BRACE.get(), ModItems.HUGE_ARROW_QUIVER.get(), "has_huge_quiver_brace");
+//		quiverSmithingRecipe(recipeFunc, ModItems.SMALL_ARROW_QUIVER.get(), ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get(), ModItems.MEDIUM_ARROW_QUIVER.get(), "has_medium_quiver_upgrade_kit");
+//		quiverSmithingRecipe(recipeFunc, ModItems.MEDIUM_ARROW_QUIVER.get(), ModItems.LARGE_QUIVER_UPGRADE_KIT.get(), ModItems.LARGE_ARROW_QUIVER.get(), "has_large_quiver_upgrade_kit");
+//		quiverSmithingRecipe(recipeFunc, ModItems.LARGE_ARROW_QUIVER.get(), ModItems.HUGE_QUIVER_UPGRADE_KIT.get(), ModItems.HUGE_ARROW_QUIVER.get(), "has_huge_quiver_upgrade_kit");
 		ConditionalShapedRecipeBuilder.shaped(ModItems.SMALL_BOLT_QUIVER.get()).define('L', leather).define('~', string).define('^', bolts).define('#', iron).pattern("L~L").pattern("L^L").pattern("###").unlockedBy("has_bolt", hasItem(bolts)).condition(new TypeDisabledCondition(ImmutableList.of(TypeDisabledCondition.QUIVER, TypeDisabledCondition.BOLTS))).save(recipeFunc);
-		quiverSmithingRecipe(recipeFunc, ModItems.SMALL_BOLT_QUIVER.get(), ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get(), ModItems.MEDIUM_BOLT_QUIVER.get(), "has_medium_quiver_upgrade_kit");
-		quiverSmithingRecipe(recipeFunc, ModItems.MEDIUM_BOLT_QUIVER.get(), ModItems.LARGE_QUIVER_UPGRADE_KIT.get(), ModItems.LARGE_BOLT_QUIVER.get(), "has_large_quiver_upgrade_kit");
-		quiverSmithingRecipe(recipeFunc, ModItems.LARGE_BOLT_QUIVER.get(), ModItems.HUGE_QUIVER_UPGRADE_KIT.get(), ModItems.HUGE_BOLT_QUIVER.get(), "has_huge_quiver_upgrade_kit");
-		ConditionalShapedRecipeBuilder.shaped(ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get()).define('L', leather).define('#', gold).pattern("L L").pattern("###").unlockedBy("has_gold_ingot", hasItem(gold)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
-		ConditionalShapedRecipeBuilder.shaped(ModItems.LARGE_QUIVER_UPGRADE_KIT.get()).define('L', leather).define('#', diamond).pattern("L L").pattern("###").unlockedBy("has_diamond", hasItem(diamond)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
-		ConditionalShapedRecipeBuilder.shaped(ModItems.HUGE_QUIVER_UPGRADE_KIT.get()).define('L', leather).define('#', netherite).pattern("L L").pattern(" # ").unlockedBy("has_netherite_ingot", hasItem(netherite)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+		quiverSmithingRecipe(recipeFunc, ModItems.QUIVER_COMPARTMENT.get(), ModItems.SMALL_BOLT_QUIVER.get(), ModItems.MEDIUM_QUIVER_BRACE.get(), ModItems.MEDIUM_BOLT_QUIVER.get(), "has_medium_quiver_brace");
+		quiverSmithingRecipe(recipeFunc, ModItems.QUIVER_COMPARTMENT.get(), ModItems.MEDIUM_BOLT_QUIVER.get(), ModItems.LARGE_QUIVER_BRACE.get(), ModItems.LARGE_BOLT_QUIVER.get(), "has_large_quiver_brace");
+		quiverSmithingRecipe(recipeFunc, ModItems.QUIVER_COMPARTMENT.get(), ModItems.LARGE_BOLT_QUIVER.get(), ModItems.HUGE_QUIVER_BRACE.get(), ModItems.HUGE_BOLT_QUIVER.get(), "has_huge_quiver_brace");
+//		quiverSmithingRecipe(recipeFunc, ModItems.SMALL_BOLT_QUIVER.get(), ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get(), ModItems.MEDIUM_BOLT_QUIVER.get(), "has_medium_quiver_upgrade_kit");
+//		quiverSmithingRecipe(recipeFunc, ModItems.MEDIUM_BOLT_QUIVER.get(), ModItems.LARGE_QUIVER_UPGRADE_KIT.get(), ModItems.LARGE_BOLT_QUIVER.get(), "has_large_quiver_upgrade_kit");
+//		quiverSmithingRecipe(recipeFunc, ModItems.LARGE_BOLT_QUIVER.get(), ModItems.HUGE_QUIVER_UPGRADE_KIT.get(), ModItems.HUGE_BOLT_QUIVER.get(), "has_huge_quiver_upgrade_kit");
+		ConditionalShapedRecipeBuilder.shaped(ModItems.QUIVER_COMPARTMENT.get()).define('#', leather).define('~', string).pattern("#~#").unlockedBy("has_leather", hasItem(leather)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+		ConditionalShapedRecipeBuilder.shaped(ModItems.MEDIUM_QUIVER_BRACE.get()).define('#', gold).define('~', string).pattern("#~#").pattern(" # ").unlockedBy("has_gold_ingot", hasItem(gold)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+		ConditionalShapedRecipeBuilder.shaped(ModItems.LARGE_QUIVER_BRACE.get()).define('#', diamond).define('~', string).pattern("#~#").pattern(" # ").unlockedBy("has_diamond", hasItem(diamond)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+		ConditionalShapedRecipeBuilder.shaped(ModItems.HUGE_QUIVER_BRACE.get()).define('#', netherite).define('~', string).pattern("~").pattern("#").unlockedBy("has_diamond", hasItem(diamond)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+//		ConditionalShapedRecipeBuilder.shaped(ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get()).define('L', leather).define('#', gold).pattern("L L").pattern("###").unlockedBy("has_gold_ingot", hasItem(gold)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+//		ConditionalShapedRecipeBuilder.shaped(ModItems.LARGE_QUIVER_UPGRADE_KIT.get()).define('L', leather).define('#', diamond).pattern("L L").pattern("###").unlockedBy("has_diamond", hasItem(diamond)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
+//		ConditionalShapedRecipeBuilder.shaped(ModItems.HUGE_QUIVER_UPGRADE_KIT.get()).define('L', leather).define('#', netherite).pattern("L L").pattern(" # ").unlockedBy("has_netherite_ingot", hasItem(netherite)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.QUIVER))).save(recipeFunc);
 		
 		ConditionalShapedRecipeBuilder.shaped(ModItems.DYNAMITE.get(), 2).define('~', string).define('#', ModItems.EXPLOSIVE_CHARGE.get()).pattern("  ~").pattern(" # ").pattern("#  ").unlockedBy("has_explosive_charge", hasItem(ModItems.EXPLOSIVE_CHARGE.get())).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.EXPLOSIVES))).save(recipeFunc);
 	
@@ -298,7 +309,7 @@ public class ModRecipeProvider extends RecipeProvider
 	
 	private void smithingRecipe(Consumer<FinishedRecipe> consumer, ItemLike base, ItemLike result, RecipeData data)
 	{
-		UpgradeRecipeBuilder.smithing(Ingredient.of(base), Ingredient.of(data.getMaterialTag()), result.asItem()).unlocks(data.getCriterion(), hasItem(data.getMaterialTag())).save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_smithing");			
+		SmithingTransformRecipeBuilder.smithing(Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), Ingredient.of(base), Ingredient.of(data.getMaterialTag()), RecipeCategory.COMBAT, result.asItem()).unlocks(data.getCriterion(), hasItem(data.getMaterialTag())).save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_smithing");			
 	}
 	
 	private void recipeDagger(Consumer<FinishedRecipe> consumer, ItemLike result, RecipeData data)
@@ -561,9 +572,9 @@ public class ModRecipeProvider extends RecipeProvider
 		ConditionalShapedRecipeBuilder.shaped(result, 4).define('#', boltHead).define('|', stick).define('F', feather).pattern("  #").pattern(" | ").pattern("F  ").unlockedBy("has_feather", hasItem(feather)).unlockedBy("has_heavy_crossbow", hasItem(heavyCrossbows)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.BOLTS))).save(consumer);
 	}
 	
-	private void quiverSmithingRecipe(Consumer<FinishedRecipe> consumer, ItemLike base, ItemLike addition, ItemLike result, String criterionName)
+	private void quiverSmithingRecipe(Consumer<FinishedRecipe> consumer, ItemLike template, ItemLike base, ItemLike addition, ItemLike result, String criterionName)
 	{
-		UpgradeRecipeBuilder recipe = new UpgradeRecipeBuilder(ModRecipeSerializers.QUIVER_UPGRADE_SMITHING.get(), Ingredient.of(base), Ingredient.of(addition), result.asItem());
+		SmithingTransformRecipeBuilder recipe = new SmithingTransformRecipeBuilder(ModRecipeSerializers.QUIVER_UPGRADE_SMITHING.get(), Ingredient.of(template), Ingredient.of(base), Ingredient.of(addition), RecipeCategory.COMBAT, result.asItem());
 		recipe.unlocks(criterionName, hasItem(addition)).save(consumer, ForgeRegistries.ITEMS.getKey(result.asItem()) + "_smithing");
 	}
 	
@@ -579,7 +590,7 @@ public class ModRecipeProvider extends RecipeProvider
 	
 	private InventoryChangeTrigger.TriggerInstance makeInventoryTrigger(ItemPredicate... predicates)
 	{
-		return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, predicates);		
+		return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, predicates);		
 	}
 	
 	public static class RecipeData
@@ -621,11 +632,5 @@ public class ModRecipeProvider extends RecipeProvider
 		{
 			return isModdedMaterial;
 		}
-	}
-	
-	@Override
-	public String getName() 
-	{
-		return ModSpartanWeaponry.NAME + " Recipes";
 	}
 }

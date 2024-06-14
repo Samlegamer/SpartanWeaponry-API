@@ -9,7 +9,7 @@ import com.oblivioussp.spartanweaponry.api.data.model.BaseModels;
 import com.oblivioussp.spartanweaponry.api.data.model.ModelGenerator;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -21,9 +21,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModItemModelProvider extends ItemModelProvider
 {
 
-	public ModItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) 
+	public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) 
 	{
-		super(generator, modid, existingFileHelper);
+		super(output, ModSpartanWeaponry.ID, existingFileHelper);
 	}
 
 	@Override
@@ -126,9 +126,10 @@ public class ModItemModelProvider extends ItemModelProvider
 		createQuiverModels(ModItems.LARGE_BOLT_QUIVER.get(), 5);
 		createQuiverModels(ModItems.HUGE_BOLT_QUIVER.get(), 5);
 
-		generator.createSimpleModel(ModItems.MEDIUM_QUIVER_UPGRADE_KIT.get());
-		generator.createSimpleModel(ModItems.LARGE_QUIVER_UPGRADE_KIT.get());
-		generator.createSimpleModel(ModItems.HUGE_QUIVER_UPGRADE_KIT.get());
+		generator.createSimpleModel(ModItems.QUIVER_COMPARTMENT.get());
+		generator.createSimpleModel(ModItems.MEDIUM_QUIVER_BRACE.get());
+		generator.createSimpleModel(ModItems.LARGE_QUIVER_BRACE.get());
+		generator.createSimpleModel(ModItems.HUGE_QUIVER_BRACE.get());
 		
 		generator.createSimpleModel(ModItems.DYNAMITE.get());
 

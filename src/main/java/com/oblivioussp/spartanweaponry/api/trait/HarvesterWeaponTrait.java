@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 
@@ -85,7 +85,7 @@ public class HarvesterWeaponTrait extends WeaponTrait implements IActionTraitCal
 			
 			if(state.getValue(ageProp) >= maxAge)
 			{
-				List<ItemStack> drops = state.getDrops(new LootContext.Builder((ServerLevel)levelIn).
+				List<ItemStack> drops = state.getDrops(new LootParams.Builder((ServerLevel)levelIn).
 						withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(posIn)).
 						withParameter(LootContextParams.BLOCK_STATE, state).
 						withParameter(LootContextParams.THIS_ENTITY, playerIn).

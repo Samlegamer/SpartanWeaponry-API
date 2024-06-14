@@ -1,7 +1,10 @@
 package com.oblivioussp.spartanweaponry.client.renderer.entity;
 
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.oblivioussp.spartanweaponry.entity.projectile.BoomerangEntity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -24,15 +27,15 @@ public class BoomerangRenderer extends ThrowingWeaponRenderer<BoomerangEntity>
 		float partTicks = rotationInAir == 0.0f ? 0.0f : partialTicks;
 		
 		matrixStack.scale(2.0f, 2.0f, 2.0f);
-		matrixStack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partTicks, entity.yRotO, entity.getYRot()) - 90.0f));
-		matrixStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partTicks, entity.xRotO, entity.getXRot()) - 135.0f));
+		matrixStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partTicks, entity.yRotO, entity.getYRot()) - 90.0f));
+		matrixStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partTicks, entity.xRotO, entity.getXRot()) - 135.0f));
 		Vector3f rotation = new Vector3f(1.0f, 1.0f, 0.0f);
 		rotation.normalize();
-		matrixStack.mulPose(rotation.rotationDegrees(180.0f));
+		matrixStack.mulPose(new Quaternionf().setAngleAxis(Mth.PI, rotation.x, rotation.y, rotation.z));			// NOTE: PI = 180 degrees
 		rotation = new Vector3f(1.0f, -1.0f, 0.0f);
 		rotation.normalize();
-		matrixStack.mulPose(rotation.rotationDegrees(90.0f));
-		matrixStack.mulPose(Vector3f.ZP.rotationDegrees(rotationInAir));
+		matrixStack.mulPose(new Quaternionf().setAngleAxis(Mth.PI / 2.0f, rotation.x, rotation.y, rotation.z));		// NOTE: PI / 2 = 90 degrees
+		matrixStack.mulPose(Axis.ZP.rotationDegrees(rotationInAir));
 		matrixStack.translate(0.075f, 0.25f, 0.0f);
 	}
 }

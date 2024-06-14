@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class QuiverArrowMenu extends QuiverBaseMenu
 {
-	public static final ResourceLocation EMPTY_ARROW_SLOT = new ResourceLocation(ModSpartanWeaponry.ID, "item/empty_arrow_slot");
+	public static final ResourceLocation EMPTY_ARROW_SLOT = new ResourceLocation(ModSpartanWeaponry.ID, "slots/empty_arrow_slot");
 	
 	public QuiverArrowMenu(int id, Inventory inventory, ItemStack quiverStack)
 	{

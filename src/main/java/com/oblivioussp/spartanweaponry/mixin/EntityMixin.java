@@ -12,11 +12,14 @@ import net.minecraft.world.level.Level;
 public class EntityMixin 
 {
 	@Shadow
-	public Level level;
-	
-	@Shadow
 	@Final
 	public RandomSource random;
+	
+	@Shadow
+	public Level level()
+	{
+		throw new IllegalStateException("Mixin failed to shadow the \"Entity.level()\" method!");
+	}
 	
 	@Shadow
 	public int getId()

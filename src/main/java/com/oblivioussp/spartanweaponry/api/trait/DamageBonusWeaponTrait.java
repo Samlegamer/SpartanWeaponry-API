@@ -6,6 +6,7 @@ import com.oblivioussp.spartanweaponry.api.APIConfigValues;
 import com.oblivioussp.spartanweaponry.api.SpartanWeaponryAPI;
 import com.oblivioussp.spartanweaponry.api.WeaponMaterial;
 import com.oblivioussp.spartanweaponry.api.WeaponTraits;
+import com.oblivioussp.spartanweaponry.init.ModDamageTypes;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -71,7 +72,7 @@ public class DamageBonusWeaponTrait extends MeleeCallbackWeaponTrait
 	public static final DamageCalculationFunc DAMAGE_BACKSTAB = (material, baseDamage, bonusDamage, source, attacker, victim) ->
 		{
 			Entity immediateEntity = source.getEntity();
-			float yaw = source.isProjectile() ? -immediateEntity.yRotO : immediateEntity.yRotO;
+			float yaw = source.is(ModDamageTypes.KEY_THROWN_WEAPON_PLAYER) ? -immediateEntity.yRotO : immediateEntity.yRotO;
 			float victimYaw = victim.yRotO;
 			float difference = victimYaw - yaw;
 			difference = posMod(difference + 180.0f, 360.0f) - 180.0f;

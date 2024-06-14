@@ -82,7 +82,7 @@ public class QuiverHelper
 		// Via a Curios slot...
 		if(ModList.get().isLoaded(CuriosApi.MODID))
 		{
-			Optional<SlotResult> opt = CuriosApi.getCuriosHelper().findFirstCurio(player, (stack) -> stack.getItem() instanceof QuiverBaseItem);
+			Optional<SlotResult> opt = getQuiverCurio(player);
 			if(opt.isPresent() && info.isQuiver(opt.get().stack()))
 				return opt.get().stack();
 		}
@@ -112,7 +112,7 @@ public class QuiverHelper
 		// Via the Curios back slot 
 		if(ModList.get().isLoaded(CuriosApi.MODID))
 		{
-			Optional<SlotResult> opt = CuriosApi.getCuriosHelper().findFirstCurio(player, (stack) -> stack.getItem() instanceof QuiverBaseItem);
+			Optional<SlotResult> opt = getQuiverCurio(player);
 			if(opt.isPresent())
 				result.add(opt.get().stack());
 		}
@@ -138,7 +138,7 @@ public class QuiverHelper
 		// Via the Curios back slot 
 		if(ModList.get().isLoaded(CuriosApi.MODID))
 		{
-			Optional<SlotResult> opt = CuriosApi.getCuriosHelper().findFirstCurio(player, (stack) -> stack.getItem() instanceof QuiverBaseItem);
+			Optional<SlotResult> opt = getQuiverCurio(player);
 			if(opt.isPresent())
 				return opt.get().stack();
 		}
@@ -151,5 +151,10 @@ public class QuiverHelper
 		}
 		
 		return ItemStack.EMPTY;
+	}
+	
+	public static Optional<SlotResult> getQuiverCurio(Player player)
+	{
+		return CuriosApi.getCuriosInventory(player).resolve().orElseThrow().findFirstCurio((stack) -> stack.getItem() instanceof QuiverBaseItem);
 	}
 }
