@@ -142,7 +142,7 @@ public class ModItemTagsProvider extends ItemTagsProvider
 		
 		tag(ModItemTags.ARROWS).add(ModItems.WOODEN_ARROW.get(), ModItems.TIPPED_WOODEN_ARROW.get(), ModItems.COPPER_ARROW.get(), ModItems.TIPPED_COPPER_ARROW.get(), ModItems.IRON_ARROW.get(), ModItems.TIPPED_IRON_ARROW.get(), ModItems.DIAMOND_ARROW.get(), ModItems.TIPPED_DIAMOND_ARROW.get(),
 				ModItems.NETHERITE_ARROW.get(), ModItems.TIPPED_NETHERITE_ARROW.get(), ModItems.EXPLOSIVE_ARROW.get());
-		tag(ModItemTags.BOLTS).add(ModItems.BOLT.get(), ModItems.TIPPED_BOLT.get(), ModItems.SPECTRAL_BOLT.get(), ModItems.COPPER_BOLT.get(), ModItems.TIPPED_COPPER_BOLT.get(), ModItems.DIAMOND_BOLT.get(), ModItems.DIAMOND_BOLT.get(), ModItems.NETHERITE_BOLT.get(), ModItems.NETHERITE_BOLT.get());
+		tag(ModItemTags.BOLTS).add(ModItems.BOLT.get(), ModItems.TIPPED_BOLT.get(), ModItems.SPECTRAL_BOLT.get(), ModItems.COPPER_BOLT.get(), ModItems.TIPPED_COPPER_BOLT.get(), ModItems.DIAMOND_BOLT.get(), ModItems.TIPPED_DIAMOND_BOLT.get(), ModItems.NETHERITE_BOLT.get(), ModItems.TIPPED_NETHERITE_BOLT.get());
 		tag(ModItemTags.COPPER_PROJECTILES).add(ModItems.COPPER_ARROW.get(), ModItems.TIPPED_COPPER_ARROW.get(), ModItems.COPPER_BOLT.get(), ModItems.TIPPED_COPPER_BOLT.get());
 		tag(ModItemTags.DIAMOND_PROJECTILES).add(ModItems.DIAMOND_ARROW.get(), ModItems.TIPPED_DIAMOND_ARROW.get(), ModItems.DIAMOND_BOLT.get(), ModItems.TIPPED_DIAMOND_BOLT.get());
 		tag(ModItemTags.NETHERITE_PROJECTILES).add(ModItems.NETHERITE_ARROW.get(), ModItems.TIPPED_NETHERITE_ARROW.get(), ModItems.NETHERITE_BOLT.get(), ModItems.TIPPED_NETHERITE_BOLT.get());
@@ -155,7 +155,7 @@ public class ModItemTagsProvider extends ItemTagsProvider
 		tag(ModItemTags.UPGRADED_QUIVERS_MAX).add(ModItems.HUGE_ARROW_QUIVER.get(), ModItems.HUGE_BOLT_QUIVER.get());
 		
 		tag(ModItemTags.EXPLOSIVES).add(ModItems.EXPLOSIVE_ARROW.get(), ModItems.DYNAMITE.get());
-		tag(ModItemTags.HEADS).add(ModItems.BLAZE_HEAD.get(), ModItems.ENDERMAN_HEAD.get(), ModItems.SPIDER_HEAD.get(), ModItems.CAVE_SPIDER_HEAD.get(), ModItems.PIGLIN_HEAD.get(), ModItems.ZOMBIFIED_PIGLIN_HEAD.get(),
+		tag(ModItemTags.HEADS).add(ModItems.BLAZE_HEAD.get(), ModItems.ENDERMAN_HEAD.get(), ModItems.SPIDER_HEAD.get(), ModItems.CAVE_SPIDER_HEAD.get(), ModItems.ZOMBIFIED_PIGLIN_HEAD.get(),
 				ModItems.HUSK_HEAD.get(), ModItems.STRAY_SKULL.get(), ModItems.DROWNED_HEAD.get(), ModItems.ILLAGER_HEAD.get(), ModItems.WITCH_HEAD.get());
 		
 		tag(ModItemTags.OILABLE_WEAPONS).add(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD).

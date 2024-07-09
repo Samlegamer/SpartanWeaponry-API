@@ -59,17 +59,17 @@ public class ModelGenerator
 		ResourceLocation blockingModel = itemModelProvider.withExistingParent(itemPath + "_blocking", new ResourceLocation(baseModel.getNamespace(), baseModel.getPath() + "_blocking")).
 				customLoader(OilCoatingItemModelBuilder::new).end().
 				texture("layer0", "item/" + itemPath).
-				texture("coating", coatingTexture.getPath()).
+				texture("coating", coatingTexture).
 				getLocation();
 		ResourceLocation throwingModel = itemModelProvider.withExistingParent(itemPath + "_throwing", new ResourceLocation(baseModel.getNamespace(), baseModel.getPath() + "_throwing")).
 				customLoader(OilCoatingItemModelBuilder::new).end().
 				texture("layer0", "item/" + itemPath).
-				texture("coating", coatingTexture.getPath()).
+				texture("coating", coatingTexture).
 				getLocation();
 		return itemModelProvider.withExistingParent(itemPath, baseModel).
 				customLoader(OilCoatingItemModelBuilder::new).end().
 				texture("layer0", "item/" + itemPath).
-				texture("coating", coatingTexture.getPath()).
+				texture("coating", coatingTexture).
 				override().predicate(ModelOverrides.BLOCKING, 1.0f).model(new ExistingModelFile(blockingModel, itemModelProvider.existingFileHelper)).end().
 				override().predicate(ModelOverrides.THROWING, 1.0f).model(new ExistingModelFile(throwingModel, itemModelProvider.existingFileHelper)).end().
 				getLocation();
@@ -86,15 +86,12 @@ public class ModelGenerator
 		String itemPath = ForgeRegistries.ITEMS.getKey(item).getPath();
 		ResourceLocation blockingModel = itemModelProvider.withExistingParent(itemPath + "_blocking", new ResourceLocation(baseModel.getNamespace(), baseModel.getPath() + "_blocking")).
 				texture("layer0", "item/" + itemPath).
-				texture("coating", coatingTexture.getPath()).
 				getLocation();
 		ResourceLocation throwingModel = itemModelProvider.withExistingParent(itemPath + "_throwing", new ResourceLocation(baseModel.getNamespace(), baseModel.getPath() + "_throwing")).
 				texture("layer0", "item/" + itemPath).
-				texture("coating", coatingTexture.getPath()).
 				getLocation();
 		return itemModelProvider.withExistingParent(itemPath, baseModel).
 				texture("layer0", "item/" + itemPath).
-				texture("coating", coatingTexture.getPath()).
 				override().predicate(ModelOverrides.BLOCKING, 1.0f).model(new ExistingModelFile(blockingModel, itemModelProvider.existingFileHelper)).end().
 				override().predicate(ModelOverrides.THROWING, 1.0f).model(new ExistingModelFile(throwingModel, itemModelProvider.existingFileHelper)).end().
 				getLocation();
@@ -127,7 +124,7 @@ public class ModelGenerator
 		return itemModelProvider.withExistingParent(itemPath, "minecraft:item/handheld").
 				customLoader(OilCoatingItemModelBuilder::new).end().
 				texture("layer0", "minecraft:item/" + itemPath).
-				texture("coating", OilCoatingTextures.VANILLA_SWORD.getPath()).
+				texture("coating", OilCoatingTextures.VANILLA_SWORD).
 				getLocation();
 	}
 	

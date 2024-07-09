@@ -94,9 +94,9 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 	public void reload() 
 	{
 		ImmutableList.Builder<WeaponTrait> builder = ImmutableList.builder();
-		
+
 		builder.addAll(archetype.getTraits());
-		builder.addAll(material.getBonusTraits());
+		builder.addAll(material.getBonusTraits(archetype.getType()));
 		traits = builder.build();
 		
 		// Initialize the weapon's attribute modifier map
@@ -229,11 +229,7 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 //			tooltip.add(Component.empty());
 		}
 		tooltip.add(Component.empty());
-    	if(material.hasAnyBonusTraits())
-    	{
-    		tooltip.add(Component.translatable(String.format("tooltip.%s.trait.material_bonus", ModSpartanWeaponry.ID)).withStyle(ChatFormatting.AQUA));
-    		material.addTraitsToTooltip(stack, tooltip, isShiftPressed);
-    	}
+    	material.addTraitsToTooltip(stack, archetype.getType(), tooltip, isShiftPressed);
 		
 		super.appendHoverText(stack, levelIn, tooltip, flagIn);
 	}
@@ -356,7 +352,6 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 			if(trait.canPerformToolAction(stack, toolAction))
 				return true;
 		}
-		/*return hasWeaponTraitWithType(WeaponTraits.TYPE_SWEEP_DAMAGE) ? super.canPerformAction(stack, toolAction) : DEFAULT_SWORD_NO_SWEEP_ACTIONS.contains(toolAction);*/
 		return archetype.canPerformToolAction(toolAction);
 	}
     

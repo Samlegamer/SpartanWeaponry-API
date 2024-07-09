@@ -21,6 +21,7 @@ public class VersatileWeaponTrait extends WeaponTrait
 		super(type, modId, TraitQuality.POSITIVE);
 		effectiveBlocks = effectiveBlocksTag;
 		toolName = effectiveToolName;
+		isMelee = true;
 	}
 	
 	@Override

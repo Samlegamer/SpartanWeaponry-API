@@ -2,7 +2,6 @@ package com.oblivioussp.spartanweaponry.item;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +14,7 @@ import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
 import com.oblivioussp.spartanweaponry.client.ClientHelper;
 import com.oblivioussp.spartanweaponry.util.ClientConfig;
 import com.oblivioussp.spartanweaponry.util.Defaults;
+import com.oblivioussp.spartanweaponry.util.WeaponType;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -48,6 +48,7 @@ public class LongbowItem extends BowItem implements IReloadable/*implements IHud
 	protected boolean doCraftCheck = true;
 	protected boolean canBeCrafted = true;
 	
+	protected final WeaponType type = WeaponType.RANGED;
 	protected List<WeaponTrait> rangedTraits;
 	
 	public LongbowItem(Item.Properties prop, WeaponMaterial material)
@@ -73,7 +74,7 @@ public class LongbowItem extends BowItem implements IReloadable/*implements IHud
 	public void reload()
 	{
 		drawTime = 1.25f;
-		rangedTraits = material.getBonusTraits().stream().filter((trait) -> trait.isRangedTrait()).collect(Collectors.toUnmodifiableList());
+		rangedTraits = material.getBonusTraits(type);
 		for(WeaponTrait trait : rangedTraits)
 		{
 			Optional<IRangedTraitCallback> opt = trait.getRangedCallback();
@@ -217,7 +218,7 @@ public class LongbowItem extends BowItem implements IReloadable/*implements IHud
 
     	material.addTagErrorTooltip(stack, tooltip);
 		
-    	if(material.hasAnyBonusTraits())
+    	if(material.hasAnyBonusTraits(type))
     	{
 			if(rangedTraits != null && !rangedTraits.isEmpty())
 			{

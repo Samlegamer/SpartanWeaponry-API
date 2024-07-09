@@ -1,7 +1,9 @@
 package com.oblivioussp.spartanweaponry.item.crafting;
 
 import com.google.gson.JsonObject;
+import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.init.ModRecipeSerializers;
+import com.oblivioussp.spartanweaponry.item.QuiverBaseItem;
 import com.oblivioussp.spartanweaponry.util.Log;
 
 import net.minecraft.core.RegistryAccess;
@@ -15,9 +17,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 
 public class QuiverUpgradeRecipe extends SmithingTransformRecipe
 {
@@ -29,30 +28,15 @@ public class QuiverUpgradeRecipe extends SmithingTransformRecipe
 	@Override
 	public ItemStack assemble(Container inv, RegistryAccess registryAccessIn) 
 	{
-		ItemStack inputStack = inv.getItem(0);
+		ItemStack origOutputStack = getResultItem(registryAccessIn);
 		ItemStack outputStack = super.assemble(inv, registryAccessIn);
-		LazyOptional<IItemHandler> inputCap = inputStack.getCapability(ForgeCapabilities.ITEM_HANDLER);
-		if(inputCap.isPresent())
-		{
-			// Place the items in the input stack into the output stack 
-			LazyOptional<IItemHandler> outputCap = outputStack.getCapability(ForgeCapabilities.ITEM_HANDLER);
-			if(outputCap.isPresent())
-			{
-				IItemHandler inputHandler = inputCap.resolve().orElseThrow();
-				IItemHandler outputHandler = outputCap.resolve().orElseThrow();
-				
-				for(int i = 0; i < inputHandler.getSlots(); i++)
-				{
-					ItemStack stack = inputHandler.getStackInSlot(i);
-					if(!stack.isEmpty())
-						outputHandler.insertItem(i, stack, false);
-				}
-			}
-			else
-			{
-				Log.error("Output ItemStack: " + outputStack.getHoverName().toString() + " doesn't contain an appropriate item handler capability to store output items to!");
-			}
-		}
+		// Resize the output tag
+		// NOTE: More consistent, but inefficient
+		outputStack.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).ifPresent((itemHandler) -> {
+			itemHandler.resize(origOutputStack.getOrCreateTagElement(QuiverBaseItem.NBT_AMMO).getInt("Size"));
+		});
+//		outputStack.getOrCreateTagElement(QuiverBaseItem.NBT_AMMO).putInt("Size", origOutputStack.getOrCreateTagElement(QuiverBaseItem.NBT_AMMO).getInt("Size"));
+		
 		return outputStack;
 	}
 

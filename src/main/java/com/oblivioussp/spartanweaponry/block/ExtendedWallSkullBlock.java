@@ -42,7 +42,7 @@ public class ExtendedWallSkullBlock extends WallSkullBlock
 	@Override
 	public VoxelShape getShape(BlockState blockState, BlockGetter getter, BlockPos blockPos, CollisionContext context)
 	{
-		if(getType() == Types.PIGLIN || getType() == Types.ZOMBIE_PIGLIN)
+		if(getType() == Types.ZOMBIE_PIGLIN)
 			return PIGLIN_SHAPES.get(blockState.getValue(FACING));
 		if(getType() == Types.ILLAGER)
 			return ILLAGER_SHAPES.get(blockState.getValue(FACING));

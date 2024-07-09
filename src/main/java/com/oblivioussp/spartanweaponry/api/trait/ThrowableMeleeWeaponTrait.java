@@ -24,6 +24,7 @@ public class ThrowableMeleeWeaponTrait extends WeaponTrait implements IActionTra
 	public ThrowableMeleeWeaponTrait(String typeIn, String modIdIn, TraitQuality qualityIn) 
 	{
 		super(typeIn, modIdIn, qualityIn);
+		isMelee = true;
 	}
 
 	@Override

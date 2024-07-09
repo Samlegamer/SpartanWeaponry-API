@@ -31,6 +31,7 @@ public class HarvesterWeaponTrait extends WeaponTrait implements IActionTraitCal
 	public HarvesterWeaponTrait(String typeIn, String modIdIn) 
 	{
 		super(typeIn, modIdIn, TraitQuality.POSITIVE);
+		isMelee = true;
 	}
 	
 	@Override

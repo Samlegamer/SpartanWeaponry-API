@@ -25,7 +25,7 @@ public class ExtendedSkullBlock extends SkullBlock
 	@Override
 	public VoxelShape getShape(BlockState p_56336_, BlockGetter p_56337_, BlockPos p_56338_, CollisionContext p_60482_)
 	{
-		if(getType() == Types.PIGLIN || getType() == Types.ZOMBIE_PIGLIN)
+		if(getType() == Types.ZOMBIE_PIGLIN)
 			return PIGLIN_SHAPE;
 		if(getType() == Types.ILLAGER)
 			return ILLAGER_SHAPE;
@@ -46,7 +46,7 @@ public class ExtendedSkullBlock extends SkullBlock
 		ENDERMAN,
 		SPIDER,
 		CAVE_SPIDER,
-		PIGLIN,
+//		PIGLIN,
 		ZOMBIE_PIGLIN,
 		HUSK,
 		STRAY,

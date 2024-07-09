@@ -29,7 +29,6 @@ import com.oblivioussp.spartanweaponry.client.renderer.entity.ExtendedSkullHelpe
 import com.oblivioussp.spartanweaponry.client.renderer.entity.IllagerHeadModel;
 import com.oblivioussp.spartanweaponry.client.renderer.entity.JavelinRenderer;
 import com.oblivioussp.spartanweaponry.client.renderer.entity.ModelLayers;
-import com.oblivioussp.spartanweaponry.client.renderer.entity.PiglinHeadModel;
 import com.oblivioussp.spartanweaponry.client.renderer.entity.SimpleArrowRenderer;
 import com.oblivioussp.spartanweaponry.client.renderer.entity.ThrowingWeaponRenderer;
 import com.oblivioussp.spartanweaponry.client.renderer.entity.TomahawkRenderer;
@@ -51,8 +50,10 @@ import com.oblivioussp.spartanweaponry.util.OilHelper;
 
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.PiglinHeadModel;
 import net.minecraft.client.model.SkullModel;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -228,8 +229,7 @@ public class ClientHelper
 		ev.registerLayerDefinition(ModelLayers.ENDERMAN_HEAD, EndermanHeadModel::createLayer);
 		ev.registerLayerDefinition(ModelLayers.SPIDER_HEAD, ExtendedSkullHelper::createSpiderLayer);
 		ev.registerLayerDefinition(ModelLayers.CAVE_SPIDER_HEAD, ExtendedSkullHelper::createSpiderLayer);
-		ev.registerLayerDefinition(ModelLayers.PIGLIN_HEAD, PiglinHeadModel::createLayer);
-		ev.registerLayerDefinition(ModelLayers.ZOMBIFIED_PIGLIN_HEAD, PiglinHeadModel::createLayer);
+		ev.registerLayerDefinition(ModelLayers.ZOMBIFIED_PIGLIN_HEAD, () -> LayerDefinition.create(PiglinHeadModel.createHeadModel(), 64, 64));
 		ev.registerLayerDefinition(ModelLayers.HUSK_HEAD, ExtendedSkullHelper::createHuskLayer);
 		ev.registerLayerDefinition(ModelLayers.STRAY_SKULL, ExtendedSkullHelper::createHeadWithHatLayer);
 		ev.registerLayerDefinition(ModelLayers.DROWNED_HEAD, ExtendedSkullHelper::createHeadWithHatLayer);
@@ -254,8 +254,7 @@ public class ClientHelper
 		ev.registerSkullModel(ExtendedSkullBlock.Types.ENDERMAN, new EndermanHeadModel(entityModelSet.bakeLayer(ModelLayers.ENDERMAN_HEAD)));
 		ev.registerSkullModel(ExtendedSkullBlock.Types.SPIDER, new SkullModel(entityModelSet.bakeLayer(ModelLayers.SPIDER_HEAD)));
 		ev.registerSkullModel(ExtendedSkullBlock.Types.CAVE_SPIDER, new SkullModel(entityModelSet.bakeLayer(ModelLayers.CAVE_SPIDER_HEAD)));
-		ev.registerSkullModel(ExtendedSkullBlock.Types.PIGLIN, new SkullModel(entityModelSet.bakeLayer(ModelLayers.PIGLIN_HEAD)));
-		ev.registerSkullModel(ExtendedSkullBlock.Types.ZOMBIE_PIGLIN, new SkullModel(entityModelSet.bakeLayer(ModelLayers.ZOMBIFIED_PIGLIN_HEAD)));
+		ev.registerSkullModel(ExtendedSkullBlock.Types.ZOMBIE_PIGLIN, new PiglinHeadModel(entityModelSet.bakeLayer(ModelLayers.ZOMBIFIED_PIGLIN_HEAD)));
 		ev.registerSkullModel(ExtendedSkullBlock.Types.HUSK, new SkullModel(entityModelSet.bakeLayer(ModelLayers.HUSK_HEAD)));
 		ev.registerSkullModel(ExtendedSkullBlock.Types.STRAY, new SkullModel(entityModelSet.bakeLayer(ModelLayers.STRAY_SKULL)));
 		ev.registerSkullModel(ExtendedSkullBlock.Types.DROWNED, new SkullModel(entityModelSet.bakeLayer(ModelLayers.DROWNED_HEAD)));
@@ -269,7 +268,6 @@ public class ClientHelper
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.ENDERMAN, new ResourceLocation(ModSpartanWeaponry.ID, "textures/entity/skull/enderman_head.png"));
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.SPIDER, new ResourceLocation("minecraft", "textures/entity/spider/spider.png"));
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.CAVE_SPIDER, new ResourceLocation("minecraft", "textures/entity/spider/cave_spider.png"));
-		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.PIGLIN, new ResourceLocation("minecraft", "textures/entity/piglin/piglin.png"));
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.ZOMBIE_PIGLIN, new ResourceLocation("minecraft", "textures/entity/piglin/zombified_piglin.png"));
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.HUSK, new ResourceLocation("minecraft", "textures/entity/zombie/husk.png"));
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ExtendedSkullBlock.Types.STRAY, new ResourceLocation(ModSpartanWeaponry.ID, "textures/entity/skull/stray_skull.png"));

@@ -27,6 +27,7 @@ public class HammerSlamWeaponTrait extends WeaponTrait implements IActionTraitCa
 	public HammerSlamWeaponTrait(String typeIn, String modIdIn) 
 	{
 		super(typeIn, modIdIn, TraitQuality.POSITIVE);
+		isMelee = true;
 	}
 	
 	@Override

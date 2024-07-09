@@ -69,6 +69,16 @@ public class ModCreativeTabs
 			output.accept(ModItems.HUGE_QUIVER_BRACE.get());
 			output.accept(ModItems.DYNAMITE.get());
 			makeWeaponOilVariants(output);
+			output.accept(ModItems.BLAZE_HEAD.get());
+			output.accept(ModItems.ENDERMAN_HEAD.get());
+			output.accept(ModItems.SPIDER_HEAD.get());
+			output.accept(ModItems.CAVE_SPIDER_HEAD.get());
+			output.accept(ModItems.ZOMBIFIED_PIGLIN_HEAD.get());
+			output.accept(ModItems.HUSK_HEAD.get());
+			output.accept(ModItems.STRAY_SKULL.get());
+			output.accept(ModItems.DROWNED_HEAD.get());
+			output.accept(ModItems.ILLAGER_HEAD.get());
+			output.accept(ModItems.WITCH_HEAD.get());
 		}).
 		build());
 

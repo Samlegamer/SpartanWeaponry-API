@@ -9,10 +9,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
+import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
 import com.oblivioussp.spartanweaponry.api.tags.ModWeaponTraitTags;
 import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
 import com.oblivioussp.spartanweaponry.util.Log;
+import com.oblivioussp.spartanweaponry.util.WeaponType;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -67,8 +69,11 @@ public class WeaponMaterial implements Tier, IReloadable
 	
 	private boolean useCustomDisplayName = false;
 	private Function<String, String> translationFunc = null;
-	
-	protected List<WeaponTrait> traits;
+
+	protected List<WeaponTrait> traits;				// *ALL* traits		 TODO: Does this still need to be cached?
+	protected List<WeaponTrait> meleeTraits;		// Melee-only traits
+	protected List<WeaponTrait> rangedTraits;		// Ranged-only traits
+	protected List<WeaponTrait> throwingTraits;		// Throwing-only traits
 	protected final TagKey<WeaponTrait> traitsTag;
 	protected boolean isValidTag;
 	protected Optional<List<Pair<WeaponTrait, WeaponTrait.InvalidReason>>> invalidTraits = Optional.empty();
@@ -114,6 +119,7 @@ public class WeaponMaterial implements Tier, IReloadable
 		if(!(isValidTag = tagManager.isKnownTagName(traitsTag)))
 		{
 			Log.error("Weapon Trait tag \"" + traitsTag.location() +  "\" couldn't be found for weapon material \"" + name + "\"!");
+			return;
 		}
 		else
 		{
@@ -139,6 +145,10 @@ public class WeaponMaterial implements Tier, IReloadable
 			}
 		}
 		traits = builder.build();
+		
+		meleeTraits = traits.stream().filter(WeaponType.MELEE.getTraitFilter()).collect(Collectors.toUnmodifiableList());
+		rangedTraits = traits.stream().filter(WeaponType.RANGED.getTraitFilter()).collect(Collectors.toUnmodifiableList());
+		throwingTraits = traits.stream().filter(WeaponType.THROWING.getTraitFilter()).collect(Collectors.toUnmodifiableList());
 	}
 	
 	public WeaponMaterial setUseCustomDisplayName()
@@ -252,14 +262,54 @@ public class WeaponMaterial implements Tier, IReloadable
 	 * Queries if the material has any Weapon Traits
 	 * @return true if any Weapon Trait bonus exists on this material; false otherwise.
 	 */
+	@Deprecated(since = "3.1.1", forRemoval = true)
 	public boolean hasAnyBonusTraits()
 	{
 		return traits != null && (!traits.isEmpty() || invalidTraits.isPresent());
 	}
 	
-	public List<WeaponTrait> getBonusTraits() 
+	public boolean hasAnyBonusTraits(WeaponType type)
+	{
+		List<WeaponTrait> weaponTraits;
+		
+		switch(type)
+		{
+		case MELEE:
+			weaponTraits = meleeTraits;
+			break;
+		case RANGED:
+			weaponTraits = rangedTraits;
+			break;
+		case THROWING:
+			weaponTraits = throwingTraits;
+			break;
+		default:
+			return false;
+		}
+		
+		return weaponTraits != null && (!weaponTraits.isEmpty() || invalidTraits.isPresent());
+		
+	}
+	
+	@Deprecated(since = "3.1.1", forRemoval = true)
+	public List<WeaponTrait> getBonusTraits()
 	{
 		return traits;
+	}
+	
+	public List<WeaponTrait> getBonusTraits(WeaponType type) 
+	{
+		switch(type)
+		{
+			case MELEE:
+				return meleeTraits;
+			case RANGED:
+				return rangedTraits;
+			case THROWING:
+				return throwingTraits;
+			default:
+				return List.of();
+		}
 	}
 
 	public void addTagErrorTooltip(ItemStack stack, List<Component> tooltip)
@@ -268,10 +318,24 @@ public class WeaponMaterial implements Tier, IReloadable
 			tooltip.add(Component.translatable(String.format("tooltip.%s.trait.invalid.material_tag", SpartanWeaponryAPI.MOD_ID), Component.translatable(String.format("tooltip.%s.material.%s", SpartanWeaponryAPI.MOD_ID, name)), traitsTag.location()).withStyle(ChatFormatting.DARK_RED));
 	}
 	
+	public void addTraitsToTooltip(ItemStack stack, WeaponType type, List<Component> tooltip, boolean isShiftPressed)
+	{
+		if(hasAnyBonusTraits(type))
+		{
+    		tooltip.add(Component.translatable(String.format("tooltip.%s.trait.material_bonus", ModSpartanWeaponry.ID)).withStyle(ChatFormatting.AQUA));
+			traits.forEach((trait) -> trait.addTooltip(stack, tooltip, isShiftPressed, WeaponTrait.InvalidReason.NONE));
+		}
+		if(invalidTraits.isPresent())
+			invalidTraits.get().forEach((traitPair) -> traitPair.getLeft().addTooltip(stack, tooltip, isShiftPressed, traitPair.getRight()));
+	}
+
+	@Deprecated(since = "3.1.1", forRemoval = true)
 	public void addTraitsToTooltip(ItemStack stack, List<Component> tooltip, boolean isShiftPressed)
 	{
 		if(hasAnyBonusTraits())
+		{
 			traits.forEach((trait) -> trait.addTooltip(stack, tooltip, isShiftPressed, WeaponTrait.InvalidReason.NONE));
+		}
 		if(invalidTraits.isPresent())
 			invalidTraits.get().forEach((traitPair) -> traitPair.getLeft().addTooltip(stack, tooltip, isShiftPressed, traitPair.getRight()));
 	}

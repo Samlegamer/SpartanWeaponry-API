@@ -90,7 +90,7 @@
         "items": [
           {
             "items": [
-              "spartanweaponry:piglin_head"
+              "minecraft:piglin_head"
             ]
           }
         ]
@@ -190,7 +190,7 @@
     "frame": "challenge",
     "hidden": false,
     "icon": {
-      "item": "spartanweaponry:piglin_head"
+      "item": "spartanweaponry:zombified_piglin_head"
     },
     "show_toast": true,
     "title": {

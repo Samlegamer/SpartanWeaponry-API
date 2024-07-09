@@ -83,8 +83,10 @@ public class WeaponTrait
 	protected TraitQuality quality;
 	protected boolean isMelee = false, 
 					isRanged = false, 
-					isThrowing = false, 
-					isAction = false;
+					isThrowing = false;
+	
+	@Deprecated(since = "3.1.1", forRemoval = true)
+	protected boolean isAction = false;
 	
 	protected MutableComponent types;
 	
@@ -185,6 +187,7 @@ public class WeaponTrait
 	 * Used for Weapon Traits that are performed as actions (e.g. Throwable & Melee Block)
 	 * @return
 	 */
+	@Deprecated(since = "3.1.1", forRemoval = true)
 	public WeaponTrait setActionTrait()
 	{
 		isAction = true;
@@ -192,9 +195,23 @@ public class WeaponTrait
 	}
 	
 	/**
+	 * Marks this Weapon trait as Melee, Ranged, and Throwing. Used for generic traits that adjust attack, loading, firing speed, for example
+	 * @return
+	 */
+	public WeaponTrait setUniversal()
+	{
+		isMelee = true;
+		isRanged = true;
+		isThrowing = true;
+		return this;
+	}
+	
+	/**
+	 * DEPRECATED: Use {@link #setUniversal()} instead!<br>
 	 * Marks this Weapon trait as Melee, Ranged, Throwing, and optionally an action trait. Used for generic traits that adjust attack, loading, firing speed, for example
 	 * @return
 	 */
+	@Deprecated(since = "3.1.1", forRemoval = true)
 	public WeaponTrait setUniversal(boolean isActionIn)
 	{
 		isMelee = true;
@@ -246,7 +263,7 @@ public class WeaponTrait
 	 */
 	public final boolean isMeleeTrait()
 	{
-		return isMelee;
+		return isMelee || getMeleeCallback().isPresent();
 	}
 
 	/**
@@ -255,7 +272,7 @@ public class WeaponTrait
 	 */
 	public final boolean isRangedTrait()
 	{
-		return isRanged;
+		return isRanged || getRangedCallback().isPresent();
 	}
 
 	/**
@@ -264,7 +281,7 @@ public class WeaponTrait
 	 */
 	public final boolean isThrowingTrait()
 	{
-		return isThrowing;
+		return isThrowing || getThrowingCallback().isPresent();
 	}
 	
 	/**
@@ -273,7 +290,7 @@ public class WeaponTrait
 	 */
 	public final boolean isActionTrait()
 	{
-		return isAction;
+		return getActionCallback().isPresent();
 	}
 	
 	/**
@@ -322,17 +339,19 @@ public class WeaponTrait
     	else
     		addTooltipTitle(stack, tooltip, ChatFormatting.DARK_RED, ChatFormatting.BOLD, ChatFormatting.STRIKETHROUGH);
 		
-		if(isShiftPressed && I18n.exists(String.format("tooltip.%s.trait.%s.desc", modId, type)))
+		if(isShiftPressed)
 		{
-			// TODO: Check and see if servers will flip out over storing components used for tooltips...
 			if(types == null)
 				initTooltipTypes();
 			else
 				tooltip.add(types);
-			if(invalidReason == InvalidReason.NONE)
-				addTooltipDescription(stack, tooltip);
-			else
-				tooltip.add(tooltipIndent().append(Component.translatable(String.format(invalidReason.getLanguageKey())).withStyle(INVALID_FORMAT)));
+			if(I18n.exists(String.format("tooltip.%s.trait.%s.desc", modId, type)))
+			{
+				if(invalidReason == InvalidReason.NONE)
+					addTooltipDescription(stack, tooltip);
+				else
+					tooltip.add(tooltipIndent().append(Component.translatable(String.format(invalidReason.getLanguageKey())).withStyle(INVALID_FORMAT)));
+			}
 		}
     }
 
@@ -356,14 +375,14 @@ public class WeaponTrait
 		List<MutableComponent> traitTypesList = new ArrayList<MutableComponent>();
 		Component comma = Component.literal(", ");
 		
-		if(isAction)
-			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.action", modId)));
-		if(isMelee)
-			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.melee", modId)));
-		if(isRanged)
-			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.ranged", modId)));
-		if(isThrowing)
-			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.throwing", modId)));
+		if(isActionTrait())
+			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.action", SpartanWeaponryAPI.MOD_ID)));
+		if(isMeleeTrait())
+			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.melee", SpartanWeaponryAPI.MOD_ID)));
+		if(isRangedTrait())
+			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.ranged", SpartanWeaponryAPI.MOD_ID)));
+		if(isThrowingTrait())
+			traitTypesList.add(Component.translatable(String.format("tooltip.%s.trait.type.throwing", SpartanWeaponryAPI.MOD_ID)));
 
 		types = Component.literal("  [").append(ComponentUtils.formatList(traitTypesList, comma, Function.identity())).append(Component.literal("]")).withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY);
     }

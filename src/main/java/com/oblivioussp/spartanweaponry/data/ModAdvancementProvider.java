@@ -103,15 +103,22 @@ public class ModAdvancementProvider extends ForgeAdvancementProvider
 			Advancement.Builder.advancement().parent(root).display(ModItems.BATTLEAXES.netherite.get(), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".upgrade_netherite.title"), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".upgrade_netherite.desc"), 
 					null, FrameType.GOAL, true, true, false).addCriterion("has_netherite_weapon", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ModItemTags.NETHERITE_WEAPONS).build())).save(saver, new ResourceLocation(ModSpartanWeaponry.ID, "upgrade_netherite_weapon"), existingFileHelper);
 			
-			Advancement.Builder.advancement().parent(scythes).display(ModItems.PIGLIN_HEAD.get(), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".collect_heads.title"), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".collect_heads.desc"),
+			Advancement.Builder.advancement().parent(scythes).display(ModItems.ZOMBIFIED_PIGLIN_HEAD.get(), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".collect_heads.title"), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".collect_heads.desc"),
 					null, FrameType.CHALLENGE, true, true, false).rewards(AdvancementRewards.Builder.experience(200).build()).
-					addCriterion("creeper_head", InventoryChangeTrigger.TriggerInstance.hasItems(Items.CREEPER_HEAD)).addCriterion("skeleton_skull", InventoryChangeTrigger.TriggerInstance.hasItems(Items.SKELETON_SKULL)).
-					addCriterion("wither_skeleton_skull", InventoryChangeTrigger.TriggerInstance.hasItems(Items.WITHER_SKELETON_SKULL)).addCriterion("zombie_head", InventoryChangeTrigger.TriggerInstance.hasItems(Items.ZOMBIE_HEAD)).
-					addCriterion("blaze_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.BLAZE_HEAD.get())).addCriterion("enderman_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.ENDERMAN_HEAD.get())).
-					addCriterion("spider_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.SPIDER_HEAD.get())).addCriterion("cave_spider_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.CAVE_SPIDER_HEAD.get())).
-					addCriterion("piglin_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.PIGLIN_HEAD.get())).addCriterion("zombified_piglin_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.ZOMBIFIED_PIGLIN_HEAD.get())).
-					addCriterion("husk_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.HUSK_HEAD.get())).addCriterion("stray_skull", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.STRAY_SKULL.get())).
-					addCriterion("drowned_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.DROWNED_HEAD.get())).addCriterion("illager_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.ILLAGER_HEAD.get())).
+					addCriterion("creeper_head", InventoryChangeTrigger.TriggerInstance.hasItems(Items.CREEPER_HEAD)).
+					addCriterion("skeleton_skull", InventoryChangeTrigger.TriggerInstance.hasItems(Items.SKELETON_SKULL)).
+					addCriterion("wither_skeleton_skull", InventoryChangeTrigger.TriggerInstance.hasItems(Items.WITHER_SKELETON_SKULL)).
+					addCriterion("zombie_head", InventoryChangeTrigger.TriggerInstance.hasItems(Items.ZOMBIE_HEAD)).
+					addCriterion("blaze_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.BLAZE_HEAD.get())).
+					addCriterion("enderman_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.ENDERMAN_HEAD.get())).
+					addCriterion("spider_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.SPIDER_HEAD.get())).
+					addCriterion("cave_spider_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.CAVE_SPIDER_HEAD.get())).
+					addCriterion("piglin_head", InventoryChangeTrigger.TriggerInstance.hasItems(Items.PIGLIN_HEAD)).
+					addCriterion("zombified_piglin_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.ZOMBIFIED_PIGLIN_HEAD.get())).
+					addCriterion("husk_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.HUSK_HEAD.get())).
+					addCriterion("stray_skull", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.STRAY_SKULL.get())).
+					addCriterion("drowned_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.DROWNED_HEAD.get())).
+					addCriterion("illager_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.ILLAGER_HEAD.get())).
 					addCriterion("witch_head", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.WITCH_HEAD.get())).save(saver, new ResourceLocation(ModSpartanWeaponry.ID, "collect_heads"), existingFileHelper);
 		
 			Advancement.Builder.advancement().parent(root).display(ModItems.WEAPON_OIL.get(), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".brew_oil.title"), Component.translatable("advancement." + ModSpartanWeaponry.ID + ".brew_oil.desc"),

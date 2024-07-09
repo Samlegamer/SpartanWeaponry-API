@@ -21,6 +21,7 @@ public class MeleeBlockWeaponTrait extends WeaponTrait implements IActionTraitCa
 	public MeleeBlockWeaponTrait(String typeIn, String modIdIn, TraitQuality qualityIn) 
 	{
 		super(typeIn, modIdIn, qualityIn);
+		isMelee = true;
 	}
 	
 	@Override

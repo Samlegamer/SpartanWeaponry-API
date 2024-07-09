@@ -3,6 +3,8 @@ package com.oblivioussp.spartanweaponry.inventory;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import com.oblivioussp.spartanweaponry.capability.IQuiverItemHandler;
+import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.item.QuiverBaseItem;
 import com.oblivioussp.spartanweaponry.util.Defaults;
 
@@ -16,8 +18,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -25,7 +25,7 @@ public abstract class QuiverBaseMenu extends AbstractContainerMenu
 {
 	protected final ItemStack quiverStack;
 
-	protected final IItemHandler handler;
+	protected final IQuiverItemHandler handler;
 	protected final Predicate<ItemStack> slotFilter;
 	protected final ResourceLocation emptySlotTexture;
 	
@@ -38,7 +38,7 @@ public abstract class QuiverBaseMenu extends AbstractContainerMenu
 		slotFilter = slotFilterIn;
 		quiverStack = quiverStackIn;
 		emptySlotTexture = emptySlotTextureIn;
-		handler = quiverStack.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow();
+		handler = quiverStack.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow();
 		
 		playerInvStart = handler.getSlots();
 		playerInvEnd = playerInvStart + 26;

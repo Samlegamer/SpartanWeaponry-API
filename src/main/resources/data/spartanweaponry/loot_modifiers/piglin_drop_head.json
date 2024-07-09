@@ -14,6 +14,6 @@
       "entity": "this"
     }
   ],
-  "skull": "spartanweaponry:piglin_head",
+  "skull": "minecraft:piglin_head",
   "type": "spartanweaponry:decapitate"
 }

@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.oblivioussp.spartanweaponry.capability.IQuiverItemHandler;
+import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.item.QuiverBaseItem;
 import com.oblivioussp.spartanweaponry.util.Log;
 import com.oblivioussp.spartanweaponry.util.QuiverHelper;
@@ -20,8 +22,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
 
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin extends ProjectileMixin
@@ -68,7 +68,7 @@ public abstract class AbstractArrowMixin extends ProjectileMixin
 							{
 								//Log.debug("Inserting arrows into a quiver!");
 								// Attempt to place the arrows into the quiver.
-								IItemHandler quiverHandler = quiver.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve().orElseThrow();
+								IQuiverItemHandler quiverHandler = quiver.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY, null).resolve().orElseThrow();
 								for(int i = 0; i < quiverHandler.getSlots(); i++)
 								{
 									arrowStack = quiverHandler.insertItem(i, arrowStack, false);

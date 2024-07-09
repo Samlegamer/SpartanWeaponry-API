@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
+import com.oblivioussp.spartanweaponry.capability.IQuiverItemHandler;
 import com.oblivioussp.spartanweaponry.capability.QuiverCapabilityProvider;
 import com.oblivioussp.spartanweaponry.capability.QuiverCurioCapabilityProvider;
 import com.oblivioussp.spartanweaponry.client.ClientHelper;
+import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.inventory.tooltip.QuiverTooltip;
 import com.oblivioussp.spartanweaponry.util.Defaults;
 
@@ -25,12 +27,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class QuiverBaseItem extends Item
 {
@@ -43,11 +42,7 @@ public abstract class QuiverBaseItem extends Item
 		CURIO
 	}
 	
-	public static final String NBT_SIZE = "Size";
-	public static final String NBT_CURRENT_AMMO = "CurrentAmmo";
-	public static final String NBT_TOTAL_AMMO = "TotalAmmo";
 	public static final String NBT_AMMO_COLLECT = "AmmoCollect";
-//	public static final String NBT_CLIENT_INVENTORY = "ClientInventory";
 	public static final String NBT_AMMO = "Ammo";
 	public static final String NBT_OFFHAND_MOVED = "OffhandMoved";
 	public static final String NBT_ITEM_ID = "Id";
@@ -83,9 +78,7 @@ public abstract class QuiverBaseItem extends Item
 		
 		// Have 6 separate states for the Heavy Arrow Quiver, instead of 4
 		if(ammoSlots >= Defaults.SlotsQuiverLarge)
-		{
 			ammo = Mth.clamp(ammo, 0, 5);
-		}
 		else
 			ammo = Mth.clamp(ammo, 0, 3);
 		
@@ -107,50 +100,33 @@ public abstract class QuiverBaseItem extends Item
 	{
 		ItemStack heldItem = playerIn.getItemInHand(handIn);
 		
+		IQuiverItemHandler handler = heldItem.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow();
+		// Check current size of Quiver and correct it if needed
+		int size = heldItem.getOrCreateTagElement(NBT_AMMO).getInt("Size");
+		if(size != ammoSlots)
+			handler.resize(ammoSlots);
+			
 		if(!levelIn.isClientSide)
 		{
 			if(!playerIn.isCrouching())
 			{
-				IItemHandler handler = heldItem.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow();
-				if(handler instanceof ItemStackHandler)
-				{
-					SlotType slotType = handIn == InteractionHand.OFF_HAND ? SlotType.OFF_HAND : SlotType.MAIN_HAND;
-					openGui(heldItem, playerIn, slotType, -1);
-					return InteractionResultHolder.consume(heldItem);
-				}
-				else
-					return InteractionResultHolder.fail(heldItem);
+				SlotType slotType = handIn == InteractionHand.OFF_HAND ? SlotType.OFF_HAND : SlotType.MAIN_HAND;
+				openGui(heldItem, playerIn, slotType, -1);
+				return InteractionResultHolder.consume(heldItem);
 			}
 			else
 			{
-				
+				// Toggle ammo collection
 				boolean ammoCollect = !heldItem.getOrCreateTag().getBoolean(NBT_AMMO_COLLECT);
 				heldItem.getTag().putBoolean(NBT_AMMO_COLLECT, ammoCollect);
 				
 				String collectStatus = ammoCollect ? "enabled" : "disabled";
 				ChatFormatting collectColour = ammoCollect ? ChatFormatting.GREEN : ChatFormatting.RED;
-				playerIn.displayClientMessage(Component.translatable("message." + ModSpartanWeaponry.ID + ".ammo_collect_toggle").append(Component.translatable("tooltip." + ModSpartanWeaponry.ID + "." + collectStatus).withStyle(collectColour)), true);
+				playerIn.displayClientMessage(Component.translatable("message." + ModSpartanWeaponry.ID + ".ammo_collect_toggle", Component.translatable("tooltip." + ModSpartanWeaponry.ID + "." + collectStatus).withStyle(collectColour)), true);
 				return InteractionResultHolder.fail(heldItem);
 			}
 		}
         return InteractionResultHolder.pass(heldItem);
-	}
-	
-	@Override
-	public CompoundTag getShareTag(ItemStack stack) 
-	{
-/*		IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve().orElseThrow();
-		if(!(handler instanceof ItemStackHandler))*/
-			return super.getShareTag(stack);
-		
-/*		CompoundTag capTag = ((ItemStackHandler)handler).serializeNBT();
-		CompoundTag tag = super.getShareTag(stack);
-		if(tag == null)
-			tag = new CompoundTag();
-		
-		if(capTag != null)
-			tag.put(NBT_CLIENT_INVENTORY, capTag);
-		return tag;*/
 	}
 	
 	@Override

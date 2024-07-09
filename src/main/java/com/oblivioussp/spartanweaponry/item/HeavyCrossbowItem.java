@@ -3,7 +3,6 @@ package com.oblivioussp.spartanweaponry.item;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -23,6 +22,7 @@ import com.oblivioussp.spartanweaponry.init.ModEnchantments;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.util.ClientConfig;
 import com.oblivioussp.spartanweaponry.util.Defaults;
+import com.oblivioussp.spartanweaponry.util.WeaponType;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -62,6 +62,7 @@ public class HeavyCrossbowItem extends CrossbowItem implements IReloadable, IHud
 	protected boolean doCraftCheck = true;
 	protected boolean canBeCrafted = true;
 	
+	protected final WeaponType type = WeaponType.RANGED;
 	protected List<WeaponTrait> rangedTraits;
 	
 	public static final String NBT_CHARGED = "Charged";
@@ -97,7 +98,7 @@ public class HeavyCrossbowItem extends CrossbowItem implements IReloadable, IHud
 	{
 		loadTicks = Defaults.CrossbowTicksToLoad;
 		aimTicks = Defaults.CrossbowInaccuracyTicks;
-		rangedTraits = material.getBonusTraits().stream().filter((trait) -> trait.isRangedTrait()).collect(Collectors.toUnmodifiableList());
+		rangedTraits = material.getBonusTraits(type);
 		for(WeaponTrait trait : rangedTraits)
 		{
 			Optional<IRangedTraitCallback> opt = trait.getRangedCallback();
@@ -371,17 +372,18 @@ public class HeavyCrossbowItem extends CrossbowItem implements IReloadable, IHud
     		}
     	}
 
-    	if(material.hasAnyBonusTraits())
+    	if(material.hasAnyBonusTraits(type))
     	{
 			if(isShiftPressed)
 				tooltip.add(Component.translatable(String.format("tooltip.%s.traits", ModSpartanWeaponry.ID), Component.translatable("tooltip." + ModSpartanWeaponry.ID + ".showing_details").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.GOLD));
 			else
 				tooltip.add(Component.translatable(String.format("tooltip.%s.traits", ModSpartanWeaponry.ID), Component.translatable("tooltip." + ModSpartanWeaponry.ID + ".show_details", ChatFormatting.DARK_AQUA.toString() + "SHIFT").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.GOLD));
 
-			if(!rangedTraits.isEmpty())
-				tooltip.add(Component.translatable(String.format("tooltip.%s.trait.material_bonus", ModSpartanWeaponry.ID)).withStyle(ChatFormatting.AQUA));
+//			if(!rangedTraits.isEmpty())
+//				tooltip.add(Component.translatable(String.format("tooltip.%s.trait.material_bonus", ModSpartanWeaponry.ID)).withStyle(ChatFormatting.AQUA));
 
-			rangedTraits.forEach((trait) -> trait.addTooltip(stack, tooltip, isShiftPressed));
+//			rangedTraits.forEach((trait) -> trait.addTooltip(stack, tooltip, isShiftPressed));
+			material.addTraitsToTooltip(stack, type, tooltip, isShiftPressed);
         	tooltip.add(Component.empty());
     	}
     	

@@ -12,6 +12,7 @@ public class ThrowingCallbackWeaponTrait extends WeaponTrait implements IThrowin
 	public ThrowingCallbackWeaponTrait(String propType, String propModId, TraitQuality quality)
 	{
 		super(propType, propModId, quality);
+		isThrowing = true;
 	}
 
 	@Override

@@ -109,7 +109,7 @@ public class ThrowingWeaponItem extends Item implements IWeaponTraitContainer<Th
 	{
 		ImmutableList.Builder<WeaponTrait> builder = ImmutableList.builder();
 		builder.addAll(archetype.getTraits());
-		builder.addAll(material.getBonusTraits());
+		builder.addAll(material.getBonusTraits(archetype.getType()));
 		traits = builder.build();
 
 		// Initialize the weapon's attribute modifier map
@@ -242,11 +242,7 @@ public class ThrowingWeaponItem extends Item implements IWeaponTraitContainer<Th
 
 			archetype.addTraitsToTooltip(stack, tooltip, isShiftPressed);
 			
-	    	if(material.hasAnyBonusTraits())
-	    	{
-	    		tooltip.add(Component.translatable(String.format("tooltip.%s.trait.material_bonus", ModSpartanWeaponry.ID)).withStyle(ChatFormatting.AQUA));
-	    		material.getBonusTraits().forEach((trait) -> trait.addTooltip(stack, tooltip, isShiftPressed));
-	    	}
+	    	material.addTraitsToTooltip(stack, archetype.getType(), tooltip, isShiftPressed);
 		}
 
 		tooltip.add(Component.empty());

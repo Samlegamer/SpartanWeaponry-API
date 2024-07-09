@@ -14,10 +14,10 @@ import net.minecraft.world.level.Level;
 
 public class TwoHandedWeaponTrait extends MeleeCallbackWeaponTrait
 {
-
 	public TwoHandedWeaponTrait(String typeIn, String modIdIn) 
 	{
 		super(typeIn, modIdIn, TraitQuality.NEGATIVE);
+		isMelee = true;
 	}
 	
 	@Override

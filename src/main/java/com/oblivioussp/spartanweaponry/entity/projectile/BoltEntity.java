@@ -361,13 +361,11 @@ public class BoltEntity extends AbstractArrow implements IEntityAdditionalSpawnD
 					
 		String boltRegName = ForgeRegistries.ITEMS.getKey(boltStack.getItem()).getPath();
 		
-		if(ForgeRegistries.POTIONS.getKey(potion).getPath() != "empty")
+		String prefix = "tipped_";
+		int idx = boltRegName.indexOf(prefix);
+		if(idx != -1)
 		{
-			int idx = boltRegName.indexOf("_tipped");
-			if(idx != -1)
-			{
-				boltRegName = boltRegName.substring(0, idx);
-			}
+			boltRegName = boltRegName.substring(idx + prefix.length());
 		}
 		return new ResourceLocation(ModSpartanWeaponry.ID, "textures/entity/projectiles/" + boltRegName + ".png");
 	}

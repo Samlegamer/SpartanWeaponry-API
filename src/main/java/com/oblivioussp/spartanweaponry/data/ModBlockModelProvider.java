@@ -26,7 +26,6 @@ public class ModBlockModelProvider extends BlockStateProvider
 		generateSkullModels(ModBlocks.ENDERMAN_HEAD.get(), ModBlocks.ENDERMAN_WALL_HEAD.get());
 		generateSkullModels(ModBlocks.SPIDER_HEAD.get(), ModBlocks.SPIDER_WALL_HEAD.get());
 		generateSkullModels(ModBlocks.CAVE_SPIDER_HEAD.get(), ModBlocks.CAVE_SPIDER_WALL_HEAD.get());
-		generateSkullModels(ModBlocks.PIGLIN_HEAD.get(), ModBlocks.PIGLIN_WALL_HEAD.get());
 		generateSkullModels(ModBlocks.ZOMBIFIED_PIGLIN_HEAD.get(), ModBlocks.ZOMBIFIED_PIGLIN_WALL_HEAD.get());
 		generateSkullModels(ModBlocks.HUSK_HEAD.get(), ModBlocks.HUSK_WALL_HEAD.get());
 		generateSkullModels(ModBlocks.STRAY_SKULL.get(), ModBlocks.STRAY_WALL_SKULL.get());

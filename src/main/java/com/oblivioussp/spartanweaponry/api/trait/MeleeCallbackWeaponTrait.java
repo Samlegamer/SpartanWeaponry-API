@@ -19,6 +19,7 @@ public class MeleeCallbackWeaponTrait extends WeaponTrait implements IMeleeTrait
 	public MeleeCallbackWeaponTrait(String typeIn, String modIdIn, TraitQuality qualityIn)
 	{
 		super(typeIn, modIdIn, qualityIn);
+		isMelee = true;
 	}
 
 	@Override

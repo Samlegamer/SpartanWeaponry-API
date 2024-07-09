@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
+import com.oblivioussp.spartanweaponry.capability.IQuiverItemHandler;
 import com.oblivioussp.spartanweaponry.client.gui.components.ToggleImageButton;
+import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.inventory.QuiverBaseMenu;
 import com.oblivioussp.spartanweaponry.item.QuiverBaseItem;
 import com.oblivioussp.spartanweaponry.network.NetworkHandler;
@@ -23,9 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 
 public class QuiverBaseScreen<T extends QuiverBaseMenu> extends AbstractContainerScreen<T> 
 {
@@ -51,7 +51,7 @@ public class QuiverBaseScreen<T extends QuiverBaseMenu> extends AbstractContaine
 		prioritySlot = quiver.getOrCreateTag().getInt(QuiverBaseItem.NBT_PROIRITY_SLOT);
 		isAmmoCollectEnabled = quiver.getOrCreateTag().getBoolean(QuiverBaseItem.NBT_AMMO_COLLECT);
 		
-		LazyOptional<IItemHandler> handler = quiver.getCapability(ForgeCapabilities.ITEM_HANDLER);
+		LazyOptional<IQuiverItemHandler> handler = quiver.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY);
 		if(handler.isPresent())
 			ammoSlots = handler.resolve().orElseThrow().getSlots();
 		else

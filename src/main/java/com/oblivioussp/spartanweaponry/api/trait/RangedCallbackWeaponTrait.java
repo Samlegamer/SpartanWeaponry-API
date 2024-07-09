@@ -12,6 +12,7 @@ public class RangedCallbackWeaponTrait extends WeaponTrait implements IRangedTra
 	public RangedCallbackWeaponTrait(String propType, String propModId, TraitQuality quality)
 	{
 		super(propType, propModId, quality);
+		isRanged = true;
 	}
 	
 	@Override

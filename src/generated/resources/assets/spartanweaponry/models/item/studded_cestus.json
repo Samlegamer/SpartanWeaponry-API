@@ -15,7 +15,6 @@
     }
   ],
   "textures": {
-    "coating": "spartanweaponry:item/coating/cestus",
     "layer0": "spartanweaponry:item/studded_cestus"
   }
 }

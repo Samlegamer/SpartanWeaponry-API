@@ -19,7 +19,6 @@ public class ModelLayers
 	public static final ModelLayerLocation ENDERMAN_HEAD = createMainModelLayer("enderman_head");
 	public static final ModelLayerLocation SPIDER_HEAD = createMainModelLayer("spider_head");
 	public static final ModelLayerLocation CAVE_SPIDER_HEAD = createMainModelLayer("cave_spider_head");
-	public static final ModelLayerLocation PIGLIN_HEAD = createMainModelLayer("piglin_head");
 	public static final ModelLayerLocation ZOMBIFIED_PIGLIN_HEAD = createMainModelLayer("zombified_piglin_head");
 	public static final ModelLayerLocation HUSK_HEAD = createMainModelLayer("husk_head");
 	public static final ModelLayerLocation STRAY_SKULL = createMainModelLayer("stray_skull");

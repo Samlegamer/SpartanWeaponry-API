@@ -16,6 +16,7 @@ import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
 import com.oblivioussp.spartanweaponry.api.trait.IMeleeTraitCallback;
 import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
 import com.oblivioussp.spartanweaponry.capability.IOilHandler;
+import com.oblivioussp.spartanweaponry.capability.IQuiverItemHandler;
 import com.oblivioussp.spartanweaponry.entity.projectile.ThrowingWeaponEntity;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.init.ModCriteriaTriggers;
@@ -68,7 +69,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
@@ -82,7 +82,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -318,9 +317,9 @@ public class CommonEventHandler
 						if(!quiver.isEmpty())
 						{
 							// TODO: Possibly make an isEmpty() method for a custom item handler
-							IItemHandler quiverHandler = quiver.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow();
-							boolean isQuiverEmpty = true;
-							for(int i = 0; i < quiverHandler.getSlots(); i++)
+							IQuiverItemHandler quiverHandler = quiver.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow();
+							boolean isQuiverEmpty = quiverHandler.isEmpty();
+							/*for(int i = 0; i < quiverHandler.getSlots(); i++)
 							{
 								ItemStack arrowStack = quiverHandler.getStackInSlot(i);
 								if(!arrowStack.isEmpty())
@@ -328,7 +327,7 @@ public class CommonEventHandler
 									isQuiverEmpty = false;
 									break;
 								}
-							}
+							}*/
 							
 							// Check to see if the opposite hand slot is not empty; attempt to move it somewhere else
 							if(!isQuiverEmpty && !oppositeStack.isEmpty() && !quiverInfo.isAmmo(oppositeStack))
@@ -382,7 +381,7 @@ public class CommonEventHandler
 	{
 		if(!quiver.isEmpty())
 		{
-			IItemHandler quiverHandler = quiver.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow();
+			IQuiverItemHandler quiverHandler = quiver.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow();
 			ItemStack arrowStack = player.getItemBySlot(oppositeHandSlot);
 			
 			int prioritySlot = quiver.getOrCreateTag().getInt(QuiverBaseItem.NBT_PROIRITY_SLOT);
@@ -413,7 +412,7 @@ public class CommonEventHandler
 	{
 		if(!quiver.isEmpty())
 		{
-			IItemHandler quiverHandler = quiver.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow();
+			IQuiverItemHandler quiverHandler = quiver.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow();
 			ItemStack arrowStack = ItemStack.EMPTY;
 			
 			int prioritySlot = quiver.getOrCreateTag().getInt(QuiverBaseItem.NBT_PROIRITY_SLOT);
@@ -460,7 +459,7 @@ public class CommonEventHandler
 					if(quiver.getOrCreateTag().getBoolean(QuiverBaseItem.NBT_AMMO_COLLECT))
 					{
 						// Attempt to place the arrows into the quiver.
-						IItemHandler quiverHandler = quiver.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve().orElseThrow();
+						IQuiverItemHandler quiverHandler = quiver.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow();
 						for(int i = 0; i < quiverHandler.getSlots(); i++)
 						{
 							pickedUpStack = quiverHandler.insertItem(i, pickedUpStack, false);

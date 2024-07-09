@@ -235,15 +235,12 @@ public class ArrowBaseEntity extends AbstractArrow implements IEntityAdditionalS
 	{
 		String arrowRegName = ForgeRegistries.ITEMS.getKey(getPickupItem().getItem()).getPath();
 		
-//		if(ForgeRegistries.POTIONS.getKey(potion).getPath() != "empty")
-//		{
-			String prefix = "tipped_";
-			int idx = arrowRegName.indexOf(prefix);
-			if(idx != -1)
-			{
-				arrowRegName = arrowRegName.substring(idx + prefix.length());
-			}
-//		}
+		String prefix = "tipped_";
+		int idx = arrowRegName.indexOf(prefix);
+		if(idx != -1)
+		{
+			arrowRegName = arrowRegName.substring(idx + prefix.length());
+		}
 		return new ResourceLocation(ModSpartanWeaponry.ID, "textures/entity/projectiles/" + arrowRegName + ".png");
 	}
 	

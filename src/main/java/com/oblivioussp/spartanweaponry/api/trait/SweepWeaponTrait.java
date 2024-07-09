@@ -17,6 +17,7 @@ public class SweepWeaponTrait extends WeaponTraitWithMagnitude
 	public SweepWeaponTrait(String propType, String propModId) 
 	{
 		super(propType, propModId, TraitQuality.POSITIVE);
+		isMelee = true;
 	}
 
 	@Override
