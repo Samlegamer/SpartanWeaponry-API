@@ -248,7 +248,7 @@ public class Config
 	public BooleanValue disableVillagerTrading;
 	
 	// Trait settings
-	public DoubleValue damageBonusChestMultiplier, damageBonusRidingMultiplier, //damageBonusRidingVelocityForMaxBonus,
+	public DoubleValue damageBonusChestMultiplier, damageBonusHeadMultiplier, damageBonusRidingMultiplier, //damageBonusRidingVelocityForMaxBonus,
 						damageBonusThrowMultiplier, damageBonusThrowJavelinMultiplier,
 						damageBonusUnarmoredMultiplier;
 	public BooleanValue damageBonusCheckArmorValue;
@@ -423,6 +423,9 @@ public class Config
 				damageBonusChestMultiplier = builder.comment("Changes the \"Chest Damage Bonus\" Weapon Trait multiplier value")
 									.translation("config." + ModSpartanWeaponry.ID + ".traits.damage_bonus.chest_multiplier")
 									.defineInRange("chest_multiplier", Defaults.DamageBonusChestMultiplier, 1.0, 50.0);
+				damageBonusHeadMultiplier = builder.comment("Changes the \"Head Damage Bonus\" Weapon Trait multiplier value")
+						.translation("config." + ModSpartanWeaponry.ID + ".traits.damage_bonus.head_multiplier")
+						.defineInRange("head_multiplier", Defaults.DamageBonusHeadMultiplier, 1.0, 50.0);
 				damageBonusRidingMultiplier = builder.comment("Changes the \"Riding Damage Bonus\" Weapon Trait multiplier value")
 						.translation("config." + ModSpartanWeaponry.ID + ".traits.damage_bonus.riding_multiplier")
 						.defineInRange("riding_multiplier", Defaults.DamageBonusRidingMultiplier, 1.0, 50.0);
@@ -653,6 +656,7 @@ public class Config
 		
 		// Update Weapon Traits
 		WeaponTraits.DAMAGE_BONUS_CHEST.get().setMagnitude(INSTANCE.damageBonusChestMultiplier.get().floatValue());
+		WeaponTraits.DAMAGE_BONUS_HEAD.get().setMagnitude(INSTANCE.damageBonusHeadMultiplier.get().floatValue());
 		WeaponTraits.DAMAGE_BONUS_RIDING.get().setMagnitude(INSTANCE.damageBonusRidingMultiplier.get().floatValue());
 		WeaponTraits.DAMAGE_BONUS_THROWN_1.get().setMagnitude(INSTANCE.damageBonusThrowMultiplier.get().floatValue());
 		WeaponTraits.DAMAGE_BONUS_THROWN_2.get().setMagnitude(INSTANCE.damageBonusThrowJavelinMultiplier.get().floatValue());
