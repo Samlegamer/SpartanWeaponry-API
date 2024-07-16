@@ -87,6 +87,7 @@ public class DamageBonusWeaponTrait extends MeleeCallbackWeaponTrait
 	{
 		super(typeIn, modIdIn, TraitQuality.POSITIVE);
 		damageFunc = func;
+		isThrowing = true;
 	}
 
 	@Override
