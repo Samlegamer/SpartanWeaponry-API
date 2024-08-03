@@ -3,10 +3,13 @@ package com.oblivioussp.spartanweaponry.item;
 import java.util.List;
 import java.util.Optional;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.capability.IQuiverItemHandler;
 import com.oblivioussp.spartanweaponry.capability.QuiverCapabilityProvider;
 import com.oblivioussp.spartanweaponry.capability.QuiverCurioCapabilityProvider;
+import com.oblivioussp.spartanweaponry.capability.QuiverItemStackHandler;
 import com.oblivioussp.spartanweaponry.client.ClientHelper;
 import com.oblivioussp.spartanweaponry.init.ModCapabilities;
 import com.oblivioussp.spartanweaponry.inventory.tooltip.QuiverTooltip;
@@ -127,6 +130,17 @@ public abstract class QuiverBaseItem extends Item
 			}
 		}
         return InteractionResultHolder.pass(heldItem);
+	}
+	
+	@Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) 
+	{
+		super.readShareTag(stack, nbt);
+		if(nbt != null)
+		{
+			QuiverItemStackHandler handler = (QuiverItemStackHandler)(stack.getCapability(ModCapabilities.QUIVER_ITEM_CAPABILITY).resolve().orElseThrow());
+			handler.deserializeNBT(nbt.getCompound(QuiverBaseItem.NBT_AMMO));	// Restore items inside quiver client-side
+		}
 	}
 	
 	@Override

@@ -9,12 +9,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class QuiverCapabilityProvider implements ICapabilitySerializable<CompoundTag>
 {
 	protected ItemStack quiver;
-	protected final LazyOptional<ItemStackHandler> handler;
+	protected final LazyOptional<QuiverItemStackHandler> handler;
 	protected final int inventorySize;
 
 	public QuiverCapabilityProvider(ItemStack stack, int invSize, CompoundTag nbt)

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.ImmutableList;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.APIConfigValues;
 import com.oblivioussp.spartanweaponry.api.APIConstants;
@@ -42,176 +43,6 @@ public class Config
 		 final Pair<Config, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Config::new);
 		 INSTANCE = specPair.getLeft();
 		 CONFIG_SPEC = specPair.getRight();
-	}
-	
-	public class WeaponCategory
-	{
-		public BooleanValue disableRecipes;
-		public DoubleValue speed;
-		public DoubleValue baseDamage;
-		public DoubleValue damageMultipler;
-		private String typeDisabledName;
-		
-		protected WeaponCategory(ForgeConfigSpec.Builder builder, String weaponClass, String weaponPlural, float defaultSpeed, float defaultBaseDamage, float defaultDamageMuliplier, String typeDisabledNameIn)
-		{
-			builder.push(weaponClass);
-			typeDisabledName = typeDisabledNameIn;
-			disableRecipes = builder.comment("Disables all recipes for all " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.disable")
-					.worldRestart()
-					.define("disable", false);
-			speed = builder.comment("Attack speed of " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.speed")
-					.defineInRange("speed", defaultSpeed, 0.0d, 4.0d);
-			baseDamage = builder.comment("Base Damage of " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.base_damage")
-					.defineInRange("base_damage", defaultBaseDamage, 0.1d, 100.0d);
-			damageMultipler = builder.comment("Damage Multiplier for " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.damage_multiplier")
-					.defineInRange("damage_multiplier", defaultDamageMuliplier, 0.1d, 10.0d);
-			builder.pop();
-		}
-		
-		public void updateDisabledRecipeList()
-		{
-			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
-		}
-	}
-	
-	public class RangedWeaponCategory
-	{
-		public BooleanValue disableRecipes;
-		private String typeDisabledName;
-		
-		protected RangedWeaponCategory(ForgeConfigSpec.Builder builder, String weaponClass, String weaponPlural, String typeDisabledNameIn)
-		{
-			builder.push(weaponClass);
-			typeDisabledName = typeDisabledNameIn;
-			disableRecipes = builder.comment("Disables all recipes for all " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.disable")
-					.worldRestart()
-					.define("disable", false);
-			builder.pop();
-		}
-		
-		public void updateDisabledRecipeList()
-		{
-			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
-		}
-	}
-	
-	public class ThrowingWeaponCategory
-	{
-		public BooleanValue disableRecipes;
-		public DoubleValue speed;
-		public DoubleValue baseDamage;
-		public DoubleValue damageMultipler;
-		public IntValue chargeTicks;
-		private String typeDisabledName;
-		
-		protected ThrowingWeaponCategory(ForgeConfigSpec.Builder builder, String weaponClass, String weaponPlural, float defaultSpeed, float defaultBaseDamage, float defaultDamageMuliplier, int defaultChargeTicks, String typeDisabledNameIn)
-		{
-			builder.push(weaponClass);
-			typeDisabledName = typeDisabledNameIn;
-			disableRecipes = builder.comment("Disables all recipes for all " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.disable")
-					.worldRestart()
-					.define("disable", false);
-			speed = builder.comment("Attack speed of " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.speed")
-					.defineInRange("speed", defaultSpeed, 0.0d, 4.0d);
-			baseDamage = builder.comment("Base Damage of " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.base_damage")
-					.defineInRange("base_damage", defaultBaseDamage, 0.1d, 100.0d);
-			damageMultipler = builder.comment("Damage Multiplier for " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.damage_multiplier")
-					.defineInRange("damage_multiplier", defaultDamageMuliplier, 0.1d, 10.0d);
-			chargeTicks = builder.comment("Charge time in ticks for " + weaponPlural + ".")
-					.translation("config." + ModSpartanWeaponry.ID + ".weapon.charge_ticks")
-					.defineInRange("charge_ticks", defaultChargeTicks, 1, 1000);
-			builder.pop();
-		}
-		
-		public void updateDisabledRecipeList()
-		{
-			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
-		}
-	}
-	
-	public class MaterialCategory
-	{
-		public DoubleValue damage;
-		public IntValue durability;
-		public BooleanValue disableRecipes;
-		private String materialName;
-		private String typeDisabledName;
-		
-		private MaterialCategory(ForgeConfigSpec.Builder builder, String materialName, float damage, int durability, String typeDisabledName)
-		{
-			builder.push(materialName);
-			this.materialName = materialName;
-			this.typeDisabledName = typeDisabledName;
-			this.damage = builder.comment("Base Damage for " + this.materialName + " weapons")
-						.translation("config." + ModSpartanWeaponry.ID + ".material.base_damage")
-						.defineInRange("base_damage", damage, 0.1d, 100.0d);
-			this.durability = builder.comment("Durability for " + this.materialName + " weapons")
-					.translation("config." + ModSpartanWeaponry.ID + ".material.durability")
-					.defineInRange("durability", durability, 1, 100000);
-			this.disableRecipes = builder.comment("Set to true to disable " + this.materialName + " weapons")
-					.translation("config." + ModSpartanWeaponry.ID + ".material.disable")
-					.worldRestart()
-					.define("disable", false);
-			builder.pop();
-		}
-		
-		public void updateDisabledRecipeList()
-		{
-			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
-		}
-	}
-	
-	public class ProjectileCategory
-	{
-		public DoubleValue baseDamage;
-		public DoubleValue rangeMultiplier;
-		
-		private ProjectileCategory(ForgeConfigSpec.Builder builder, String materialName, String projectileName, float baseDamage, float rangeMultiplier)
-		{
-			String projName = materialName == null || materialName == "" ? projectileName : materialName + " " + projectileName;
-			String category = materialName == null || materialName == "" ? projectileName : materialName + "_" + projectileName;
-			builder.push(category);
-			this.baseDamage = builder.comment("Base damage for " + projName + "s")
-					.translation("config." + ModSpartanWeaponry.ID + ".arrow.base_damage")
-					.defineInRange("base_damage", baseDamage, 0.1d, 100.0d);
-			this.rangeMultiplier = builder.comment("Range muliplier for " + projName + "s")
-					.translation("config." + ModSpartanWeaponry.ID + ".arrow.range_multiplier")
-					.defineInRange("range_multiplier", rangeMultiplier, 0.1d, 100.0d);
-			builder.pop();
-		}
-	}
-	
-	public class BoltCategory
-	{
-		public DoubleValue baseDamage;
-		public DoubleValue rangeMultiplier;
-		public DoubleValue armorPiercingFactor;
-		
-		protected BoltCategory(ForgeConfigSpec.Builder builder, String materialName, String projectileName, float baseDamage, float rangeMultiplier, float armorPiercingFactor)
-		{
-			String projName = materialName == null || materialName == "" ? projectileName : materialName + " " + projectileName;
-			String category = materialName == null || materialName == "" ? projectileName : materialName + "_" + projectileName;
-			builder.push(category);
-			this.baseDamage = builder.comment("Base damage for " + projName + "s")
-					.translation("config." + ModSpartanWeaponry.ID + ".arrow.base_damage")
-					.defineInRange("base_damage", baseDamage, 0.1d, 100.0d);
-			this.rangeMultiplier = builder.comment("Range muliplier for " + projName + "s")
-				.translation("config." + ModSpartanWeaponry.ID + ".arrow.range_multiplier")
-				.defineInRange("range_multiplier", rangeMultiplier, 0.1d, 100.0d);
-			this.armorPiercingFactor = builder.comment("Armor Piercing factor for " + projName + "s")
-					.translation("config." + ModSpartanWeaponry.ID + ".bolt.armor_piercing_factor")
-					.defineInRange("armor_piercing_factor", armorPiercingFactor, 0.0d, 1.0d);
-			builder.pop();
-		}
 	}
 	
 	// Weapon categories
@@ -583,7 +414,9 @@ public class Config
 		ModItems.GREATSWORDS.updateSettingsFromConfig(INSTANCE.greatswords.baseDamage.get().floatValue(), INSTANCE.greatswords.damageMultipler.get().floatValue(), INSTANCE.greatswords.speed.get().doubleValue());
 		INSTANCE.greatswords.updateDisabledRecipeList();
 		
+		ImmutableList.of(ModItems.WOODEN_CLUB, ModItems.STUDDED_CLUB).forEach((club) -> club.get().setAttackDamageAndSpeed(INSTANCE.clubs.baseDamage.get().floatValue(), INSTANCE.clubs.damageMultipler.get().floatValue(), INSTANCE.clubs.speed.get().doubleValue()));
 		INSTANCE.clubs.updateDisabledRecipeList();
+		ImmutableList.of(ModItems.CESTUS, ModItems.STUDDED_CESTUS).forEach((club) -> club.get().setAttackDamageAndSpeed(INSTANCE.cestus.baseDamage.get().floatValue(), INSTANCE.cestus.damageMultipler.get().floatValue(), INSTANCE.cestus.speed.get().doubleValue()));
 		INSTANCE.cestus.updateDisabledRecipeList();
 		
 		ModItems.BATTLE_HAMMERS.updateSettingsFromConfig(INSTANCE.battleHammers.baseDamage.get().floatValue(), INSTANCE.battleHammers.damageMultipler.get().floatValue(), INSTANCE.battleHammers.speed.get().doubleValue());
@@ -724,5 +557,177 @@ public class Config
 	{
 		material.setAttackDamage(baseDamage);
 		material.setDurability(durability);
+	}
+	
+
+	
+	public class WeaponCategory
+	{
+		public BooleanValue disableRecipes;
+		public DoubleValue speed;
+		public DoubleValue baseDamage;
+		public DoubleValue damageMultipler;
+		private String typeDisabledName;
+		
+		protected WeaponCategory(ForgeConfigSpec.Builder builder, String weaponClass, String weaponPlural, float defaultSpeed, float defaultBaseDamage, float defaultDamageMuliplier, String typeDisabledNameIn)
+		{
+			builder.push(weaponClass);
+			typeDisabledName = typeDisabledNameIn;
+			disableRecipes = builder.comment("Disables all recipes for all " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.disable")
+					.worldRestart()
+					.define("disable", false);
+			speed = builder.comment("Attack speed of " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.speed")
+					.defineInRange("speed", defaultSpeed, 0.0d, 4.0d);
+			baseDamage = builder.comment("Base Damage of " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.base_damage")
+					.defineInRange("base_damage", defaultBaseDamage, 0.1d, 100.0d);
+			damageMultipler = builder.comment("Damage Multiplier for " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.damage_multiplier")
+					.defineInRange("damage_multiplier", defaultDamageMuliplier, 0.1d, 10.0d);
+			builder.pop();
+		}
+		
+		public void updateDisabledRecipeList()
+		{
+			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
+		}
+	}
+	
+	public class RangedWeaponCategory
+	{
+		public BooleanValue disableRecipes;
+		private String typeDisabledName;
+		
+		protected RangedWeaponCategory(ForgeConfigSpec.Builder builder, String weaponClass, String weaponPlural, String typeDisabledNameIn)
+		{
+			builder.push(weaponClass);
+			typeDisabledName = typeDisabledNameIn;
+			disableRecipes = builder.comment("Disables all recipes for all " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.disable")
+					.worldRestart()
+					.define("disable", false);
+			builder.pop();
+		}
+		
+		public void updateDisabledRecipeList()
+		{
+			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
+		}
+	}
+	
+	public class ThrowingWeaponCategory
+	{
+		public BooleanValue disableRecipes;
+		public DoubleValue speed;
+		public DoubleValue baseDamage;
+		public DoubleValue damageMultipler;
+		public IntValue chargeTicks;
+		private String typeDisabledName;
+		
+		protected ThrowingWeaponCategory(ForgeConfigSpec.Builder builder, String weaponClass, String weaponPlural, float defaultSpeed, float defaultBaseDamage, float defaultDamageMuliplier, int defaultChargeTicks, String typeDisabledNameIn)
+		{
+			builder.push(weaponClass);
+			typeDisabledName = typeDisabledNameIn;
+			disableRecipes = builder.comment("Disables all recipes for all " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.disable")
+					.worldRestart()
+					.define("disable", false);
+			speed = builder.comment("Attack speed of " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.speed")
+					.defineInRange("speed", defaultSpeed, 0.0d, 4.0d);
+			baseDamage = builder.comment("Base Damage of " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.base_damage")
+					.defineInRange("base_damage", defaultBaseDamage, 0.1d, 100.0d);
+			damageMultipler = builder.comment("Damage Multiplier for " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.damage_multiplier")
+					.defineInRange("damage_multiplier", defaultDamageMuliplier, 0.1d, 10.0d);
+			chargeTicks = builder.comment("Charge time in ticks for " + weaponPlural + ".")
+					.translation("config." + ModSpartanWeaponry.ID + ".weapon.charge_ticks")
+					.defineInRange("charge_ticks", defaultChargeTicks, 1, 1000);
+			builder.pop();
+		}
+		
+		public void updateDisabledRecipeList()
+		{
+			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
+		}
+	}
+	
+	public class MaterialCategory
+	{
+		public DoubleValue damage;
+		public IntValue durability;
+		public BooleanValue disableRecipes;
+		private String materialName;
+		private String typeDisabledName;
+		
+		private MaterialCategory(ForgeConfigSpec.Builder builder, String materialName, float damage, int durability, String typeDisabledName)
+		{
+			builder.push(materialName);
+			this.materialName = materialName;
+			this.typeDisabledName = typeDisabledName;
+			this.damage = builder.comment("Base Damage for " + this.materialName + " weapons")
+						.translation("config." + ModSpartanWeaponry.ID + ".material.base_damage")
+						.defineInRange("base_damage", damage, 0.1d, 100.0d);
+			this.durability = builder.comment("Durability for " + this.materialName + " weapons")
+					.translation("config." + ModSpartanWeaponry.ID + ".material.durability")
+					.defineInRange("durability", durability, 1, 100000);
+			this.disableRecipes = builder.comment("Set to true to disable " + this.materialName + " weapons")
+					.translation("config." + ModSpartanWeaponry.ID + ".material.disable")
+					.worldRestart()
+					.define("disable", false);
+			builder.pop();
+		}
+		
+		public void updateDisabledRecipeList()
+		{
+			updateDisabledRecipe(typeDisabledName, disableRecipes.get());
+		}
+	}
+	
+	public class ProjectileCategory
+	{
+		public DoubleValue baseDamage;
+		public DoubleValue rangeMultiplier;
+		
+		private ProjectileCategory(ForgeConfigSpec.Builder builder, String materialName, String projectileName, float baseDamage, float rangeMultiplier)
+		{
+			String projName = materialName == null || materialName == "" ? projectileName : materialName + " " + projectileName;
+			String category = materialName == null || materialName == "" ? projectileName : materialName + "_" + projectileName;
+			builder.push(category);
+			this.baseDamage = builder.comment("Base damage for " + projName + "s")
+					.translation("config." + ModSpartanWeaponry.ID + ".arrow.base_damage")
+					.defineInRange("base_damage", baseDamage, 0.1d, 100.0d);
+			this.rangeMultiplier = builder.comment("Range muliplier for " + projName + "s")
+					.translation("config." + ModSpartanWeaponry.ID + ".arrow.range_multiplier")
+					.defineInRange("range_multiplier", rangeMultiplier, 0.1d, 100.0d);
+			builder.pop();
+		}
+	}
+	
+	public class BoltCategory
+	{
+		public DoubleValue baseDamage;
+		public DoubleValue rangeMultiplier;
+		public DoubleValue armorPiercingFactor;
+		
+		protected BoltCategory(ForgeConfigSpec.Builder builder, String materialName, String projectileName, float baseDamage, float rangeMultiplier, float armorPiercingFactor)
+		{
+			String projName = materialName == null || materialName == "" ? projectileName : materialName + " " + projectileName;
+			String category = materialName == null || materialName == "" ? projectileName : materialName + "_" + projectileName;
+			builder.push(category);
+			this.baseDamage = builder.comment("Base damage for " + projName + "s")
+					.translation("config." + ModSpartanWeaponry.ID + ".arrow.base_damage")
+					.defineInRange("base_damage", baseDamage, 0.1d, 100.0d);
+			this.rangeMultiplier = builder.comment("Range muliplier for " + projName + "s")
+				.translation("config." + ModSpartanWeaponry.ID + ".arrow.range_multiplier")
+				.defineInRange("range_multiplier", rangeMultiplier, 0.1d, 100.0d);
+			this.armorPiercingFactor = builder.comment("Armor Piercing factor for " + projName + "s")
+					.translation("config." + ModSpartanWeaponry.ID + ".bolt.armor_piercing_factor")
+					.defineInRange("armor_piercing_factor", armorPiercingFactor, 0.0d, 1.0d);
+			builder.pop();
+		}
 	}
 }

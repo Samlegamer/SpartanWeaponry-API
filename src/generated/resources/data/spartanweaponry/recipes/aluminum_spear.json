@@ -12,14 +12,14 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:ingots/aluminum"
+        "tag": "spartanweaponry:ingots/aluminum"
       }
     }
   ],
   "group": "spartanweaponry:spear",
   "key": {
     "#": {
-      "tag": "forge:ingots/aluminum"
+      "tag": "spartanweaponry:ingots/aluminum"
     },
     "/": {
       "tag": "spartanweaponry:poles"

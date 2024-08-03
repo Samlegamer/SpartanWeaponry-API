@@ -215,11 +215,11 @@ public class ModItems
 	public static final WeaponItemsMelee RAPIERS = new WeaponItemsMelee(REGISTRY, "rapier", WeaponFactory.RAPIER);
 	public static final WeaponItemsMelee GREATSWORDS = new WeaponItemsMelee(REGISTRY, "greatsword", WeaponFactory.GREATSWORD);
 
-	public static final RegistryObject<Item> WOODEN_CLUB = REGISTRY.register("wooden_club", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.WOOD, WeaponArchetype.CLUB, Defaults.DamageBaseClub, Defaults.DamageMultiplierClub, Defaults.SpeedClub));
-	public static final RegistryObject<Item> STUDDED_CLUB = REGISTRY.register("studded_club", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.IRON, WeaponArchetype.CLUB, Defaults.DamageBaseClub, Defaults.DamageMultiplierClub, Defaults.SpeedClub));
+	public static final RegistryObject<SwordBaseItem> WOODEN_CLUB = REGISTRY.register("wooden_club", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.WOOD, WeaponArchetype.CLUB, Defaults.DamageBaseClub, Defaults.DamageMultiplierClub, Defaults.SpeedClub));
+	public static final RegistryObject<SwordBaseItem> STUDDED_CLUB = REGISTRY.register("studded_club", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.IRON, WeaponArchetype.CLUB, Defaults.DamageBaseClub, Defaults.DamageMultiplierClub, Defaults.SpeedClub));
 
-	public static final RegistryObject<Item> CESTUS = REGISTRY.register("cestus", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.LEATHER, WeaponArchetype.CESTUS, Defaults.DamageBaseCestus, Defaults.DamageMultiplierCestus, Defaults.SpeedCestus));
-	public static final RegistryObject<Item> STUDDED_CESTUS = REGISTRY.register("studded_cestus", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.IRON, WeaponArchetype.CESTUS, Defaults.DamageBaseCestus, Defaults.DamageMultiplierCestus, Defaults.SpeedCestus));
+	public static final RegistryObject<SwordBaseItem> CESTUS = REGISTRY.register("cestus", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.LEATHER, WeaponArchetype.CESTUS, Defaults.DamageBaseCestus, Defaults.DamageMultiplierCestus, Defaults.SpeedCestus));
+	public static final RegistryObject<SwordBaseItem> STUDDED_CESTUS = REGISTRY.register("studded_cestus", () -> new SwordBaseItem(new Item.Properties(), WeaponMaterial.IRON, WeaponArchetype.CESTUS, Defaults.DamageBaseCestus, Defaults.DamageMultiplierCestus, Defaults.SpeedCestus));
 	
 	public static final WeaponItemsMelee BATTLE_HAMMERS = new WeaponItemsMelee(REGISTRY, "battle_hammer", WeaponFactory.BATTLE_HAMMER);
 	public static final WeaponItemsMelee WARHAMMERS = new WeaponItemsMelee(REGISTRY, "warhammer", WeaponFactory.WARHAMMER);

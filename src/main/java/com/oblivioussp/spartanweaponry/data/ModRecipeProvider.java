@@ -2,9 +2,13 @@ package com.oblivioussp.spartanweaponry.data;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.OilEffects;
@@ -13,6 +17,7 @@ import com.oblivioussp.spartanweaponry.api.crafting.condition.TypeDisabledCondit
 import com.oblivioussp.spartanweaponry.api.data.recipe.ConditionalShapedRecipeBuilder;
 import com.oblivioussp.spartanweaponry.api.data.recipe.ConditionalShapelessRecipeBuilder;
 import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
+import com.oblivioussp.spartanweaponry.data.recipe.TagCookingRecipeBuilder;
 import com.oblivioussp.spartanweaponry.data.recipe.TippedProjectileRecipeBuilder;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.init.ModRecipeSerializers;
@@ -62,7 +67,6 @@ public class ModRecipeProvider extends RecipeProvider
 		TagKey<Item> string = ItemTags.create(new ResourceLocation("forge:string"));
 		TagKey<Item> leather = ItemTags.create(new ResourceLocation("forge:leather"));
 		TagKey<Item> gunpowder = ItemTags.create(new ResourceLocation("forge:gunpowder"));
-		TagKey<Item> ironNugget = ItemTags.create(new ResourceLocation("forge:nuggets/iron"));
 		TagKey<Item> feathers = ItemTags.create(new ResourceLocation("forge:feathers"));
 		TagKey<Item> slimeballs = ItemTags.create(new ResourceLocation("forge:slimeballs"));
 		
@@ -87,6 +91,21 @@ public class ModRecipeProvider extends RecipeProvider
 		TagKey<Item> constantan = ItemTags.create(new ResourceLocation(WeaponMaterial.CONSTANTAN.getRepairTagName()));
 		TagKey<Item> platinum = ItemTags.create(new ResourceLocation(WeaponMaterial.PLATINUM.getRepairTagName()));
 		TagKey<Item> aluminum = ItemTags.create(new ResourceLocation(WeaponMaterial.ALUMINUM.getRepairTagName()));
+
+		TagKey<Item> copperNugget = ItemTags.create(new ResourceLocation("forge:nuggets/copper"));
+		TagKey<Item> ironNugget = ItemTags.create(new ResourceLocation("forge:nuggets/iron"));
+		TagKey<Item> goldNugget = ItemTags.create(new ResourceLocation("forge:nuggets/gold"));
+		TagKey<Item> tinNugget = ItemTags.create(new ResourceLocation("forge:nuggets/tin"));
+		TagKey<Item> bronzeNugget = ItemTags.create(new ResourceLocation("forge:nuggets/bronze"));
+		TagKey<Item> steelNugget = ItemTags.create(new ResourceLocation("forge:nuggets/steel"));
+		TagKey<Item> silverNugget = ItemTags.create(new ResourceLocation("forge:nuggets/silver"));
+		TagKey<Item> electrumNugget = ItemTags.create(new ResourceLocation("forge:nuggets/electrum"));
+		TagKey<Item> leadNugget = ItemTags.create(new ResourceLocation("forge:nuggets/lead"));
+		TagKey<Item> nickelNugget = ItemTags.create(new ResourceLocation("forge:nuggets/nickel"));
+		TagKey<Item> invarNugget = ItemTags.create(new ResourceLocation("forge:nuggets/invar"));
+		TagKey<Item> constantanNugget = ItemTags.create(new ResourceLocation("forge:nuggets/constantan"));
+		TagKey<Item> platinumNugget = ItemTags.create(new ResourceLocation("forge:nuggets/platinum"));
+		TagKey<Item> aluminumNugget = ItemTags.create(new ResourceLocation("forge:nuggets/aluminum"));
 		
 		// Handles
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.COMBAT, ModItems.SIMPLE_HANDLE.get()).requires(stick).requires(ModItemTags.GRASS).unlockedBy("has_stick", hasItem(stick)).save(recipeFunc);
@@ -102,26 +121,26 @@ public class ModRecipeProvider extends RecipeProvider
 		ConditionalShapedRecipeBuilder.shaped(ModItems.EXPLOSIVE_CHARGE.get(), 4).define('#', gunpowder).define('-', ironNugget).pattern("###").pattern("---").pattern("###").group("spartanweaponry:explosive").unlockedBy("has_gunpowder", hasItem(gunpowder)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.EXPLOSIVES))).save(recipeFunc);
 		ConditionalShapedRecipeBuilder.shaped(ModItems.GREASE_BALL.get()).define('#', ModItemTags.RAW_MEAT).define('O', slimeballs).pattern(" # ").pattern("#O#").pattern(" # ").group("spartanweaponry:grease_ball").unlockedBy("has_meat", hasItem(ModItemTags.RAW_MEAT)).unlockedBy("has_slimeball", hasItem(slimeballs)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.OIL))).save(recipeFunc);
 		
-		RecipeData dataWood = new RecipeData(ItemTags.PLANKS, "has_wood");
-		RecipeData dataStone = new RecipeData(stone, "has_cobblestone");
-		RecipeData dataLeather = new RecipeData(leather, "has_leather");
-		RecipeData dataIron = new RecipeData(iron, "has_iron_ingot");
-		RecipeData dataGold = new RecipeData(gold, "has_gold_ingot");
-		RecipeData dataDiamond = new RecipeData(diamond, "has_diamond");
-		RecipeData dataNetherite = new RecipeData(netherite, "has_netherite_ingot");
+		RecipeData dataWood = new RecipeData(ItemTags.PLANKS, "wood", "has_wood");
+		RecipeData dataStone = new RecipeData(stone, "stone", "has_cobblestone");
+		RecipeData dataLeather = new RecipeData(leather, "leather", "has_leather");
+		RecipeData dataCopper = new RecipeData(copper, copperNugget, "copper", "has_copper_ingot", "copper");
+		RecipeData dataIron = new RecipeData(iron, ironNugget, "iron", "has_iron_ingot");
+		RecipeData dataGold = new RecipeData(gold, goldNugget, "gold", "has_gold_ingot");
+		RecipeData dataDiamond = new RecipeData(diamond, "diamond", "has_diamond");
+		RecipeData dataNetherite = new RecipeData(netherite, "netherite", "has_netherite_ingot");
 		
-		RecipeData dataCopper = new RecipeData(copper, "has_copper_ingot", "copper");
-		RecipeData dataTin = new RecipeData(tin, "has_tin_ingot", "tin");
-		RecipeData dataBronze = new RecipeData(bronze, "has_bronze_ingot", "bronze");
-		RecipeData dataSteel = new RecipeData(steel, "has_steel_ingot", "steel");
-		RecipeData dataSilver = new RecipeData(silver, "has_silver_ingot", "silver");
-		RecipeData dataElectrum = new RecipeData(electrum, "has_electrum_ingot", "electrum");
-		RecipeData dataLead = new RecipeData(lead, "has_lead_ingot", "lead");
-		RecipeData dataNickel = new RecipeData(nickel, "has_nickel_ingot", "nickel");
-		RecipeData dataInvar = new RecipeData(invar, "has_invar_ingot", "invar");
-		RecipeData dataConstantan = new RecipeData(constantan, "has_constantan_ingot", "constantan");
-		RecipeData dataPlatinum = new RecipeData(platinum, "has_platinum_ingot", "platinum");
-		RecipeData dataAluminum = new RecipeData(aluminum, "has_aluminum_ingot", "aluminum");
+		RecipeData dataTin = new RecipeData(tin, tinNugget, "tin", "has_tin_ingot", "tin");
+		RecipeData dataBronze = new RecipeData(bronze, bronzeNugget, "bronze", "has_bronze_ingot", "bronze");
+		RecipeData dataSteel = new RecipeData(steel, steelNugget, "steel", "has_steel_ingot", "steel");
+		RecipeData dataSilver = new RecipeData(silver, silverNugget, "silver", "has_silver_ingot", "silver");
+		RecipeData dataElectrum = new RecipeData(electrum, electrumNugget, "electrum", "has_electrum_ingot", "electrum");
+		RecipeData dataLead = new RecipeData(lead, leadNugget, "lead", "has_lead_ingot", "lead");
+		RecipeData dataNickel = new RecipeData(nickel, nickelNugget, "nickel", "has_nickel_ingot", "nickel");
+		RecipeData dataInvar = new RecipeData(invar, invarNugget, "invar", "has_invar_ingot", "invar");
+		RecipeData dataConstantan = new RecipeData(constantan, constantanNugget, "constantan", "has_constantan_ingot", "constantan");
+		RecipeData dataPlatinum = new RecipeData(platinum, platinumNugget, "platinum", "has_platinum_ingot", "platinum");
+		RecipeData dataAluminum = new RecipeData(aluminum, aluminumNugget, "aluminum", "has_aluminum_ingot", "aluminum");
 		
 		ImmutableList<SwordBaseItem> daggers = ModItems.DAGGERS.getAsList();
 		ImmutableList<SwordBaseItem> parryingDaggers = ModItems.PARRYING_DAGGERS.getAsList();
@@ -214,8 +233,52 @@ public class ModRecipeProvider extends RecipeProvider
 				recipeGlaive(recipeFunc, glaives.get(i), data);
 				recipeQuarterstaff(recipeFunc, quarterstaves.get(i), data);
 				recipeScythe(recipeFunc, scythes.get(i), data);
+				
+			}
+			// Create nugget smelting recipes if necessary
+			if(data.hasNuggetTag())
+			{
+				ImmutableMap.Builder<String, Item> mapBuilder = new ImmutableMap.Builder<>();
+				mapBuilder.put(TypeDisabledCondition.DAGGER, daggers.get(i)).
+						put(TypeDisabledCondition.PARRYING_DAGGER, parryingDaggers.get(i)).
+						put(TypeDisabledCondition.LONGSWORD, longswords.get(i)).
+						put(TypeDisabledCondition.KATANA, katanas.get(i)).
+						put(TypeDisabledCondition.SABER, sabers.get(i)).
+						put(TypeDisabledCondition.RAPIER, rapiers.get(i)).
+						put(TypeDisabledCondition.GREATSWORD, greatswords.get(i)).
+						put(TypeDisabledCondition.BATTLE_HAMMER, battleHammers.get(i)).
+						put(TypeDisabledCondition.WARHAMMER, warhammers.get(i)).
+						put(TypeDisabledCondition.SPEAR, spears.get(i)).
+						put(TypeDisabledCondition.HALBERD, halberds.get(i)).
+						put(TypeDisabledCondition.PIKE, pikes.get(i)).
+						put(TypeDisabledCondition.LANCE, lances.get(i)).
+						put(TypeDisabledCondition.LONGBOW, longbows.get(i)).
+						put(TypeDisabledCondition.HEAVY_CROSSBOW, heavyCrossbows.get(i)).
+						put(TypeDisabledCondition.THROWING_KNIFE, throwingKnives.get(i)).
+						put(TypeDisabledCondition.TOMAHAWK, tomahawks.get(i)).
+						put(TypeDisabledCondition.JAVELIN, javelins.get(i)).
+						put(TypeDisabledCondition.BOOMERANG, boomerangs.get(i)).
+						put(TypeDisabledCondition.BATTLEAXE, battleaxes.get(i)).
+						put(TypeDisabledCondition.FLANGED_MACE, flangedMaces.get(i)).
+						put(TypeDisabledCondition.GLAIVE, glaives.get(i)).
+						put(TypeDisabledCondition.QUARTERSTAFF, quarterstaves.get(i)).
+						put(TypeDisabledCondition.SCYTHE, scythes.get(i));
+				ImmutableMap<String, Item> ingredientMap = mapBuilder.build();
+				String materialName = data.getMaterialName();
+				
+				TagCookingRecipeBuilder smeltingRecipe = TagCookingRecipeBuilder.smelting(ingredientMap, RecipeCategory.MISC, data.getNuggetTag(), 0.1f, 200);
+				if(data.isModdedMaterial())
+					smeltingRecipe.addDisabledTypes(data.getDisableType());
+				smeltingRecipe.save(recipeFunc, new ResourceLocation(ModSpartanWeaponry.ID, materialName + "_nugget_from_smelting_" + materialName + "_weapons"));
+				
+				TagCookingRecipeBuilder blastingRecipe = TagCookingRecipeBuilder.blasting(ingredientMap, RecipeCategory.MISC, data.getNuggetTag(), 0.1f, 100);
+				if(data.isModdedMaterial())
+					blastingRecipe.addDisabledTypes(data.getDisableType());
+				blastingRecipe.save(recipeFunc, new ResourceLocation(ModSpartanWeaponry.ID, materialName + "_nugget_from_blasting_" + materialName + "_weapons"));
 			}
 		}
+		
+//		SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.DAGGERS.iron.get()), RecipeCategory.MISC, Ingredient.of(ironNugget).getItems()[0].getItem(), 0.1f, 200).save(recipeFunc, ModSpartanWeaponry.ID + ":" + ForgeRegistries.ITEMS.getKey(Items.IRON_NUGGET).getPath() + "_from_smelting");
 		
 		ConditionalShapedRecipeBuilder.shaped(ModItems.WOODEN_CLUB.get()).define('#', woodLog).pattern(" #").pattern("# ").group(ModSpartanWeaponry.ID + ":club").unlockedBy("has_wood_log", hasItem(woodLog)).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.CLUB))).save(recipeFunc);
 		ConditionalShapedRecipeBuilder.shaped(ModItems.STUDDED_CLUB.get()).define('#', iron).define('C', ModItems.WOODEN_CLUB.get()).pattern("C#").group(ModSpartanWeaponry.ID + ":club").unlockedBy("has_club", hasItem(ModItems.WOODEN_CLUB.get())).condition(new TypeDisabledCondition(Collections.singletonList(TypeDisabledCondition.CLUB))).save(recipeFunc);
@@ -304,7 +367,8 @@ public class ModRecipeProvider extends RecipeProvider
 			public ResourceLocation getAdvancementId() 
 			{
 				return new ResourceLocation("");
-			}});
+			}
+		});
 	}
 	
 	private void smithingRecipe(Consumer<FinishedRecipe> consumer, ItemLike base, ItemLike result, RecipeData data)
@@ -596,26 +660,55 @@ public class ModRecipeProvider extends RecipeProvider
 	public static class RecipeData
 	{
 		private final TagKey<Item> materialTag;
+		private final Optional<TagKey<Item>> nuggetTag;
+		private final String materialName;
 		private final String criterion;
 		private final String disableType;
 		private final boolean isModdedMaterial;
 		
-		public RecipeData(TagKey<Item> materialTagIn, String criterionIn, String disableTypeIn)
+		public RecipeData(TagKey<Item> materialTagIn, @Nullable TagKey<Item> nuggetTagIn, String materialNameIn, String criterionIn, String disableTypeIn)
 		{
 			materialTag = materialTagIn;
+			nuggetTag = Optional.ofNullable(nuggetTagIn);
+			materialName = materialNameIn;
 			criterion = criterionIn;
 			disableType = disableTypeIn;
 			isModdedMaterial = !disableTypeIn.isEmpty();
 		}
 		
-		public RecipeData(TagKey<Item> materialTagIn, String criterionIn)
+		public RecipeData(TagKey<Item> materialTagIn, String materialNameIn, String criterionIn, String disableTypeIn)
 		{
-			this(materialTagIn, criterionIn, "");
+			this(materialTagIn, null, materialNameIn, criterionIn, disableTypeIn);
+		}
+		
+		public RecipeData(TagKey<Item> materialTagIn, TagKey<Item> nuggetTagIn, String materialNameIn, String criterionIn)
+		{
+			this(materialTagIn, nuggetTagIn, materialNameIn, criterionIn, "");
+		}
+		
+		public RecipeData(TagKey<Item> materialTagIn, String materialNameIn, String criterionIn)
+		{
+			this(materialTagIn, materialNameIn, criterionIn, "");
 		}
 		
 		public TagKey<Item> getMaterialTag() 
 		{
 			return materialTag;
+		}
+		
+		public boolean hasNuggetTag()
+		{
+			return nuggetTag.isPresent();
+		}
+		
+		public TagKey<Item> getNuggetTag()
+		{
+			return nuggetTag.orElseThrow();
+		}
+		
+		public String getMaterialName()
+		{
+			return materialName;
 		}
 		
 		public String getCriterion() 

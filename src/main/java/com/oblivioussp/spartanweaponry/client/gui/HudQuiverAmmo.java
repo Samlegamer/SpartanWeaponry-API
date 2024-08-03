@@ -2,7 +2,6 @@ package com.oblivioussp.spartanweaponry.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.oblivioussp.spartanweaponry.client.KeyBinds;
 import com.oblivioussp.spartanweaponry.client.gui.AlignmentHelper.Alignment;
 import com.oblivioussp.spartanweaponry.client.gui.AlignmentHelper.VerticalAlignment;
@@ -16,7 +15,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -76,10 +74,9 @@ public class HudQuiverAmmo
 		offsetX = AlignmentHelper.getAlignedX(align, ClientConfig.INSTANCE.quiverHudOffsetX.get(), 22);
 		offsetY = AlignmentHelper.getAlignedY(align, ClientConfig.INSTANCE.quiverHudOffsetY.get(), 22);
 		
-		PoseStack poseStack = RenderSystem.getModelViewStack();
+		PoseStack poseStack = guiGraphics.pose();
 		poseStack.pushPose();
-        poseStack.translate(0.0d, 0.0d, 200.0d);
-        MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+//        MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
         
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -87,16 +84,19 @@ public class HudQuiverAmmo
         
 		guiGraphics.blit(WIDGETS, offsetX, offsetY, 24, 23, 22, 22);
 		guiGraphics.renderFakeItem(quiverStack, offsetX + 3, offsetY + 3);
-		font.drawInBatch(ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+        poseStack.translate(0.0f, 0.0f, 200.0f);
+		guiGraphics.drawString(font, ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true);
+//		font.drawInBatch(ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
 		
 		// Draw the key (in text form) required to open this quiver
 		if(!KeyBinds.KEY_ACCESS_QUIVER.isUnbound())
 		{
 			String inventoryKey = "[" + KeyBinds.KEY_ACCESS_QUIVER.getTranslatedKeyMessage().getString().toUpperCase() + "]";
 			int keyTextYOffset = align.getVertical() == VerticalAlignment.TOP ? 22 : -8;
-			font.drawInBatch(inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
+			guiGraphics.drawString(font, inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true);
+//			font.drawInBatch(inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
 		}
-		renderBuffer.endBatch();
+//		renderBuffer.endBatch();
 		poseStack.popPose();
 	}
 }

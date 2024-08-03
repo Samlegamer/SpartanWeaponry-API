@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.init.ModItems;
 import com.oblivioussp.spartanweaponry.init.ModOilRecipes;
 import com.oblivioussp.spartanweaponry.item.crafting.OilBrewingRecipe;
@@ -12,6 +13,7 @@ import com.oblivioussp.spartanweaponry.util.OilHelper;
 
 import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -46,8 +48,10 @@ public class OilBrewingRecipeMaker
 					ItemStack potionStack = new ItemStack(Items.POTION);
 					PotionUtils.setPotion(potionStack, potion);
 					ItemStack oilStack = OilHelper.makePotionOilStack(potion);
+					ResourceLocation potionLocation = ForgeRegistries.POTIONS.getKey(potion);
 					
-					recipes.add(vanillaRecipeFactoryIn.createBrewingRecipe(ImmutableList.of(new ItemStack(ModItems.GREASE_BALL.get())), ImmutableList.of(potionStack), oilStack));
+					recipes.add(vanillaRecipeFactoryIn.createBrewingRecipe(ImmutableList.of(new ItemStack(ModItems.GREASE_BALL.get())), ImmutableList.of(potionStack), oilStack, 
+							new ResourceLocation(ModSpartanWeaponry.ID, potionLocation.getNamespace() + "." + potionLocation.getPath() + "_oil_from_brewing")));
 				}
 			}
 		}

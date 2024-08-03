@@ -1,5 +1,6 @@
 package com.oblivioussp.spartanweaponry.api.tags;
 
+import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
 import com.oblivioussp.spartanweaponry.api.SpartanWeaponryAPI;
 
 import net.minecraft.resources.ResourceLocation;
@@ -94,11 +95,11 @@ public class ModItemTags
 	// Materials for repairing weapons
 	public static final TagKey<Item> COBBLESTONE = ItemTags.create(new ResourceLocation("forge:cobblestone"));
 	public static final TagKey<Item> LEATHER = ItemTags.create(new ResourceLocation("forge:leather"));
+	public static final TagKey<Item> COPPER_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/copper"));
 	public static final TagKey<Item> IRON_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/iron"));
 	public static final TagKey<Item> GOLD_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/gold"));
 	public static final TagKey<Item> DIAMOND = ItemTags.create(new ResourceLocation("forge:gems/diamond"));
 	public static final TagKey<Item> NETHERITE_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/netherite"));
-	public static final TagKey<Item> COPPER_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/copper"));
 	public static final TagKey<Item> TIN_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/tin"));
 	public static final TagKey<Item> BRONZE_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/bronze"));
 	public static final TagKey<Item> STEEL_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/steel"));
@@ -109,7 +110,24 @@ public class ModItemTags
 	public static final TagKey<Item> INVAR_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/invar"));
 	public static final TagKey<Item> CONSTANTAN_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/constantan"));
 	public static final TagKey<Item> PLATINUM_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/platinum"));
-	public static final TagKey<Item> ALUMINUM_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/aluminum"));
+	public static final TagKey<Item> ALUMINUM_INGOT = ItemTags.create(new ResourceLocation(ModSpartanWeaponry.ID, "ingots/aluminum"));	// The below two alumin(i)um ingot tag variants combined (for compatibility)
+	public static final TagKey<Item> FORGE_ALUMINUM_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/aluminum"));
+	public static final TagKey<Item> FORGE_ALUMINIUM_INGOT = ItemTags.create(new ResourceLocation("forge:ingots/aluminium"));
+	
+/*	public static final TagKey<Item> COPPER_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/copper"));
+	public static final TagKey<Item> IRON_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/iron"));
+	public static final TagKey<Item> GOLD_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/gold"));
+	public static final TagKey<Item> TIN_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/tin"));
+	public static final TagKey<Item> BRONZE_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/bronze"));
+	public static final TagKey<Item> STEEL_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/steel"));
+	public static final TagKey<Item> SILVER_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/silver"));
+	public static final TagKey<Item> ELECTRUM_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/gold"));
+	public static final TagKey<Item> LEAD_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/lead"));
+	public static final TagKey<Item> NICKEL_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/nickel"));
+	public static final TagKey<Item> INVAR_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/invar"));
+	public static final TagKey<Item> CONSTANTAN_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/constantan"));
+	public static final TagKey<Item> PLATINUM_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/platinum"));
+	public static final TagKey<Item> ALUMINUM_NUGGET = ItemTags.create(new ResourceLocation("forge:nuggets/aluminum"));*/
 
 	public static final TagKey<Item> GRASS = ItemTags.create(new ResourceLocation("forge:grass"));
 	public static final TagKey<Item> RAW_MEAT = ItemTags.create(new ResourceLocation("forge:foods/meat/raw"));

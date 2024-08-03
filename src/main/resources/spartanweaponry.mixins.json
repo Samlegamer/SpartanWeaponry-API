@@ -11,7 +11,9 @@
 		"PlayerMixin",
 		"MobMixin",
 		"AbstractSkeletonMixin",
-		"ZombieMixin",
+		"ZombieMixin"
+	],
+	"client": [ 
 		"ItemModelGeneratorMixin"
 	],
 	"minVersion": "0.8"

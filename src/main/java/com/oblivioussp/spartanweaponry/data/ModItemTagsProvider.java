@@ -33,6 +33,7 @@ public class ModItemTagsProvider extends ItemTagsProvider
 	{
 		final TagKey<Item> WEAPONS = ItemTags.create(new ResourceLocation("forge:weapons"));
 		final TagKey<Item> CURIOS_BACK = ItemTags.create(new ResourceLocation("curios:back"));
+		final TagKey<Item> CURIOS_QUIVER = ItemTags.create(new ResourceLocation("curios:quiver"));
 		
 		// Tags in the Spartan Weaponry domain
 		tag(ModItemTags.HANDLES).add(ModItems.SIMPLE_HANDLE.get(), ModItems.HANDLE.get());
@@ -183,7 +184,22 @@ public class ModItemTagsProvider extends ItemTagsProvider
 		tag(ModItemTags.INVAR_INGOT);
 		tag(ModItemTags.CONSTANTAN_INGOT);
 		tag(ModItemTags.PLATINUM_INGOT);
-		tag(ModItemTags.ALUMINUM_INGOT);
+		tag(ModItemTags.FORGE_ALUMINUM_INGOT);
+		tag(ModItemTags.FORGE_ALUMINIUM_INGOT);
+		tag(ModItemTags.ALUMINUM_INGOT).addTags(ModItemTags.FORGE_ALUMINUM_INGOT, ModItemTags.FORGE_ALUMINIUM_INGOT);
+		
+		// TODO: Implement nugget tags for smelting/blasting recipes later
+/*		tag(ModItemTags.TIN_NUGGET);
+		tag(ModItemTags.BRONZE_NUGGET);
+		tag(ModItemTags.STEEL_NUGGET);
+		tag(ModItemTags.SILVER_NUGGET);
+		tag(ModItemTags.ELECTRUM_NUGGET);
+		tag(ModItemTags.LEAD_NUGGET);
+		tag(ModItemTags.NICKEL_NUGGET);
+		tag(ModItemTags.INVAR_NUGGET);
+		tag(ModItemTags.CONSTANTAN_NUGGET);
+		tag(ModItemTags.PLATINUM_NUGGET);
+		tag(ModItemTags.ALUMINUM_NUGGET);*/
 		
 		// Tags in vanilla Minecraft's domain
 		tag(ItemTags.ARROWS).addTag(ModItemTags.ARROWS);
@@ -199,6 +215,7 @@ public class ModItemTagsProvider extends ItemTagsProvider
 		
 		// Tags in Curios' domain
 		tag(CURIOS_BACK).addTag(ModItemTags.QUIVERS);
+		tag(CURIOS_QUIVER).addTag(ModItemTags.QUIVERS);
 	}
 	
 	@Override

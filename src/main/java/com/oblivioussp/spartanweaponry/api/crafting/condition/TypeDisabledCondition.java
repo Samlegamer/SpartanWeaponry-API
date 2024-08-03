@@ -65,7 +65,7 @@ public class TypeDisabledCondition implements ICondition
 	public static final String PLATINUM = "platinum";
 	public static final String ALUMINUM = "aluminum";
 	
-	private static final ResourceLocation NAME = new ResourceLocation(SpartanWeaponryAPI.MOD_ID, "type_disabled");
+	public static final ResourceLocation NAME = new ResourceLocation(SpartanWeaponryAPI.MOD_ID, "type_disabled");
 	private final List<String> types;
 	
 	public TypeDisabledCondition(List<String> types)

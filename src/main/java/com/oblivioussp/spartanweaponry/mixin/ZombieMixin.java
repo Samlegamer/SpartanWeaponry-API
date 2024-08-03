@@ -30,9 +30,9 @@ public class ZombieMixin extends MobMixin
 		if(!Config.INSTANCE.disableSpawningZombieWithWeapon.get())
 		{
 			float rand = random.nextFloat();
-			float chance = /*difficultyIn.isHard() ? 
+			float chance = difficultyIn.isHard() ? 
 					Config.INSTANCE.skeletonWithLongbowSpawnChanceHard.get().floatValue() : 
-					Config.INSTANCE.skeletonWithLongbowSpawnChanceNormal.get().floatValue()*/ 0.5f;
+					Config.INSTANCE.skeletonWithLongbowSpawnChanceNormal.get().floatValue();
 			
 			if(rand > 1 - chance)
 			{

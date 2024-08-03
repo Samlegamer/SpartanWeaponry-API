@@ -16,6 +16,7 @@ import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraftforge.fml.ModList;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 public class QuiverHelper 
 {
@@ -72,10 +73,6 @@ public class QuiverHelper
 			}
 		});
 
-//	public static final Predicate<ItemStack> ARROW_QUIVER = (stack) -> stack.getItem().isIn(ItemTags.getCollection().get(new ResourceLocation(SpartanWeaponryAPI.MOD_ID, "arrow_quivers")));
-//	public static final Predicate<ItemStack> BOLT_QUIVER = (stack) -> stack.getItem().isIn(ItemTags.getCollection().get(new ResourceLocation(SpartanWeaponryAPI.MOD_ID, "bolt_quivers")));
-//	public static final Predicate<ItemStack> HEAVY_CROSSBOW = (stack) -> stack.getItem().isIn(ItemTags.getCollection().get(new ResourceLocation(SpartanWeaponryAPI.MOD_ID, "heavy_crossbows")));
-	
 	public static ItemStack findFirstOfType(Player player, IQuiverInfo info)
 	{
 		// Find a quiver, if possible.
@@ -155,6 +152,7 @@ public class QuiverHelper
 	
 	public static Optional<SlotResult> getQuiverCurio(Player player)
 	{
-		return CuriosApi.getCuriosInventory(player).resolve().orElseThrow().findFirstCurio((stack) -> stack.getItem() instanceof QuiverBaseItem);
+		Optional<ICuriosItemHandler> handler = CuriosApi.getCuriosInventory(player).resolve();
+		return handler.isPresent() ? handler.orElseThrow().findFirstCurio((stack) -> stack.getItem() instanceof QuiverBaseItem) : Optional.empty();
 	}
 }
