@@ -48,7 +48,13 @@ public class TagSmeltingRecipe extends SmeltingRecipe implements ITagCookingReci
 	}
 
 	@Override
-	public Ingredient getResult() 
+	public Ingredient getInputIngredient() 
+	{
+		return ingredient;
+	}
+
+	@Override
+	public Ingredient getResultIngredient() 
 	{
 		return result;
 	}
@@ -59,4 +65,9 @@ public class TagSmeltingRecipe extends SmeltingRecipe implements ITagCookingReci
 		return getCookingTime();
 	}
 
+	@Override
+	public float getExperienceDrop()
+	{
+		return getExperience();
+	}
 }

@@ -8,7 +8,8 @@ import net.minecraft.world.item.crafting.Recipe;
 public interface ITagCookingRecipe extends Recipe<Container>
 {
 	public CookingBookCategory getCategory();
-	public Ingredient getResult();
-	public float getExperience();
+	public Ingredient getInputIngredient();
+	public Ingredient getResultIngredient();
+	public float getExperienceDrop();
 	public int getCookTime();
 }

@@ -93,21 +93,21 @@ public class TagCookingRecipeSerializer<T extends ITagCookingRecipe> implements 
 	{
 		bufferIn.writeUtf(recipeIn.getGroup());
 		bufferIn.writeEnum(recipeIn.getCategory());
-		recipeIn.getIngredients().get(0).toNetwork(bufferIn);
-		recipeIn.getResult().toNetwork(bufferIn);
-		bufferIn.writeFloat(recipeIn.getExperience());
-		bufferIn.writeInt(recipeIn.getCookTime());
-	}
-
-	@FunctionalInterface
-	public interface RecipeFactory<T extends ITagCookingRecipe>
-	{
-		T create(ResourceLocation idIn, String groupIn, CookingBookCategory categoryIn, Ingredient inputIngredientIn, Ingredient outputIn, float experienceIn, int cookTimeIn);
+		recipeIn.getInputIngredient().toNetwork(bufferIn);
+		recipeIn.getResultIngredient().toNetwork(bufferIn);
+		bufferIn.writeFloat(recipeIn.getExperienceDrop());
+		bufferIn.writeVarInt(recipeIn.getCookTime());
 	}
 
 	@Override
 	public T fromJson(ResourceLocation idIn, JsonObject jsonIn) 
 	{
 		return null;
+	}
+
+	@FunctionalInterface
+	public interface RecipeFactory<T extends ITagCookingRecipe>
+	{
+		T create(ResourceLocation idIn, String groupIn, CookingBookCategory categoryIn, Ingredient inputIngredientIn, Ingredient outputIn, float experienceIn, int cookTimeIn);
 	}
 }
